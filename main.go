@@ -16,7 +16,7 @@ var extensions_txt = gopath + "\\src\\cook\\ingredients\\extensions.txt"
 var files_txt = gopath + "\\src\\cook\\ingredients\\files.txt"
 var raft_large_extentions_txt = gopath + "\\src\\cook\\ingredients\\raft-large-extensions.txt"
 
-var types_list = map[string][]string{
+var types_dic = map[string][]string{
 	"archive": {".7z", ".a", ".apk", ".xapk", ".ar", ".bz2", ".cab", ".cpio", ".deb", ".dmg", ".egg", ".gz", ".iso", ".jar", ".lha", ".mar", ".pea", ".rar", ".rpm", ".s7z", ".shar", ".tar", ".tbz2", ".tgz", ".tlz", ".war", ".whl", ".xpi", ".zip", ".zipx", ".xz", ".pak"},
 
 	"web": {".css", ".html", ".htm", ".html5", ".less", ".scss", ".wasm"},
@@ -100,11 +100,14 @@ func main() {
 	suffix_list := strings.Split(suffixs, ",")
 	separators_list := strings.Split(separators, ",")
 	extensions_list := strings.Split(extensions, ",")
+	types_list := strings.Split(types, ",")
 
 	// Checking for type of extensions if user added
 	if types != "" {
-		exts := types_list[types]
-		extensions_list = append(extensions_list, exts...)
+		for _, types := range types_list {
+			exts := types_dic[types]
+			extensions_list = append(extensions_list, exts...)
+		}
 	}
 
 	if prefixs != "" && suffixs != "" {
