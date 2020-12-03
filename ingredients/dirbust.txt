@@ -1,67 +1,67 @@
 %n%0
 %n%1
-%n%1.%e%
+%n%1%e%
 %n%2
-%n%2.%e%
+%n%2%e%
 %n%3
-%n%3.%e%
+%n%3%e%
 %n%4
-%n%4.%e%
+%n%4%e%
 %n%5
-%n%5.%e%
-%n% (3rd copy).%e%
-%n% (4th copy).%e%
-%n% (another copy).%e%
-%n% (copy).%e%
-%n% (third copy).%e%
-%n% - Copy (2).%e%
-%n% - Copy Copy.%e%
-%n% - Copy.%e%
+%n%5%e%
+%n% (3rd copy)%e%
+%n% (4th copy)%e%
+%n% (another copy)%e%
+%n% (copy)%e%
+%n% (third copy)%e%
+%n% - Copy (2)%e%
+%n% - Copy Copy%e%
+%n% - Copy%e%
 %n%-
 %n%.1
 %n%.2
 %n%.3
 %n%.7z
-%n%.%e%1
-%n%.%e%2
-%n%.%e%3
-%n%.%e%4
-%n%.%e%5
-%n%.%e%.1
-%n%.%e%.7z
-%n%.%e%.a
-%n%.%e%.ar
-%n%.%e%.bac
-%n%.%e%.backup
-%n%.%e%.bak
-%n%.%e%.bz2
-%n%.%e%.cbz
-%n%.%e%.exe
-%n%.%e%.gz
-%n%.%e%.inc
-%n%.%e%.include
-%n%.%e%.jar
-%n%.%e%.lzma
-%n%.%e%.old
-%n%.%e%.rar
-%n%.%e%.tar
-%n%.%e%.tar.7z
-%n%.%e%.tar.bz2
-%n%.%e%.tar.gz
-%n%.%e%.tar.lzma
-%n%.%e%.tar.xz
-%n%.%e%.wim
-%n%.%e%.xz
-%n%.%e%.zip
-%n%.%e%_backup
-%n%.%e%_bak
-%n%.%e%_inc
-%n%.%e%_old
-%n%.%e%backup
-%n%.%e%bak
-%n%.%e%inc
-%n%.%e%old
-%n%.%e%~
+%n%%e%1
+%n%%e%2
+%n%%e%3
+%n%%e%4
+%n%%e%5
+%n%%e%.1
+%n%%e%.7z
+%n%%e%.a
+%n%%e%.ar
+%n%%e%.bac
+%n%%e%.backup
+%n%%e%.bak
+%n%%e%.bz2
+%n%%e%.cbz
+%n%%e%.exe
+%n%%e%.gz
+%n%%e%.inc
+%n%%e%.include
+%n%%e%.jar
+%n%%e%.lzma
+%n%%e%.old
+%n%%e%.rar
+%n%%e%.tar
+%n%%e%.tar.7z
+%n%%e%.tar.bz2
+%n%%e%.tar.gz
+%n%%e%.tar.lzma
+%n%%e%.tar.xz
+%n%%e%.wim
+%n%%e%.xz
+%n%%e%.zip
+%n%%e%_backup
+%n%%e%_bak
+%n%%e%_inc
+%n%%e%_old
+%n%%e%backup
+%n%%e%bak
+%n%%e%inc
+%n%%e%old
+%n%%e%~
 %n%.a
 %n%.ar
 %n%.bac
@@ -122,12 +122,12 @@
 %n%.zip
 %n%_
 %n%_backup
-%n%_backup.%e%
+%n%_backup%e%
 %n%_bak
-%n%_bak.%e%
+%n%_bak%e%
 %n%_inc
 %n%_old
-%n%_old.%e%
+%n%_old%e%
 %n%backup
 %n%bak
 %n%inc
@@ -139,9 +139,9 @@
 .%n%.swn
 .%n%.swo
 .%n%.swp
-backup_%n%.%e%
-bak_%n%.%e%
-Copy (2) of %n%.%e%
-Copy of %n%.%e%
-Copy of Copy of %n%.%e%
-old_%n%.%e%
+backup_%n%%e%
+bak_%n%%e%
+Copy (2) of %n%%e%
+Copy of %n%%e%
+Copy of Copy of %n%%e%
+old_%n%%e%
