@@ -219,14 +219,26 @@ func main() {
 	var words string
 	flag.StringVar(&words, "w", "", "word or list of words")
 
+	var words_file string
+	flag.StringVar(&words_file, "wf", "", "File containing words")
+
 	var prefixs string
 	flag.StringVar(&prefixs, "p", "", "word or list of words to add as prefix")
+
+	var prefixs_file string
+	flag.StringVar(&prefixs_file, "pf", "", "File containing Prefix")
 
 	var suffixs string
 	flag.StringVar(&suffixs, "s", "", "word or list of words to add as suffix")
 
+	var suffixs_file string
+	flag.StringVar(&suffixs_file, "sf", "", "File containing Suffix")
+
 	var separators string
-	flag.StringVar(&separators, "sp", "", "char/chars or list of char/chars to add as separator")
+	flag.StringVar(&separators, "j", "", "char/chars or list of char/chars to join between prefix, words and suffix")
+
+	var separators_file string
+	flag.StringVar(&separators_file, "jf", "", "File containing  join between prefix, words and suffix")
 
 	var subdomainList string
 	flag.StringVar(&subdomainList, "f", "", "Enter list of subdomains")
@@ -264,6 +276,7 @@ func main() {
 		fmt.Printf("extensions_list  : %v\n", extensions_list)
 		fmt.Printf("types_list       : %v\n", types_list)
 	}
+
 	var slash = ""
 
 	if addslash {
