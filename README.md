@@ -1,4 +1,4 @@
-<img src="./images/a.png">
+<img src="./images/f.png">
 
 # COOK
 A highly customizable custom-wordlist generator.
