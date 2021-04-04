@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"regexp"
 	"strings"
@@ -17,6 +16,24 @@ var m = make(map[interface{}]map[string][]string)
 
 var params = make(map[string][]string)
 var pattern = []string{}
+
+var banner = `
+
+                             
+  ░            ░ ░      ░ ░  ░  ░   
+ ░        ░ ░ ░ ▒  ░ ░ ░ ▒  ░ ░░ ░ 
+  ░  ▒     ░ ▒ ▒░   ░ ▒ ▒░ ░ ░▒ ▒░
+░ ░▒ ▒  ░░ ▒░▒░▒░ ░ ▒░▒░▒░ ▒ ▒▒ ▓▒
+ ▄████▄   ▒█████   ▒█████   ██ ▄█▀
+▒██▀ ▀█  ▒██▒  ██▒▒██▒  ██▒ ██▄█▒ 
+▒▓█    ▄ ▒██░  ██▒▒██░  ██▒▓███▄░ 
+▒▓▓▄ ▄██▒▒██   ██░▒██   ██░▓██ █▄ 
+ ▒ ▓███▀ ░░ ████▓▒░░ ████▓▒░▒██▒ █▄ V1
+======================================
+
+HIGHLY CUSTOMIZABLE WORDLIST GENERATOR
+		by Gitesh Sharma @giteshnxtlvl
+`
 
 var help = `
 cook -p1 admin,root,su p1
@@ -41,7 +58,7 @@ words:
     files: [masters, files, password]
 
 extensions:
-    archive: [".7z", ".a", ".apk", ".xapk", ".ar", ".bz2", ".cab", ".cpio", ".deb", ".dmg", ".egg", ".gz", ".iso", ".jar", ".lha", ".mar", ".pea", ".rar", ".rpm", ".s7z", ".shar", ".tar", ".tbz2", ".tgz", ".tlz", ".war", ".whl", ".xpi", ".zip", ".zipx", ".xz", ".pak"]
+    archive: [.7z, .a, .apk, .xapk, .ar, .bz2, .cab, .cpio, .deb, .dmg, .egg, .gz, .iso, .jar, .lha, .mar, .pea, .rar, .rpm, .s7z, .shar, .tar, .tbz2, .tgz, .tlz, .war, .whl, .xpi, .zip, .zipx, .xz, .pak]
     config : [.conf, .config]
     sheet  : [.ods, .xls, .xlsx, .csv, .ics .vcf]
     exec   : [.exe, .msi, .bin, .command, .sh, .bat, .crx]
@@ -90,13 +107,19 @@ func findRegex(file, expresssion string) []string {
 
 //Parse Input
 func parseInput(commands []string) {
-	last := len(commands) - 1
-	for i, cmd := range commands[:last] {
 
-		if cmd == "-h" {
-			fmt.Println(help)
-			os.Exit(0)
-		}
+	if len(commands) == 0 {
+		fmt.Println(banner)
+		os.Exit(0)
+	}
+	if stringInSlice(commands, "-h") {
+		fmt.Println(help)
+		os.Exit(0)
+	}
+
+	last := len(commands) - 1
+
+	for i, cmd := range commands[:last] {
 
 		if strings.HasPrefix(cmd, "-") {
 			cmd = strings.Replace(cmd, "-", "", 1)
@@ -146,7 +169,7 @@ func cookConfig() {
 		var err2 error
 		content, err2 = ioutil.ReadFile(configFile)
 		if err2 != nil {
-			log.Fatalf("Config File Reading Error: %v", err2)
+			fmt.Printf("Config File Reading Error: %v\n", err2)
 		}
 
 		//If file is empty
@@ -157,14 +180,14 @@ func cookConfig() {
 	} else if os.IsNotExist(err) {
 		err := ioutil.WriteFile(configFile, []byte(config), 0644)
 		if err != nil {
-			log.Fatalf("Config File Writing Error: %v", err)
+			fmt.Printf("Config File Writing Error: %v\n", err)
 		}
 	}
 
 	err := yaml.Unmarshal([]byte(content), &m)
 
 	if err != nil {
-		log.Fatalf("error: %v", err)
+		fmt.Printf("error: %v", err)
 	}
 
 	for k, v := range m["charSet"] {
