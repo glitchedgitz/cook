@@ -37,8 +37,49 @@ go get github.com/giteshnxtlvl/cook
 ```
 
 # Usage
-## Basic Usage
+### Basic Usage
+
 ```
-Structure:
-cook -ingredient1 <value1> -ingredient2 <value2> ... [pattern]
+  cook -start admin,root  -sep _,-  -end secret,critical  start:sep:end
+```
+OUTPUT
+```
+  admin_secret
+  admin_critical
+  admin-secret
+  admin-critical
+  root_secret
+  root_critical
+  root-secret
+  root-critical
+```
+
+### EXTENSION CATEGORY USAGE
+```
+cook -start admin,root  -sep _ -end secret  start:sep:archive
+```
+OUTPUT
+```
+admin_.7z
+admin_.a
+admin_.apk
+admin_.xapk
+admin_.ar
+...
+...
+```
+
+### REGEX INPUT FROM FILE
+```
+cook -start admin -exp raft-large-extensions.txt:\.asp.*  /:start:exp
+```
+OUTPUT
+```
+/admin.aspx
+/admin.asp
+/admin.aspx.cs
+/admin.aspx.vb
+/admin.asp.asp
+...
+...
 ```

@@ -36,11 +36,22 @@ HIGHLY CUSTOMIZABLE WORDLIST GENERATOR
 `
 
 var help = `
-cook -p1 admin,root,su p1
-`
+BASIC USAGE
+	cook -start admin,root  -sep _,-  -end secret,critical  start:sep:end
 
-var config = `# This is COOK's config file
-# You can modify this file according to your need
+OUTPUT
+	admin_secret
+	admin_critical
+	admin-secret
+	admin-critical
+	root_secret
+	root_critical
+	root-secret
+	root-critical
+` + config
+
+var config = `
+# This is COOK's config file
 
 charSet:
     n     : [0123456789]
