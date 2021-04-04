@@ -18,77 +18,9 @@ var m = make(map[interface{}]map[string][]string)
 var params = make(map[string][]string)
 var pattern = []string{}
 
-func stringInSlice(list []string, a string) bool {
-	for _, b := range list {
-		if b == a {
-			return true
-		}
-	}
-	return false
-}
-
-func findRegex(file, expresssion string) []string {
-	founded := []string{}
-
-	content, _ := ioutil.ReadFile(file)
-
-	r, err := regexp.Compile(expresssion)
-	if err != nil {
-		println(err)
-	}
-
-	data := strings.ReplaceAll(string(content), "\r\n", "\n")
-	extensions_list := r.FindAllString(data, -1)
-
-	for _, found := range extensions_list {
-		if !stringInSlice(founded, found) {
-			founded = append(founded, found)
-		}
-	}
-
-	return founded
-}
-
-//Parse Input
-func parseInput(commands []string) {
-	last := len(commands) - 1
-	for i, cmd := range commands[:last] {
-		if i%2 == 0 {
-			cmd = strings.Replace(cmd, "-", "", 1)
-			value := commands[i+1]
-			values := []string{}
-
-			if strings.Contains(value, ":") {
-				t := strings.SplitN(value, ":", 2)
-				file := t[0]
-				reg := t[1]
-
-				if strings.HasSuffix(file, ".txt") {
-					values = findRegex(file, reg)
-				} else {
-					values = strings.Split(value, ",")
-				}
-			} else if strings.HasSuffix(value, ".txt") {
-				content, err := ioutil.ReadFile(value)
-
-				if err != nil {
-					values = strings.Split(value, ",")
-				} else {
-					fileData := string(content)
-					fileData = strings.ReplaceAll(fileData, "\r\n", "\n")
-					values = strings.Split(fileData, "\n")
-				}
-			} else {
-				values = strings.Split(value, ",")
-			}
-
-			params[cmd] = values
-			// fmt.Print(Blue + cmd + " = " + White)
-			// fmt.Println(values)
-		}
-	}
-	pattern = strings.Split(commands[last], ":")
-}
+var help = `
+cook -p1 admin,root,su p1
+`
 
 var config = `# This is COOK's config file
 # You can modify this file according to your need
@@ -125,21 +57,85 @@ extensions:
     image  : [.3dm, .3ds, .max, .bmp, .dds, .gif, .jpg, .jpeg, .png, .psd, .xcf, .tga, .thm, .tif, .tiff, .yuv, .ai, .eps, .ps, .svg, .dwg, .dxf, .gpx, .kml, .kmz, .webp]
 `
 
+func stringInSlice(list []string, a string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
+}
+
+func findRegex(file, expresssion string) []string {
+	founded := []string{}
+
+	content, _ := ioutil.ReadFile(file)
+
+	r, err := regexp.Compile(expresssion)
+	if err != nil {
+		println(err)
+	}
+
+	data := strings.ReplaceAll(string(content), "\r\n", "\n")
+	extensions_list := r.FindAllString(data, -1)
+
+	for _, found := range extensions_list {
+		if !stringInSlice(founded, found) {
+			founded = append(founded, found)
+		}
+	}
+
+	return founded
+}
+
+//Parse Input
+func parseInput(commands []string) {
+	last := len(commands) - 1
+	for i, cmd := range commands[:last] {
+
+		if cmd == "-h" {
+			fmt.Println(help)
+			os.Exit(0)
+		}
+
+		if strings.HasPrefix(cmd, "-") {
+			cmd = strings.Replace(cmd, "-", "", 1)
+			value := commands[i+1]
+			values := []string{}
+
+			if strings.Contains(value, ":") {
+				t := strings.SplitN(value, ":", 2)
+				file := t[0]
+				reg := t[1]
+
+				if strings.HasSuffix(file, ".txt") {
+					values = findRegex(file, reg)
+				} else {
+					values = strings.Split(value, ",")
+				}
+			} else if strings.HasSuffix(value, ".txt") {
+				content, err := ioutil.ReadFile(value)
+
+				if err != nil {
+					values = strings.Split(value, ",")
+				} else {
+					fileData := string(content)
+					fileData = strings.ReplaceAll(fileData, "\r\n", "\n")
+					values = strings.Split(fileData, "\n")
+				}
+			} else {
+				values = strings.Split(value, ",")
+			}
+
+			params[cmd] = values
+		}
+	}
+	pattern = strings.Split(commands[last], ":")
+}
+
 func cookConfig() {
 
-	// home, err := os.UserHomeDir()
-	// if err != nil {
-	// 	fmt.Printf("Expected nil got %v while getting dir\n", err)
-	// }
-
-	// configPath := filepath.Join(home, "cook")
-	// if _, err := os.Stat(configPath); os.IsNotExist(err) {
-	// 	os.Mkdir(configPath, os.ModePerm)
-	// }
-
-	//Making Config File
 	configFile := os.Getenv("COOK")
-	// fmt.Println(configFile)
 
 	content := []byte(config)
 
