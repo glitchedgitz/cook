@@ -32,7 +32,7 @@ var banner = `
 ======================================
 
 HIGHLY CUSTOMIZABLE WORDLIST GENERATOR
-		by Gitesh Sharma @giteshnxtlvl
+	by Gitesh Sharma @giteshnxtlvl
 `
 
 var help = `
