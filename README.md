@@ -41,7 +41,6 @@ A highly customizable custom-wordlist generator.
   ```
    cook -start admin,root  -sep _ -end secret  start:sep:archive
   ```
-  Or
   ```
    cook admin,root:_:archive
   ```
@@ -66,7 +65,6 @@ A highly customizable custom-wordlist generator.
   ```
    cook -start admin -exp raft-large-extensions.txt:\.asp.*  /:start:exp
   ```
-  Or
   ```
    cook -exp raft-large-extensions.txt:\.asp.*  /:admin:exp
   ```
@@ -86,7 +84,6 @@ A highly customizable custom-wordlist generator.
   ```
    cook -start admin,root -file file_not_exists.txt start:_:file
   ```
-  Or
   ```
    cook -file file_not_exists.txt admin,root:_:file
   ```
