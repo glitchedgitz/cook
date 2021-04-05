@@ -48,15 +48,6 @@ A customizable wordlist and password generator.
   ```
 <img src="./images/07.png">
 
-<img src="./images/05.png">
-
-<img src="./images/06.png">
-
-
-
-
-
-  
   ### File not found  
   You can specify file `-any raft-large-extensions.txt` and can also use regex pattern to extract values like `-exp raft-large-extensions.txt:\.asp.*`
   ```
@@ -70,6 +61,11 @@ A customizable wordlist and password generator.
     admin_file_not_exists.txt
     root_file_not_exists.txt
   ```
+
+<img src="./images/05.png">
+
+<img src="./images/06.png">
+
 
 # Installation
 ```
