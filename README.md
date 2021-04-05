@@ -46,12 +46,13 @@ A customizable wordlist and password generator.
   ```
    cook -exp raft-large-extensions.txt:\.asp.*  /:admin:exp
   ```
+<img src="./images/07.png">
 
 <img src="./images/05.png">
 
 <img src="./images/06.png">
 
-<img src="./images/07.png">
+
 
 
 
