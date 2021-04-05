@@ -9,26 +9,26 @@ A highly customizable custom-wordlist generator.
   - Input multiple values like `-p1 admin,root,su`
   - Use extension from **pre-defined dictionary**
 
-  ### Usage
-  Paramerized Approach
-  ```
-    cook -start admin,root  -sep _,-  -end secret,critical  start:sep:end
-  ```
-  Direct Approach
-  ```
-    cook admin,root:_,-:secret,critical
-  ```
-  Output
-  ```
-    admin_secret
-    admin_critical
-    admin-secret
-    admin-critical
-    root_secret
-    root_critical
-    root-secret
-    root-critical
-  ```
+  > ### Usage
+  >Paramerized Approach
+  >```
+  >  cook -start admin,root  -sep _,-  -end secret,critical  start:sep:end
+  >```
+  >Direct Approach
+  >```
+  >  cook admin,root:_,-:secret,critical
+  >```
+  >Output
+  >```
+  >  admin_secret
+  >  admin_critical
+  >  admin-secret
+  >  admin-critical
+  >  root_secret
+  >  root_critical
+  >  root-secret
+  >  root-critical
+  >```
 
 - #### Pre-defined Extentions Categories  
   - Use `archive` for `.rar, .7z, .zip, .tar,  .tgz, ...`  
