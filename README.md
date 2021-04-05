@@ -66,6 +66,8 @@ A customizable wordlist and password generator.
 
 <img src="./images/06.png">
 
+<img src="./images/08.png">
+
 
 # Installation
 ```
