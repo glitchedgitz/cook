@@ -10,10 +10,11 @@ A highly customizable custom-wordlist generator.
   - Use extension from **pre-defined dictionary**
 
   ### Usage
+  Paramerized Approach
   ```
     cook -start admin,root  -sep _,-  -end secret,critical  start:sep:end
   ```
-  Or
+  Direct Approach
   ```
     cook admin,root:_,-:secret,critical
   ```
