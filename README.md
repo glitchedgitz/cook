@@ -4,7 +4,7 @@
 A highly customizable custom-wordlist generator.
 - #### Highly Customizable using cook.yaml
 
-<img src="./images/pattern.png">
+<img src="./images/pattern2..png">
 
 - #### Parameter & Value approach
   - Name your own parameter `-[anything] admin`
