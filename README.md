@@ -28,7 +28,9 @@ A highly customizable custom-wordlist generator.
 ## cook.yaml
 This file contains character sets, words's set and extensions set specified.
 ```yaml
-charSet:  # Each character is a separate value
+
+# Each character is a separate value
+charSet:  
     n     : [0123456789]
     A     : [ABCDEFGHIJKLMNOPQRSTUVWXYZ]
     a     : [abcdefghijklmnopqrstuvwxyz]
@@ -39,11 +41,13 @@ charSet:  # Each character is a separate value
     s     : ["!#$%&'()*+,-./:;<=>?@[\\]^_`{|}~&\""]
     all   : ["!#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\""]
 
-words:    # Define your own words and values
-    admin: [admin, root, su]
-    files: [masters, files, password]
+# Define your own words and values
+words:    
+    something1: [admin, root, su]
+    something2: [masters, files, password]
 
-extensions: # Extensions
+# Extensions Set
+extensions: 
     archive: [.7z, .a, .apk, .xapk, .ar, .bz2, .cab, .cpio, .deb, .dmg, .egg, .gz, .iso, .jar, .lha, .mar, .pea, .rar, .rpm, .s7z, .shar, .tar, .tbz2, .tgz, .tlz, .war, .whl, .xpi, .zip, .zipx, .xz, .pak]
     config : [.conf, .config]
     sheet  : [.ods, .xls, .xlsx, .csv, .ics .vcf]
@@ -77,11 +81,13 @@ Steps to modify cook.yaml
 
 ### Basic Usage
 ```
-►  cook -start admin,root  -sep _,-  -end secret,critical  start:sep:end
+  cook -start admin,root  -sep _,-  -end secret,critical  start:sep:end
 ```
+Or
 ```
-►  cook admin,root:_,-:secret,critical
+  cook admin,root:_,-:secret,critical
 ```
+Output
 ```
   admin_secret
   admin_critical
@@ -94,12 +100,15 @@ Steps to modify cook.yaml
 ```
 
 ### Extention Category Usage
+Using `archieve` extension.
 ```
-► cook -start admin,root  -sep _ -end secret  start:sep:archive
+ cook -start admin,root  -sep _ -end secret  start:sep:archive
 ```
+Or
 ```
-► cook admin,root:_:archive
+ cook admin,root:_:archive
 ```
+Output
 ```
 admin_.7z
 admin_.a
@@ -112,11 +121,13 @@ admin_.ar
 
 ### Regex Input from File
 ```
-► cook -start admin -exp raft-large-extensions.txt:\.asp.*  /:start:exp
+ cook -start admin -exp raft-large-extensions.txt:\.asp.*  /:start:exp
 ```
+Or
 ```
-► cook -exp raft-large-extensions.txt:\.asp.*  /:admin:exp
+ cook -exp raft-large-extensions.txt:\.asp.*  /:admin:exp
 ```
+Output
 ```
 /admin.aspx
 /admin.asp
