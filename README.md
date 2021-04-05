@@ -22,7 +22,7 @@ A highly customizable custom-wordlist generator.
 
 # Installation
 ```
-go get github.com/giteshnxtlvl/cook
+► go get github.com/giteshnxtlvl/cook
 ```
 
 ## cook.yaml
@@ -77,7 +77,10 @@ Steps to modify cook.yaml
 
 ### Basic Usage
 ```
-  cook -start admin,root  -sep _,-  -end secret,critical  start:sep:end
+►  cook -start admin,root  -sep _,-  -end secret,critical  start:sep:end
+```
+```
+►  cook admin,root:_,-:secret,critical
 ```
 ```
   admin_secret
@@ -92,7 +95,10 @@ Steps to modify cook.yaml
 
 ### Extention Category Usage
 ```
-cook -start admin,root  -sep _ -end secret  start:sep:archive
+► cook -start admin,root  -sep _ -end secret  start:sep:archive
+```
+```
+► cook admin,root:_:archive
 ```
 ```
 admin_.7z
@@ -106,7 +112,10 @@ admin_.ar
 
 ### Regex Input from File
 ```
-cook -start admin -exp raft-large-extensions.txt:\.asp.*  /:start:exp
+► cook -start admin -exp raft-large-extensions.txt:\.asp.*  /:start:exp
+```
+```
+► cook -exp raft-large-extensions.txt:\.asp.*  /:admin:exp
 ```
 ```
 /admin.aspx
