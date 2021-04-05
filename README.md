@@ -9,16 +9,76 @@ A highly customizable custom-wordlist generator.
   - Input multiple values like `-p1 admin,root,su`
   - Use extension from **pre-defined dictionary**
 
+  ### Basic Usage
+  ```
+    cook -start admin,root  -sep _,-  -end secret,critical  start:sep:end
+  ```
+  Or
+  ```
+    cook admin,root:_,-:secret,critical
+  ```
+  Output
+  ```
+    admin_secret
+    admin_critical
+    admin-secret
+    admin-critical
+    root_secret
+    root_critical
+    root-secret
+    root-critical
+  ```
+
 - #### Pre-defined Extentions Categories
   - Use `archive` for `.rar, .7z, .zip, .tar,  .tgz, ...`  
   - Use `web` for `.html, .php, .aspx, .js, .jsx, .jsp, ...`
   - Many More...
   - Create your own category in **cook.yaml**
 
+  ### Extention Category Usage
+  Using `archieve` extension set
+  ```
+   cook -start admin,root  -sep _ -end secret  start:sep:archive
+  ```
+  Or
+  ```
+   cook admin,root:_:archive
+  ```
+  Output
+  ```
+  admin_.7z
+  admin_.a
+  admin_.apk
+  admin_.xapk
+  admin_.ar
+  ...
+  ...
+  ```
+
 - #### Smart file detection
   - Set `file.txt` as param’s value
   - Regex input from `file.txt`:**^apps.***
   - File not found means use filename as value
+
+  ### Regex Input from File
+  You can specify file `-any raft-large-extensions.txt` and can also use regex pattern to extract values like `-exp raft-large-extensions.txt:\.asp.*`
+  ```
+   cook -start admin -exp raft-large-extensions.txt:\.asp.*  /:start:exp
+  ```
+  Or
+  ```
+   cook -exp raft-large-extensions.txt:\.asp.*  /:admin:exp
+  ```
+  Output
+  ```
+  /admin.aspx
+  /admin.asp
+  /admin.aspx.cs
+  /admin.aspx.vb
+  /admin.asp.asp
+  ...
+  ...
+  ```
 
 # Installation
 ```
@@ -68,72 +128,7 @@ extensions:
 
 Steps to modify cook.yaml 
 1. Create an environment varirable names `COOK` 
-2. Sets it's value to file's path, doesn't matter file exists or not
-   Example: COOK: E:\tools\config\cook.yaml
+2. Sets it's value to file's path, doesn't matter file exists or not  
+   Example: COOK: `E:\tools\config\cook.yaml`
 3. Done, run the tool and it will create `cook.yaml`.
 
-# Usage
-
-### Param Rules
-- Always start with dash
-- Can overwrite pre-defined wordlist's name.
-
-
-### Basic Usage
-```
-  cook -start admin,root  -sep _,-  -end secret,critical  start:sep:end
-```
-Or
-```
-  cook admin,root:_,-:secret,critical
-```
-Output
-```
-  admin_secret
-  admin_critical
-  admin-secret
-  admin-critical
-  root_secret
-  root_critical
-  root-secret
-  root-critical
-```
-
-### Extention Category Usage
-Using `archieve` extension.
-```
- cook -start admin,root  -sep _ -end secret  start:sep:archive
-```
-Or
-```
- cook admin,root:_:archive
-```
-Output
-```
-admin_.7z
-admin_.a
-admin_.apk
-admin_.xapk
-admin_.ar
-...
-...
-```
-
-### Regex Input from File
-```
- cook -start admin -exp raft-large-extensions.txt:\.asp.*  /:start:exp
-```
-Or
-```
- cook -exp raft-large-extensions.txt:\.asp.*  /:admin:exp
-```
-Output
-```
-/admin.aspx
-/admin.asp
-/admin.aspx.cs
-/admin.aspx.vb
-/admin.asp.asp
-...
-...
-```
