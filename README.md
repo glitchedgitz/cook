@@ -9,7 +9,7 @@ A highly customizable custom-wordlist generator.
   - Input multiple values like `-p1 admin,root,su`
   - Use extension from **pre-defined dictionary**
 
-  **Usage**
+  ### Usage
   ```
     cook -start admin,root  -sep _,-  -end secret,critical  start:sep:end
   ```
@@ -35,7 +35,7 @@ A highly customizable custom-wordlist generator.
   - Many More...
   - Create your own category in **cook.yaml**
 
-  **Extention Category Usage**  
+  ### Extention Category Usage
   Using `archieve` extension set
   ```
    cook -start admin,root  -sep _ -end secret  start:sep:archive
@@ -60,7 +60,7 @@ A highly customizable custom-wordlist generator.
   - Regex input from `file.txt`:**^apps.***
   - File not found means use filename as value
 
-  **Regex Input from File**  
+  ### Regex Input from File  
   You can specify file `-any raft-large-extensions.txt` and can also use regex pattern to extract values like `-exp raft-large-extensions.txt:\.asp.*`
   ```
    cook -start admin -exp raft-large-extensions.txt:\.asp.*  /:start:exp
@@ -80,7 +80,7 @@ A highly customizable custom-wordlist generator.
   ...
   ```
   
-  **File not found**  
+  ### File not found  
   You can specify file `-any raft-large-extensions.txt` and can also use regex pattern to extract values like `-exp raft-large-extensions.txt:\.asp.*`
   ```
    cook -start admin,root -file file_not_exists.txt start:_:file
