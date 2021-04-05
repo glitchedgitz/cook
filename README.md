@@ -1,44 +1,27 @@
-<img src="./images/header1.png">
+<img src="./images/01.png">
 
 # COOK
-A highly customizable custom-wordlist generator.
-- #### Highly Customizable using cook.yaml
+A customizable wordlist and password generator.
 
-<img src="./images/pattern2..png">
-
-- #### Parameter & Value approach
-  - Name your own parameter `-[anything] admin`
-  - Input multiple values like `-p1 admin,root,su`
-  - Use extension from **pre-defined dictionary**
-
-  ### Usage
-  Paramerized Approach
+## USAGE
   ```
     cook -start admin,root  -sep _,-  -end secret,critical  start:sep:end
   ```
-  Direct Approach
   ```
     cook admin,root:_,-:secret,critical
   ```
-  Output
-  ```
-    admin_secret
-    admin_critical
-    admin-secret
-    admin-critical
-    root_secret
-    root_critical
-    root-secret
-    root-critical
-  ```
+  
+<img src="./images/02.png">
 
-- #### Pre-defined Extentions Categories  
+
+
+## Predefined Extentions Sets
   - Use `archive` for `.rar, .7z, .zip, .tar,  .tgz, ...`  
   - Use `web` for `.html, .php, .aspx, .js, .jsx, .jsp, ...`
   - Many More...
   - Create your own category in **cook.yaml**
 
-  ### Extention Category Usage
+  ### Usage
   Using `archieve` extension set
   ```
    cook -start admin,root  -sep _ -end secret  start:sep:archive
@@ -46,18 +29,11 @@ A highly customizable custom-wordlist generator.
   ```
    cook admin,root:_:archive
   ```
-  Output
-  ```
-  admin_.7z
-  admin_.a
-  admin_.apk
-  admin_.xapk
-  admin_.ar
-  ...
-  ...
-  ```
+  
+<img src="./images/03.png">
 
-- #### Smart file detection  
+
+## Smart file detection  
   - Set `file.txt` as param’s value
   - Regex input from `file.txt`:**^apps.***
   - File not found means use filename as value
@@ -70,16 +46,17 @@ A highly customizable custom-wordlist generator.
   ```
    cook -exp raft-large-extensions.txt:\.asp.*  /:admin:exp
   ```
-  Output
-  ```
-  /admin.aspx
-  /admin.asp
-  /admin.aspx.cs
-  /admin.aspx.vb
-  /admin.asp.asp
-  ...
-  ...
-  ```
+  
+<img src="./images/04.png">
+
+<img src="./images/05.png">
+
+<img src="./images/06.png">
+
+<img src="./images/07.png">
+
+
+
   
   ### File not found  
   You can specify file `-any raft-large-extensions.txt` and can also use regex pattern to extract values like `-exp raft-large-extensions.txt:\.asp.*`
