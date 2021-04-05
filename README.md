@@ -132,3 +132,5 @@ Steps to modify cook.yaml
    Example: COOK: `E:\tools\config\cook.yaml`
 3. Done, run the tool and it will create `cook.yaml`.
 
+## Rseources
+- raft-large-extensions.txt : `https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/raft-large-extensions.txt`
