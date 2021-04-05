@@ -1,8 +1,10 @@
-<img src="./images/f.png">
+<img src="./images/header1.png">
 
 # COOK
 A highly customizable custom-wordlist generator.
 - #### Highly Customizable using cook.yaml
+
+<img src="./images/pattern.png">
 
 - #### Parameter & Value approach
   - Name your own parameter `-[anything] admin`
