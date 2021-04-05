@@ -64,25 +64,29 @@ charSet:
     s     : ["!#$%&'()*+,-./:;<=>?@[\\]^_` + "`" + `{|}~&\""]
     all   : ["!#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_` + "`" + `abcdefghijklmnopqrstuvwxyz{|}~\""]
 
+files:
+    raft_ext: [E:\\tools\\wordlists\\SecLists\\Discovery\\Web-Content\\raft-large-extensions.txt]
+    robot_1000: [E:\\tools\\wordlists\\SecLists\\Discovery\\Web-Content\\RobotsDisallowed-Top1000.txt]
+
 words:
-    admin: [admin, root, su]
-    files: [masters, files, password]
+    something1: [admin, root, su]
+    something2: [masters, files, password]
 
 extensions:
-    archive: [.7z, .a, .apk, .xapk, .ar, .bz2, .cab, .cpio, .deb, .dmg, .egg, .gz, .iso, .jar, .lha, .mar, .pea, .rar, .rpm, .s7z, .shar, .tar, .tbz2, .tgz, .tlz, .war, .whl, .xpi, .zip, .zipx, .xz, .pak]
-    config : [.conf, .config]
-    sheet  : [.ods, .xls, .xlsx, .csv, .ics .vcf]
-    exec   : [.exe, .msi, .bin, .command, .sh, .bat, .crx]
-    code   : [.c, .cc, .class, .clj, .cpp, .cs, .cxx, .el, .go, .h, .java, .lua, .m, .m4, .php, .php3, .php5, .php7, .pl, .po, .py, .rb, .rs, .sh, .swift, .vb, .vcxproj, .xcodeproj, .xml, .diff, .patch, .js, .jsx]
-    web    : [.html, .html5, .htm, .css, .js, .jsx, .less, .scss, .wasm, .php, .php3, .php5, .php7]
-    backup : [.bak, .backup, .backup1, .backup2]
-    slide  : [.ppt, .odp]
-    font   : [.eot, .otf, .ttf, .woff, .woff2]
-    text   : [.doc, .docx, .ebook, .log, .md, .msg, .odt, .org, .pages, .pdf, .rtf, .rst, .tex, .txt, .wpd, .wps]
-    audio  : [.aac, .aiff, .ape, .au, .flac, .gsm, .it, .m3u, .m4a, .mid, .mod, .mp3, .mpa, .pls, .ra, .s3m, .sid, .wav, .wma, .xm]
-    book   : [.mobi, .epub, .azw1, .azw3, .azw4, .azw6, .azw, .cbr, .cbz]
-    video  : [.3g2, .3gp, .aaf, .asf, .avchd, .avi, .drc, .flv, .m2v, .m4p, .m4v, .mkv, .mng, .mov, .mp2, .mp4, .mpe, .mpeg, .mpg, .mpv, .mxf, .nsv, .ogg, .ogv, .ogm, .qt, .rm, .rmvb, .roq, .srt, .svi, .vob, .webm, .wmv, .yuv]
-    image  : [.3dm, .3ds, .max, .bmp, .dds, .gif, .jpg, .jpeg, .png, .psd, .xcf, .tga, .thm, .tif, .tiff, .yuv, .ai, .eps, .ps, .svg, .dwg, .dxf, .gpx, .kml, .kmz, .webp]
+    archive: [7z, a, apk, xapk, ar, bz2, cab, cpio, deb, dmg, egg, gz, iso, jar, lha, mar, pea, rar, rpm, s7z, shar, tar, tbz2, tgz, tlz, war, whl, xpi, zip, zipx, xz, pak]
+    config : [conf, config]
+    sheet  : [ods, xls, xlsx, csv, ics vcf]
+    exec   : [exe, msi, bin, command, sh, bat, crx]
+    code   : [c, cc, class, clj, cpp, cs, cxx, el, go, h, java, lua, m, m4, php, php3, php5, php7, pl, po, py, rb, rs, sh, swift, vb, vcxproj, xcodeproj, xml, diff, patch, js, jsx]
+    web    : [html, html5, htm, css, js, jsx, less, scss, wasm, php, php3, php5, php7]
+    backup : [bak, backup, backup1, backup2]
+    slide  : [ppt, odp]
+    font   : [eot, otf, ttf, woff, woff2]
+    text   : [doc, docx, ebook, log, md, msg, odt, org, pages, pdf, rtf, rst, tex, txt, wpd, wps]
+    audio  : [aac, aiff, ape, au, flac, gsm, it, m3u, m4a, mid, mod, mp3, mpa, pls, ra, s3m, sid, wav, wma, xm]
+    book   : [mobi, epub, azw1, azw3, azw4, azw6, azw, cbr, cbz]
+    video  : [3g2, 3gp, aaf, asf, avchd, avi, drc, flv, m2v, m4p, m4v, mkv, mng, mov, mp2, mp4, mpe, mpeg, mpg, mpv, mxf, nsv, ogg, ogv, ogm, qt, rm, rmvb, roq, srt, svi, vob, webm, wmv, yuv]
+    image  : [3dm, 3ds, max, bmp, dds, gif, jpg, jpeg, png, psd, xcf, tga, thm, tif, tiff, yuv, ai, eps, ps, svg, dwg, dxf, gpx, kml, kmz, webp]
 `
 
 func stringInSlice(list []string, a string) bool {
@@ -153,8 +157,7 @@ func parseInput(commands []string) {
 				if err != nil {
 					values = strings.Split(value, ",")
 				} else {
-					fileData := string(content)
-					fileData = strings.ReplaceAll(fileData, "\r\n", "\n")
+					fileData := strings.ReplaceAll(string(content), "\r\n", "\n")
 					values = strings.Split(fileData, "\n")
 				}
 			} else {
@@ -200,11 +203,6 @@ func cookConfig() {
 	if err != nil {
 		fmt.Printf("error: %v", err)
 	}
-
-	for k, v := range m["charSet"] {
-		m["charSet"][k] = strings.Split(v[0], "")
-	}
-
 }
 
 func main() {
@@ -223,19 +221,44 @@ func main() {
 				tmp1 = append(tmp1, params[p]...)
 				continue
 			}
+			if _, exists := m["charSet"][p]; exists {
+				chars := strings.Split(m["charSet"][p][0], "")
+				tmp1 = append(tmp1, chars...)
+				continue
+			}
+			if _, exists := m["files"][p]; exists {
 
-			var notFound = true
-			for _, char := range m {
-				if _, exists := char[p]; exists {
-					tmp1 = append(tmp1, char[p]...)
-					notFound = false
-					break
+				content, err := ioutil.ReadFile(m["files"][p][0])
+
+				if err != nil {
+					fmt.Println("In cook.yaml, " + m["files"][p][0])
+					panic(err)
 				}
-			}
 
-			if notFound {
-				tmp1 = append(tmp1, p)
+				fileData := strings.ReplaceAll(string(content), "\r\n", "\n")
+				tmp1 = append(tmp1, strings.Split(fileData, "\n")...)
+				continue
 			}
+			if _, exists := m["words"][p]; exists {
+				tmp1 = append(tmp1, m["words"][p]...)
+				continue
+			}
+			if _, exists := m["extensions"][p]; exists {
+				for _, ext := range m["extensions"][p] {
+					tmp1 = append(tmp1, "."+ext)
+				}
+				continue
+			}
+			// for _, char := range m {
+			// 	if _, exists := char[p]; exists {
+			// 		tmp1 = append(tmp1, char[p]...)
+			// 		notFound = false
+			// 		break
+			// 	}
+			// }
+
+			tmp1 = append(tmp1, p)
+
 		}
 
 		if i == 0 {
