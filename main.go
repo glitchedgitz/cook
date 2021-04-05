@@ -51,8 +51,10 @@ OUTPUT
 ` + config
 
 var config = `
+
 # This is COOK's config file
 
+# Character set like crunch
 charSet:
     n     : [0123456789]
     A     : [ABCDEFGHIJKLMNOPQRSTUVWXYZ]
@@ -64,14 +66,17 @@ charSet:
     s     : ["!#$%&'()*+,-./:;<=>?@[\\]^_` + "`" + `{|}~&\""]
     all   : ["!#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_` + "`" + `abcdefghijklmnopqrstuvwxyz{|}~\""]
 
+# File to access from anywhere
 files:
     raft_ext: [E:\\tools\\wordlists\\SecLists\\Discovery\\Web-Content\\raft-large-extensions.txt]
     robot_1000: [E:\\tools\\wordlists\\SecLists\\Discovery\\Web-Content\\RobotsDisallowed-Top1000.txt]
 
+# Create your word's set
 words:
-    something1: [admin, root, su]
-    something2: [masters, files, password]
+   admin_set: [admin, root, su, administration]
+   password_set: [123, "@123", "#123"]
 
+# Extension Set, . will added before using this
 extensions:
     archive: [7z, a, apk, xapk, ar, bz2, cab, cpio, deb, dmg, egg, gz, iso, jar, lha, mar, pea, rar, rpm, s7z, shar, tar, tbz2, tgz, tlz, war, whl, xpi, zip, zipx, xz, pak]
     config : [conf, config]
@@ -87,6 +92,7 @@ extensions:
     book   : [mobi, epub, azw1, azw3, azw4, azw6, azw, cbr, cbz]
     video  : [3g2, 3gp, aaf, asf, avchd, avi, drc, flv, m2v, m4p, m4v, mkv, mng, mov, mp2, mp4, mpe, mpeg, mpg, mpv, mxf, nsv, ogg, ogv, ogm, qt, rm, rmvb, roq, srt, svi, vob, webm, wmv, yuv]
     image  : [3dm, 3ds, max, bmp, dds, gif, jpg, jpeg, png, psd, xcf, tga, thm, tif, tiff, yuv, ai, eps, ps, svg, dwg, dxf, gpx, kml, kmz, webp]
+
 `
 
 func stringInSlice(list []string, a string) bool {
