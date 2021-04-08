@@ -22,10 +22,10 @@
 ## Summary
 - Easily create permutations and combinations of words.
 - Customize the tools according to your **unique secrets keywords**.   
-  To customize the tools you have to modify `cook.yaml`. Check here [Customizing tool](#modifying-cookyaml)
+  To customize the tools you have to modify `cook.yaml`. Check here [Customizing tool](#customizing-tool)
 - Easy UX, Checkout examples
 
-## Installation
+# Installation
 - Using Go
 ```
   go get github.com/giteshnxtlvl/cook
@@ -34,14 +34,14 @@
 - Download builds  
   https://github.com/giteshnxtlvl/cook/releases/
 
-## Customizing tool
+# Customizing tool
 > Note: You can use above pre-defined sets without modifying anything
 
 1. Download [cook.yaml](https://github.com/giteshnxtlvl/cook/blob/main/cook.yaml)
 1. Create an env varirable `COOK` = `Path of file`
 3. Done, now tool will use your `cook.yaml`.
 
-## Usage
+# Usage
   ```
     cook -start admin,root  -sep _,-  -end secret,critical  start:sep:end
   ```
@@ -52,7 +52,7 @@
 <img src="./images/02.png">
 
 
-## Predefined Extentions Sets
+# Predefined Extentions Sets
   - Use `archive` for `.rar, .7z, .zip, .tar,  .tgz, ...`  
   - Use `web` for `.html, .php, .aspx, .js, .jsx, .jsp, ...`
   - Many More...
@@ -70,7 +70,7 @@
 <img src="./images/03.png">
 
 
-## Using Files
+# Using Files
   - Set `file.txt` as param’s value
   - Regex input from `file.txt`:**^apps.***
   - File not found means use filename as value
@@ -99,24 +99,24 @@
     root_file_not_exists.txt
   ```
 
-## Save Wordlists by Unique Names  
+# Save Wordlists by Unique Names  
 
 <img src="./images/05.png">
 
-## Create your own unique words sets  
+# Create your own unique words sets  
 
 <img src="./images/06.png">
 
-## Use it like CRUNCH  
+# Use it like CRUNCH  
 
 <img src="./images/08.png">
 
-## Advance Usage  
+# Advance Usage  
 
 <img src="./images/09.png">
 
 
-## cook.yaml
+# Predefined-Sets
 This file contains character sets, words's set and extensions set specified.
 ```yaml
 
@@ -163,9 +163,9 @@ extensions:
     image  : [3dm, 3ds, max, bmp, dds, gif, jpg, jpeg, png, psd, xcf, tga, thm, tif, tiff, yuv, ai, eps, ps, svg, dwg, dxf, gpx, kml, kmz, webp]
 ```
 
-## Upcoming Features
+# Upcoming Features
 - Endpoints Analyser
 - Saving Files and Folders in `cook.yaml`
 
-## Resources
+# Resources
 - raft-large-extensions.txt : `https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/raft-large-extensions.txt`
