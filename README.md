@@ -1,9 +1,8 @@
 <img src="./images/01.png">
 
-# COOK
-A customizable wordlist and password generator.
+<h1 align="center">COOK - A customizable wordlist and password generator</h1>
 
-Features
+- [Summary](#summary)  
 - [Basic Usage](#usage)  
 - [Predefined Extentions Sets](#predefined-extentions-sets)
 - [Using Files](#using-files)
@@ -13,9 +12,17 @@ Features
 - [Create your own unique words sets](#create-your-own-unique-words-sets)
 - [Char-sets : Use it like CRUNCH](#use-it-like-crunch)
 - [Advance Usage](#advance-usage)
+
 - [Installation](#installation)
+- [Customizing tool](#modifying-cookyaml)
 - [Upcoming Features](#upcoming-features)
 
+
+## Summary
+- Easily create permutations and combinations of words.
+- Customize the tools according to your **unique secrets keywords**.   
+  To customize the tools you have to modify `cook.yaml`. Check here [Customizing tool](#modifying-cookyaml)
+- Easy UX, Checkout examples
 
 ## USAGE
   ```
