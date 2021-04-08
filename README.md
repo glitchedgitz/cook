@@ -2,8 +2,9 @@
 
 <h1 align="center">COOK - A customizable wordlist and password generator</h1>
 
-- [Summary](#summary)  
-- [Basic Usage](#usage)  
+
+- [Summary](#summary)
+- [Basic Usage](#usage)
 - [Predefined Extentions Sets](#predefined-extentions-sets)
 - [Using Files](#using-files)
   - [Regex Input from File](#regex-input-from-file)
@@ -12,7 +13,6 @@
 - [Create your own unique words sets](#create-your-own-unique-words-sets)
 - [Char-sets : Use it like CRUNCH](#use-it-like-crunch)
 - [Advance Usage](#advance-usage)
-
 - [Installation](#installation)
 - [Customizing tool](#modifying-cookyaml)
 - [Upcoming Features](#upcoming-features)
