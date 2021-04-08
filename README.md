@@ -38,10 +38,9 @@
 > Note: You can use above pre-defined sets without modifying anything
 
 Steps to modify `cook.yaml`
-1. Create an environment varirable names `COOK` 
-2. Sets it's value to file's path, doesn't matter file exists or not  
-   Example: COOK: `E:\tools\config\cook.yaml`
-3. Done, run the tool and it will create `cook.yaml`.
+1. Download [cook.yaml](https://github.com/giteshnxtlvl/cook/blob/main/cook.yaml)
+1. Create an env varirable `COOK` = `Path of file`
+3. Done, now tool will use your `cook.yaml`.
 
 ## Usage
   ```
