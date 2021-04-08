@@ -1,7 +1,7 @@
 <img src="./images/01.png">
 
 <h1 align="center">COOK</h1>
-<h3>A customizable wordlist and password generator</h3>
+<h3 align="center">A customizable wordlist and password generator</h3>
 
 
 - [Summary](#summary)
