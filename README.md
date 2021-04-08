@@ -19,7 +19,7 @@
 - [Upcoming Features](#upcoming-features)
 
 
-## Summary
+# Summary
 - Easily create permutations and combinations of words.
 - Customize the tools according to your **unique secrets keywords**.   
   To customize the tools you have to modify `cook.yaml`. Check here [Customizing tool](#customizing-tool)
