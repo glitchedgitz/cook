@@ -1,9 +1,12 @@
 <img src="./images/01.png">
 
-<h1 align="center">COOK - A customizable wordlist and password generator</h1>
+<h1 align="center">COOK</h1>
+<h3>A customizable wordlist and password generator</h3>
 
 
 - [Summary](#summary)
+- [Installation](#installation)
+- [Customizing tool](#customizing-tool)
 - [Basic Usage](#usage)
 - [Predefined Extentions Sets](#predefined-extentions-sets)
 - [Using Files](#using-files)
@@ -13,8 +16,6 @@
 - [Create your own unique words sets](#create-your-own-unique-words-sets)
 - [Char-sets : Use it like CRUNCH](#use-it-like-crunch)
 - [Advance Usage](#advance-usage)
-- [Installation](#installation)
-- [Customizing tool](#modifying-cookyaml)
 - [Upcoming Features](#upcoming-features)
 
 
@@ -24,7 +25,25 @@
   To customize the tools you have to modify `cook.yaml`. Check here [Customizing tool](#modifying-cookyaml)
 - Easy UX, Checkout examples
 
-## USAGE
+## Installation
+- Using Go
+```
+  go get github.com/giteshnxtlvl/cook
+```
+
+- Download builds  
+  https://github.com/giteshnxtlvl/cook/releases/
+
+## Customizing tool
+> Note: You can use above pre-defined sets without modifying anything
+
+Steps to modify `cook.yaml`
+1. Create an environment varirable names `COOK` 
+2. Sets it's value to file's path, doesn't matter file exists or not  
+   Example: COOK: `E:\tools\config\cook.yaml`
+3. Done, run the tool and it will create `cook.yaml`.
+
+## Usage
   ```
     cook -start admin,root  -sep _,-  -end secret,critical  start:sep:end
   ```
@@ -99,11 +118,6 @@
 <img src="./images/09.png">
 
 
-# Installation
-```
-  go get github.com/giteshnxtlvl/cook
-```
-
 ## cook.yaml
 This file contains character sets, words's set and extensions set specified.
 ```yaml
@@ -150,14 +164,6 @@ extensions:
     video  : [3g2, 3gp, aaf, asf, avchd, avi, drc, flv, m2v, m4p, m4v, mkv, mng, mov, mp2, mp4, mpe, mpeg, mpg, mpv, mxf, nsv, ogg, ogv, ogm, qt, rm, rmvb, roq, srt, svi, vob, webm, wmv, yuv]
     image  : [3dm, 3ds, max, bmp, dds, gif, jpg, jpeg, png, psd, xcf, tga, thm, tif, tiff, yuv, ai, eps, ps, svg, dwg, dxf, gpx, kml, kmz, webp]
 ```
-## Modifying cook.yaml
-> Note: You can use above pre-defined sets without modifying anything
-
-Steps to modify cook.yaml 
-1. Create an environment varirable names `COOK` 
-2. Sets it's value to file's path, doesn't matter file exists or not  
-   Example: COOK: `E:\tools\config\cook.yaml`
-3. Done, run the tool and it will create `cook.yaml`.
 
 ## Upcoming Features
 - Endpoints Analyser
