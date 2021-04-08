@@ -3,6 +3,20 @@
 # COOK
 A customizable wordlist and password generator.
 
+Features
+- [Basic Usage](#usage)  
+- [Predefined Extentions Sets](#predefined-extentions-sets)
+- [Using Files](#using-files)
+  - [Regex Input from File](#regex-input-from-file)
+  - [File Not Found](#regex-input-from-file)
+- [Save your wordlists by unique names](#save-wordlists-by-unique-names)
+- [Create your own unique words sets](#create-your-own-unique-words-sets)
+- [Char-sets : Use it like CRUNCH](#use-it-like-crunch)
+- [Advance Usage](#advance-usage)
+- [Installation](#installation)
+- [Upcoming Features](#upcoming-features)
+
+
 ## USAGE
   ```
     cook -start admin,root  -sep _,-  -end secret,critical  start:sep:end
@@ -12,7 +26,6 @@ A customizable wordlist and password generator.
   ```
   
 <img src="./images/02.png">
-
 
 
 ## Predefined Extentions Sets
@@ -33,7 +46,7 @@ A customizable wordlist and password generator.
 <img src="./images/03.png">
 
 
-## Smart file detection  
+## Using Files
   - Set `file.txt` as param’s value
   - Regex input from `file.txt`:**^apps.***
   - File not found means use filename as value
@@ -62,11 +75,19 @@ A customizable wordlist and password generator.
     root_file_not_exists.txt
   ```
 
+## Save Wordlists by Unique Names  
+
 <img src="./images/05.png">
+
+## Create your own unique words sets  
 
 <img src="./images/06.png">
 
+## Use it like CRUNCH  
+
 <img src="./images/08.png">
+
+## Advance Usage  
 
 <img src="./images/09.png">
 
