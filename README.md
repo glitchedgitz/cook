@@ -53,13 +53,8 @@
 
 
 # Predefined Extentions Sets
-  - Use `archive` for `.rar, .7z, .zip, .tar,  .tgz, ...`  
-  - Use `web` for `.html, .php, .aspx, .js, .jsx, .jsp, ...`
-  - Many More...
-  - Create your own category in **cook.yaml**
-
+  <img src="./images/03.png">  
   ### Usage
-  Using `archieve` extension set
   ```
    cook -start admin,root  -sep _ -end secret  start:sep:archive
   ```
@@ -67,9 +62,6 @@
    cook admin,root:_:archive
   ```
   
-<img src="./images/03.png">
-
-
 # Using Files
   - Set `file.txt` as param’s value
   - Regex input from `file.txt`:**^apps.***
@@ -83,7 +75,7 @@
   ```
    cook -exp raft-large-extensions.txt:\.asp.*  /:admin:exp
   ```
-<img src="./images/07.png">
+  <img src="./images/07.png">
 
   ### File not found  
   You can specify file `-any raft-large-extensions.txt` and can also use regex pattern to extract values like `-exp raft-large-extensions.txt:\.asp.*`
