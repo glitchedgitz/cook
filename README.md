@@ -42,6 +42,11 @@
 3. Done, now tool will use your `cook.yaml`.
 
 # Usage
+
+  <img src="./images/02.png">  
+  
+  ### Recipe
+
   ```
     cook -start admin,root  -sep _,-  -end secret,critical  start:sep:end
   ```
@@ -49,12 +54,14 @@
     cook admin,root:_,-:secret,critical
   ```
   
-<img src="./images/02.png">
+
 
 
 # Predefined Extentions Sets
-  <img src="./images/03.png">  
-  ### Usage
+
+  <img src="./images/03.png">    
+  
+  ### Recipe
   ```
    cook -start admin,root  -sep _ -end secret  start:sep:archive
   ```
@@ -68,24 +75,28 @@
   - File not found means use filename as value
 
   ### Regex Input from File  
-  You can specify file `-any raft-large-extensions.txt` and can also use regex pattern to extract values like `-exp raft-large-extensions.txt:\.asp.*`
+  
+  <img src="./images/07.png">    
+  
+  ### Recipe
   ```
    cook -start admin -exp raft-large-extensions.txt:\.asp.*  /:start:exp
   ```
   ```
    cook -exp raft-large-extensions.txt:\.asp.*  /:admin:exp
   ```
-  <img src="./images/07.png">
+  
 
   ### File not found  
-  You can specify file `-any raft-large-extensions.txt` and can also use regex pattern to extract values like `-exp raft-large-extensions.txt:\.asp.*`
+  If file not found, it will do this
+  ### Recipe
   ```
    cook -start admin,root -file file_not_exists.txt start:_:file
   ```
   ```
    cook -file file_not_exists.txt admin,root:_:file
   ```
-  Output
+  ### Output
   ```
     admin_file_not_exists.txt
     root_file_not_exists.txt
@@ -104,7 +115,7 @@
 <img src="./images/08.png">
 
 # Advance Usage  
-
+Understanding concept is important!!
 <img src="./images/09.png">
 
 
