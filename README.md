@@ -37,7 +37,6 @@
 ## Customizing tool
 > Note: You can use above pre-defined sets without modifying anything
 
-Steps to modify `cook.yaml`
 1. Download [cook.yaml](https://github.com/giteshnxtlvl/cook/blob/main/cook.yaml)
 1. Create an env varirable `COOK` = `Path of file`
 3. Done, now tool will use your `cook.yaml`.
