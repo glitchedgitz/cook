@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"gopkg.in/yaml.v2"
@@ -24,18 +25,19 @@ var banner = `
  ░        ░ ░ ░ ▒  ░ ░ ░ ▒  ░ ░░ ░ 
   ░  ▒     ░ ▒ ▒░   ░ ▒ ▒░ ░ ░▒ ▒░
 ░ ░▒ ▒  ░░ ▒░▒░▒░ ░ ▒░▒░▒░ ▒ ▒▒ ▓▒
- ▄████▄   ▒█████   ▒█████   ██ ▄█▀
-▒██▀ ▀█  ▒██▒  ██▒▒██▒  ██▒ ██▄█▒ 
+ ▄████▄   ▒█████   ▒█████   ██ ▄█▀           A CUSTOMIZABLE WORDLIST
+▒██▀ ▀█  ▒██▒  ██▒▒██▒  ██▒ ██▄█▒            AND PASSWORD GENERATOR
 ▒▓█    ▄ ▒██░  ██▒▒██░  ██▒▓███▄░ 
-▒▓▓▄ ▄██▒▒██   ██░▒██   ██░▓██ █▄ 
- ▒ ▓███▀ ░░ ████▓▒░░ ████▓▒░▒██▒ █▄ V1
-======================================
+▒▓▓▄ ▄██▒▒██   ██░▒██   ██░▓██ █▄            by Gitesh Sharma 
+ ▒ ▓███▀ ░░ ████▓▒░░ ████▓▒░▒██▒ █▄ V1       @giteshnxtlvl
 
-HIGHLY CUSTOMIZABLE WORDLIST GENERATOR
-	by Gitesh Sharma @giteshnxtlvl
 `
 
 var help = `
+
+COMPLETE USAGE
+	https://github.com/giteshnxtlvl/cook
+
 BASIC USAGE
 	cook -start admin,root  -sep _,-  -end secret,critical  start:sep:end
 
@@ -48,11 +50,9 @@ OUTPUT
 	root_critical
 	root-secret
 	root-critical
-` + config
+`
 
 var config = `
-
-# This is COOK's config file
 
 # Character set like crunch
 charSet:
@@ -95,6 +95,24 @@ extensions:
 
 `
 
+func parseCommand(list []string, a string) ([]string, bool) {
+	for i, b := range list {
+		if b == a {
+			return append(list[:i], list[i+1:]...), true
+		}
+	}
+	return list, false
+}
+
+func parseCommandArg(list []string, a string) ([]string, string) {
+	for i, b := range list {
+		if b == a {
+			return append(list[:i], list[i+2:]...), list[i+1]
+		}
+	}
+	return list, ""
+}
+
 func stringInSlice(list []string, a string) bool {
 	for _, b := range list {
 		if b == a {
@@ -126,6 +144,10 @@ func findRegex(file, expresssion string) []string {
 	return founded
 }
 
+var toUpper = false
+var toLower = false
+var colCases = make(map[int][]string)
+
 //Parse Input
 func parseInput(commands []string) {
 
@@ -133,10 +155,29 @@ func parseInput(commands []string) {
 		fmt.Println(banner)
 		os.Exit(0)
 	}
+
 	if stringInSlice(commands, "-h") {
+		fmt.Println(banner)
 		fmt.Println(help)
+		fmt.Println(config)
 		os.Exit(0)
 	}
+
+	commands, toUpper = parseCommand(commands, "-upper")
+	commands, toLower = parseCommand(commands, "-lower")
+	commands, caseValue := parseCommandArg(commands, "-case")
+
+	if caseValue != "" {
+		for _, val := range strings.Split(caseValue, ",") {
+			v := strings.SplitN(val, ":", 2)
+			i, err := strconv.Atoi(v[0])
+			if err != nil {
+				panic(err)
+			}
+			colCases[i] = strings.Split(v[1], "")
+		}
+	}
+	// cook admin:_,-:test -case 1:UL,2:T,A
 
 	last := len(commands) - 1
 
@@ -221,6 +262,10 @@ func main() {
 	for i, param := range pattern {
 		tmp1 := []string{}
 
+		if i == 0 {
+			final = append(final, "")
+		}
+
 		for _, p := range strings.Split(param, ",") {
 
 			if _, exists := params[p]; exists {
@@ -255,35 +300,65 @@ func main() {
 				}
 				continue
 			}
-			// for _, char := range m {
-			// 	if _, exists := char[p]; exists {
-			// 		tmp1 = append(tmp1, char[p]...)
-			// 		notFound = false
-			// 		break
-			// 	}
-			// }
 
 			tmp1 = append(tmp1, p)
 
 		}
 
-		if i == 0 {
-			final = tmp1
-			continue
-		}
-
 		tmp2 := []string{}
-		for _, t := range final {
-			for _, v := range tmp1 {
-				tmp2 = append(tmp2, t+v)
+
+		if _, exists := colCases[i]; exists {
+			A := false
+			if colCases[i][0] == "A" {
+				A = true
+			}
+
+			if A || stringInSlice(colCases[i], "U") {
+				for _, t := range final {
+					for _, v := range tmp1 {
+						tmp2 = append(tmp2, t+strings.ToUpper(v))
+					}
+				}
+			}
+
+			if A || stringInSlice(colCases[i], "L") {
+				for _, t := range final {
+					for _, v := range tmp1 {
+						tmp2 = append(tmp2, t+strings.ToLower(v))
+					}
+				}
+			}
+
+			if A || stringInSlice(colCases[i], "T") {
+				for _, t := range final {
+					for _, v := range tmp1 {
+						tmp2 = append(tmp2, t+strings.Title(v))
+					}
+				}
+			}
+		} else {
+			for _, t := range final {
+				for _, v := range tmp1 {
+					tmp2 = append(tmp2, t+v)
+				}
 			}
 		}
 
 		final = tmp2
 	}
 
-	for _, t := range final {
-		fmt.Println(t)
+	if toUpper {
+		for _, t := range final {
+			fmt.Println(strings.ToUpper(t))
+		}
+	} else if toLower {
+		for _, t := range final {
+			fmt.Println(strings.ToLower(t))
+		}
+	} else {
+		for _, t := range final {
+			fmt.Println(t)
+		}
 	}
 
 }
