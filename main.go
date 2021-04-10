@@ -73,8 +73,10 @@ files:
 
 # Create your word's set
 words:
-   admin_set: [admin, root, su, administration]
-   password_set: [123, "@123", "#123"]
+	admin_set: [admin, root, su, administration]
+	password_set: [123, "@123", "#123"]
+	months : [January, February, March, April, May, June, July, August, September, October, November, December]
+	mons : [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
 
 # Extension Set, . will added before using this
 extensions:
@@ -167,19 +169,28 @@ func parseInput(commands []string) {
 	commands, toLower = parseCommand(commands, "-lower")
 	commands, caseValue := parseCommandArg(commands, "-case")
 
+	last := len(commands) - 1
+	pattern = strings.Split(commands[last], ":")
+
 	if caseValue != "" {
-		for _, val := range strings.Split(caseValue, ",") {
-			v := strings.SplitN(val, ":", 2)
-			i, err := strconv.Atoi(v[0])
-			if err != nil {
-				panic(err)
+		if !strings.Contains(caseValue, ":") {
+			tmp := strings.Split(caseValue, "")
+			for i := 0; i < len(pattern); i++ {
+				colCases[i] = tmp
 			}
-			colCases[i] = strings.Split(v[1], "")
+
+		} else {
+			for _, val := range strings.Split(caseValue, ",") {
+				v := strings.SplitN(val, ":", 2)
+				i, err := strconv.Atoi(v[0])
+				if err != nil {
+					panic(err)
+				}
+				colCases[i] = strings.Split(v[1], "")
+			}
 		}
 	}
 	// cook admin:_,-:test -case 1:UL,2:T,A
-
-	last := len(commands) - 1
 
 	for i, cmd := range commands[:last] {
 
@@ -214,7 +225,6 @@ func parseInput(commands []string) {
 			params[cmd] = values
 		}
 	}
-	pattern = strings.Split(commands[last], ":")
 }
 
 func cookConfig() {

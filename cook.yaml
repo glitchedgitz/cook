@@ -17,10 +17,12 @@ files:
 
 # Create your word's set
 words:
-   admin_set: [admin, root, su, administration]
-   password_set: [123, "@123", "#123"]
+    admin_set: [admin, root, su, administration]
+    password_set: [123, "@123", "#123"]
+   	months : [January, February, March, April, May, June, July, August, September, October, November, December]
+	mons : [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
 
-# Extension Set, . will added before using this
+# Extension Set, "." will added before every extension by tool
 extensions:
     archive: [7z, a, apk, xapk, ar, bz2, cab, cpio, deb, dmg, egg, gz, iso, jar, lha, mar, pea, rar, rpm, s7z, shar, tar, tbz2, tgz, tlz, war, whl, xpi, zip, zipx, xz, pak]
     config : [conf, config]
