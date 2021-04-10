@@ -16,6 +16,7 @@
 - [Create your own unique words sets](#create-your-own-unique-words-sets)
 - [Char-sets : Use it like CRUNCH](#use-it-like-crunch)
 - [Advance Usage](#advance-usage)
+- [Uppercase, Lowercase, Titlecase or All](#cases)
 - [Upcoming Features](#upcoming-features)
 
 
@@ -117,6 +118,10 @@
 # Advance Usage  
 Understanding concept is important!!
 <img src="./images/09.png">
+
+# Cases
+
+<img src="./images/10.png"> 
 
 
 # Predefined-Sets
