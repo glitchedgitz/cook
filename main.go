@@ -173,12 +173,21 @@ func parseInput(commands []string) {
 	pattern = strings.Split(commands[last], ":")
 
 	if caseValue != "" {
+		caseValue = strings.ToUpper(caseValue)
 		if !strings.Contains(caseValue, ":") {
 			tmp := strings.Split(caseValue, "")
-			for i := 0; i < len(pattern); i++ {
-				colCases[i] = tmp
+
+			//For Camel Case Only
+			if strings.Contains(caseValue, "C") {
+				colCases[0] = append(colCases[0], "L")
+				for i := 1; i < len(pattern); i++ {
+					colCases[i] = append(colCases[i], "T")
+				}
 			}
 
+			for i := 0; i < len(pattern); i++ {
+				colCases[i] = append(colCases[i], tmp...)
+			}
 		} else {
 			for _, val := range strings.Split(caseValue, ",") {
 				v := strings.SplitN(val, ":", 2)
