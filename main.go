@@ -70,6 +70,7 @@ charSet:
 files:
     raft_ext: [E:\\tools\\wordlists\\SecLists\\Discovery\\Web-Content\\raft-large-extensions.txt]
     robot_1000: [E:\\tools\\wordlists\\SecLists\\Discovery\\Web-Content\\RobotsDisallowed-Top1000.txt]
+    public: [https://publicsuffix.org/list/public_suffix_list.dat]
 
 # Create your word's set
 words:
@@ -80,12 +81,13 @@ words:
 
 # Extension Set, . will added before using this
 extensions:
-    archive: [7z, a, apk, xapk, ar, bz2, cab, cpio, deb, dmg, egg, gz, iso, jar, lha, mar, pea, rar, rpm, s7z, shar, tar, tbz2, tgz, tlz, war, whl, xpi, zip, zipx, xz, pak]
+    archive: [7z, a, apk, xapk, ar, bz2, cab, cpio, deb, dmg, egg, gz, iso, jar, lha, mar, pea, rar, rpm, s7z, shar, tar, tar.gz, tbz2, tgz, tlz, war, whl, xpi, zip, zipx, xz, pak]
     config : [conf, config]
     sheet  : [ods, xls, xlsx, csv, ics vcf]
     exec   : [exe, msi, bin, command, sh, bat, crx]
     code   : [c, cc, class, clj, cpp, cs, cxx, el, go, h, java, lua, m, m4, php, php3, php5, php7, pl, po, py, rb, rs, sh, swift, vb, vcxproj, xcodeproj, xml, diff, patch, js, jsx]
-    web    : [html, html5, htm, css, js, jsx, less, scss, wasm, php, php3, php5, php7]
+    web    	    : [html, html5, htm, js, jsx, wasm, asp, aspx, ashx, php, php3, php5, php7]
+    web_full    : [html, html5, htm, css, js, jsx, less, scss, wasm, php, php3, php5, php7]
     backup : [bak, backup, backup1, backup2]
     slide  : [ppt, odp]
     font   : [eot, otf, ttf, woff, woff2]
@@ -97,27 +99,27 @@ extensions:
 
 `
 
-func parseCommand(list []string, a string) ([]string, bool) {
-	for i, b := range list {
-		if b == a {
+func parseCommand(list []string, val string) ([]string, bool) {
+	for i, l := range list {
+		if l == val {
 			return append(list[:i], list[i+1:]...), true
 		}
 	}
 	return list, false
 }
 
-func parseCommandArg(list []string, a string) ([]string, string) {
-	for i, b := range list {
-		if b == a {
+func parseCommandArg(list []string, val string) ([]string, string) {
+	for i, l := range list {
+		if l == val {
 			return append(list[:i], list[i+2:]...), list[i+1]
 		}
 	}
 	return list, ""
 }
 
-func stringInSlice(list []string, a string) bool {
-	for _, b := range list {
-		if b == a {
+func valueInSlice(list []string, val string) bool {
+	for _, l := range list {
+		if l == val {
 			return true
 		}
 	}
@@ -138,7 +140,7 @@ func findRegex(file, expresssion string) []string {
 	extensions_list := r.FindAllString(data, -1)
 
 	for _, found := range extensions_list {
-		if !stringInSlice(founded, found) {
+		if !valueInSlice(founded, found) {
 			founded = append(founded, found)
 		}
 	}
@@ -146,9 +148,7 @@ func findRegex(file, expresssion string) []string {
 	return founded
 }
 
-var toUpper = false
-var toLower = false
-var colCases = make(map[int][]string)
+var columnCases = make(map[int][]string)
 
 //Parse Input
 func parseInput(commands []string) {
@@ -158,15 +158,15 @@ func parseInput(commands []string) {
 		os.Exit(0)
 	}
 
-	if stringInSlice(commands, "-h") {
+	if valueInSlice(commands, "-h") {
 		fmt.Println(banner)
 		fmt.Println(help)
 		fmt.Println(config)
 		os.Exit(0)
 	}
 
-	commands, toUpper = parseCommand(commands, "-upper")
-	commands, toLower = parseCommand(commands, "-lower")
+	// commands, toUpper = parseCommand(commands, "-upper")
+	// commands, toLower = parseCommand(commands, "-lower")
 	commands, caseValue := parseCommandArg(commands, "-case")
 
 	last := len(commands) - 1
@@ -179,14 +179,14 @@ func parseInput(commands []string) {
 
 			//For Camel Case Only
 			if strings.Contains(caseValue, "C") {
-				colCases[0] = append(colCases[0], "L")
+				columnCases[0] = append(columnCases[0], "L")
 				for i := 1; i < len(pattern); i++ {
-					colCases[i] = append(colCases[i], "T")
+					columnCases[i] = append(columnCases[i], "T")
 				}
 			}
 
 			for i := 0; i < len(pattern); i++ {
-				colCases[i] = append(colCases[i], tmp...)
+				columnCases[i] = append(columnCases[i], tmp...)
 			}
 		} else {
 			for _, val := range strings.Split(caseValue, ",") {
@@ -195,11 +195,10 @@ func parseInput(commands []string) {
 				if err != nil {
 					panic(err)
 				}
-				colCases[i] = strings.Split(v[1], "")
+				columnCases[i] = strings.Split(v[1], "")
 			}
 		}
 	}
-	// cook admin:_,-:test -case 1:UL,2:T,A
 
 	for i, cmd := range commands[:last] {
 
@@ -208,6 +207,7 @@ func parseInput(commands []string) {
 			value := commands[i+1]
 			values := []string{}
 
+			//Checking regex
 			if strings.Contains(value, ":") {
 				t := strings.SplitN(value, ":", 2)
 				file := t[0]
@@ -215,9 +215,12 @@ func parseInput(commands []string) {
 
 				if strings.HasSuffix(file, ".txt") {
 					values = findRegex(file, reg)
+				} else if _, exists := m["files"][file]; exists {
+					values = findRegex(m["files"][file][0], reg)
 				} else {
 					values = strings.Split(value, ",")
 				}
+
 			} else if strings.HasSuffix(value, ".txt") {
 				content, err := ioutil.ReadFile(value)
 
@@ -236,10 +239,36 @@ func parseInput(commands []string) {
 	}
 }
 
+func parseIntRanges(p string) ([]string, bool) {
+	val := []string{}
+	if strings.HasPrefix(p, "[") && strings.HasSuffix(p, "]") && strings.Contains(p, "-") {
+		p = strings.ReplaceAll(p, "[", "")
+		p = strings.ReplaceAll(p, "]", "")
+		numRange := strings.SplitN(p, "-", 2)
+
+		start, err := strconv.Atoi(numRange[0])
+		if err != nil {
+			return val, false
+		}
+
+		stop, err := strconv.Atoi(numRange[1])
+		if err != nil {
+			return val, false
+		}
+
+		for start <= stop {
+			val = append(val, strconv.Itoa(start))
+			start++
+		}
+
+		return val, true //get all ranges
+	}
+	return val, false
+}
+
 func cookConfig() {
 
 	configFile := os.Getenv("COOK")
-
 	content := []byte(config)
 
 	if len(configFile) == 0 {
@@ -276,24 +305,27 @@ func main() {
 	cookConfig()
 	parseInput(os.Args[1:])
 
-	final := []string{}
+	//Initializing with empty string, so loops will run for 1st column
+	final := []string{""}
 
-	for i, param := range pattern {
-		tmp1 := []string{}
+	for columnNum, param := range pattern {
 
-		if i == 0 {
-			final = append(final, "")
-		}
+		columnValues := []string{}
 
 		for _, p := range strings.Split(param, ",") {
 
+			val, success := parseIntRanges(p)
+			if success {
+				columnValues = append(columnValues, val...)
+				continue
+			}
 			if _, exists := params[p]; exists {
-				tmp1 = append(tmp1, params[p]...)
+				columnValues = append(columnValues, params[p]...)
 				continue
 			}
 			if _, exists := m["charSet"][p]; exists {
 				chars := strings.Split(m["charSet"][p][0], "")
-				tmp1 = append(tmp1, chars...)
+				columnValues = append(columnValues, chars...)
 				continue
 			}
 			if _, exists := m["files"][p]; exists {
@@ -306,78 +338,71 @@ func main() {
 				}
 
 				fileData := strings.ReplaceAll(string(content), "\r\n", "\n")
-				tmp1 = append(tmp1, strings.Split(fileData, "\n")...)
+				columnValues = append(columnValues, strings.Split(fileData, "\n")...)
 				continue
 			}
 			if _, exists := m["words"][p]; exists {
-				tmp1 = append(tmp1, m["words"][p]...)
+				columnValues = append(columnValues, m["words"][p]...)
 				continue
 			}
 			if _, exists := m["extensions"][p]; exists {
 				for _, ext := range m["extensions"][p] {
-					tmp1 = append(tmp1, "."+ext)
+					columnValues = append(columnValues, "."+ext)
 				}
 				continue
 			}
 
-			tmp1 = append(tmp1, p)
-
+			columnValues = append(columnValues, p)
 		}
 
-		tmp2 := []string{}
+		temp := []string{}
 
-		if _, exists := colCases[i]; exists {
+		// Using cases for columnValues
+		if _, exists := columnCases[columnNum]; exists {
+
+			//A: All cases
 			A := false
-			if colCases[i][0] == "A" {
+
+			if valueInSlice(columnCases[columnNum], "A") {
 				A = true
 			}
 
-			if A || stringInSlice(colCases[i], "U") {
+			if A || valueInSlice(columnCases[columnNum], "U") {
 				for _, t := range final {
-					for _, v := range tmp1 {
-						tmp2 = append(tmp2, t+strings.ToUpper(v))
+					for _, v := range columnValues {
+						temp = append(temp, t+strings.ToUpper(v))
 					}
 				}
 			}
 
-			if A || stringInSlice(colCases[i], "L") {
+			if A || valueInSlice(columnCases[columnNum], "L") {
 				for _, t := range final {
-					for _, v := range tmp1 {
-						tmp2 = append(tmp2, t+strings.ToLower(v))
+					for _, v := range columnValues {
+						temp = append(temp, t+strings.ToLower(v))
 					}
 				}
 			}
 
-			if A || stringInSlice(colCases[i], "T") {
+			if A || valueInSlice(columnCases[columnNum], "T") {
 				for _, t := range final {
-					for _, v := range tmp1 {
-						tmp2 = append(tmp2, t+strings.Title(v))
+					for _, v := range columnValues {
+						temp = append(temp, t+strings.Title(v))
 					}
 				}
 			}
 		} else {
 			for _, t := range final {
-				for _, v := range tmp1 {
-					tmp2 = append(tmp2, t+v)
+				for _, v := range columnValues {
+					temp = append(temp, t+v)
 				}
 			}
 		}
 
-		final = tmp2
+		final = temp
 	}
 
-	if toUpper {
-		for _, t := range final {
-			fmt.Println(strings.ToUpper(t))
-		}
-	} else if toLower {
-		for _, t := range final {
-			fmt.Println(strings.ToLower(t))
-		}
-	} else {
-		for _, t := range final {
-			fmt.Println(t)
-		}
+	for _, v := range final {
+		fmt.Println(v)
 	}
 
 }
