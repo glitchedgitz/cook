@@ -12,12 +12,10 @@ import (
 )
 
 var gopath = os.Getenv("GOPATH")
-
 var m = make(map[interface{}]map[string][]string)
-
 var params = make(map[string][]string)
 var pattern = []string{}
-
+var version = "1.3"
 var banner = `
 
                              
@@ -29,7 +27,7 @@ var banner = `
 ▒██▀ ▀█  ▒██▒  ██▒▒██▒  ██▒ ██▄█▒            AND PASSWORD GENERATOR
 ▒▓█    ▄ ▒██░  ██▒▒██░  ██▒▓███▄░ 
 ▒▓▓▄ ▄██▒▒██   ██░▒██   ██░▓██ █▄            by Gitesh Sharma 
- ▒ ▓███▀ ░░ ████▓▒░░ ████▓▒░▒██▒ █▄ V1       @giteshnxtlvl
+ ▒ ▓███▀ ░░ ████▓▒░░ ████▓▒░▒██▒ █▄ ` + version + `      @giteshnxtlvl
 
 `
 
@@ -68,35 +66,33 @@ charSet:
 
 # File to access from anywhere
 files:
-    raft_ext: [E:\\tools\\wordlists\\SecLists\\Discovery\\Web-Content\\raft-large-extensions.txt]
-    robot_1000: [E:\\tools\\wordlists\\SecLists\\Discovery\\Web-Content\\RobotsDisallowed-Top1000.txt]
-    public: [https://publicsuffix.org/list/public_suffix_list.dat]
+    raft_ext     : [E:\\tools\\wordlists\\SecLists\\Discovery\\Web-Content\\raft-large-extensions.txt]
+    robot_1000   : [E:\\tools\\wordlists\\SecLists\\Discovery\\Web-Content\\RobotsDisallowed-Top1000.txt]
 
 # Create your word's set
 words:
-	admin_set: [admin, root, su, administration]
-	password_set: [123, "@123", "#123"]
-	months : [January, February, March, April, May, June, July, August, September, October, November, December]
-	mons : [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+    admin_set    : [admin, root, su, administration]
+    password_set : [123, "@123", "#123"]
+    months       : [January, February, March, April, May, June, July, August, September, October, November, December]
+    mons         : [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
 
 # Extension Set, . will added before using this
 extensions:
-    archive: [7z, a, apk, xapk, ar, bz2, cab, cpio, deb, dmg, egg, gz, iso, jar, lha, mar, pea, rar, rpm, s7z, shar, tar, tar.gz, tbz2, tgz, tlz, war, whl, xpi, zip, zipx, xz, pak]
-    config : [conf, config]
-    sheet  : [ods, xls, xlsx, csv, ics vcf]
-    exec   : [exe, msi, bin, command, sh, bat, crx]
-    code   : [c, cc, class, clj, cpp, cs, cxx, el, go, h, java, lua, m, m4, php, php3, php5, php7, pl, po, py, rb, rs, sh, swift, vb, vcxproj, xcodeproj, xml, diff, patch, js, jsx]
-    web    	    : [html, html5, htm, js, jsx, wasm, asp, aspx, ashx, php, php3, php5, php7]
-    web_full    : [html, html5, htm, css, js, jsx, less, scss, wasm, php, php3, php5, php7]
-    backup : [bak, backup, backup1, backup2]
-    slide  : [ppt, odp]
-    font   : [eot, otf, ttf, woff, woff2]
-    text   : [doc, docx, ebook, log, md, msg, odt, org, pages, pdf, rtf, rst, tex, txt, wpd, wps]
-    audio  : [aac, aiff, ape, au, flac, gsm, it, m3u, m4a, mid, mod, mp3, mpa, pls, ra, s3m, sid, wav, wma, xm]
-    book   : [mobi, epub, azw1, azw3, azw4, azw6, azw, cbr, cbz]
-    video  : [3g2, 3gp, aaf, asf, avchd, avi, drc, flv, m2v, m4p, m4v, mkv, mng, mov, mp2, mp4, mpe, mpeg, mpg, mpv, mxf, nsv, ogg, ogv, ogm, qt, rm, rmvb, roq, srt, svi, vob, webm, wmv, yuv]
-    image  : [3dm, 3ds, max, bmp, dds, gif, jpg, jpeg, png, psd, xcf, tga, thm, tif, tiff, yuv, ai, eps, ps, svg, dwg, dxf, gpx, kml, kmz, webp]
-
+    archive : [7z, a, apk, xapk, ar, bz2, cab, cpio, deb, dmg, egg, gz, iso, jar, lha, mar, pea, rar, rpm, s7z, shar, tar, tbz2, tgz, tlz, war, whl, xpi, zip, zipx, xz, pak]
+    config  : [conf, config]
+    sheet   : [ods, xls, xlsx, csv, ics vcf]
+    exec    : [exe, msi, bin, command, sh, bat, crx]
+    code    : [c, cc, class, clj, cpp, cs, cxx, el, go, h, java, lua, m, m4, php, php3, php5, php7, pl, po, py, rb, rs, sh, swift, vb, vcxproj, xcodeproj, xml, diff, patch, js, jsx]
+    web     : [html, html5, htm, css, js, jsx, less, scss, wasm, php, php3, php5, php7]
+    backup  : [bak, backup, backup1, backup2]
+    slide   : [ppt, odp]
+    font    : [eot, otf, ttf, woff, woff2]
+    text    : [doc, docx, ebook, log, md, msg, odt, org, pages, pdf, rtf, rst, tex, txt, wpd, wps]
+    audio   : [aac, aiff, ape, au, flac, gsm, it, m3u, m4a, mid, mod, mp3, mpa, pls, ra, s3m, sid, wav, wma, xm]
+    book    : [mobi, epub, azw1, azw3, azw4, azw6, azw, cbr, cbz]
+    video   : [3g2, 3gp, aaf, asf, avchd, avi, drc, flv, m2v, m4p, m4v, mkv, mng, mov, mp2, mp4, mpe, mpeg, mpg, mpv, mxf, nsv, ogg, ogv, ogm, qt, rm, rmvb, roq, srt, svi, vob, webm, wmv, yuv]
+    image   : [3dm, 3ds, max, bmp, dds, gif, jpg, jpeg, png, psd, xcf, tga, thm, tif, tiff, yuv, ai, eps, ps, svg, dwg, dxf, gpx, kml, kmz, webp]
+	
 `
 
 func parseCommand(list []string, val string) ([]string, bool) {
@@ -129,11 +125,14 @@ func valueInSlice(list []string, val string) bool {
 func findRegex(file, expresssion string) []string {
 	founded := []string{}
 
-	content, _ := ioutil.ReadFile(file)
+	content, err := ioutil.ReadFile(file)
+	if err != nil {
+		return []string{file + ":" + expresssion}
+	}
 
 	r, err := regexp.Compile(expresssion)
 	if err != nil {
-		println(err)
+		panic(err)
 	}
 
 	data := strings.ReplaceAll(string(content), "\r\n", "\n")
