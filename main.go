@@ -51,7 +51,6 @@ OUTPUT
 `
 
 var config = `
-
 # Character set like crunch
 charSet:
     n     : [0123456789]
@@ -92,7 +91,6 @@ extensions:
     book    : [mobi, epub, azw1, azw3, azw4, azw6, azw, cbr, cbz]
     video   : [3g2, 3gp, aaf, asf, avchd, avi, drc, flv, m2v, m4p, m4v, mkv, mng, mov, mp2, mp4, mpe, mpeg, mpg, mpv, mxf, nsv, ogg, ogv, ogm, qt, rm, rmvb, roq, srt, svi, vob, webm, wmv, yuv]
     image   : [3dm, 3ds, max, bmp, dds, gif, jpg, jpeg, png, psd, xcf, tga, thm, tif, tiff, yuv, ai, eps, ps, svg, dwg, dxf, gpx, kml, kmz, webp]
-	
 `
 
 func parseCommand(list []string, val string) ([]string, bool) {
