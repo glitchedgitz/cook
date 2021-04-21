@@ -14,6 +14,7 @@
   - [Words Sets](#create-your-own-unique-sets)
   - [Character sets - Use it like crunch](#use-it-like-crunch)
   - [Patterns/Functions](#patternsfunctions)
+  - [Int Ranges](#int-ranges)
 - [Using Files](#using-files)
   - [Regex Input from File](#regex-input-from-file)
   - [File Not Found](#regex-input-from-file)
@@ -97,6 +98,9 @@ Understanding concept is important!
 ```
   cook -name elliot -birth date(17,Sep,1994) name:birth
 ```
+
+# Int Ranges
+<img width="768" src="./images/13.png"> 
 
 # Files
   ### Regex Input from File  
