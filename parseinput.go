@@ -118,85 +118,84 @@ func parseInput(commands []string) {
 	}
 
 	for i, cmd := range commands[:last] {
-
 		if strings.HasPrefix(cmd, "-") {
 			cmd = strings.Replace(cmd, "-", "", 1)
 			value := commands[i+1]
-			values := []string{}
-
-			if strings.Contains(value, "(") && strings.HasSuffix(value, ")") {
-				function := strings.SplitN(value, "(", 2)
-				funcName := function[0]
-				if _, exists := m["patterns"][funcName]; exists {
-					funcArgs := strings.Split(strings.TrimSuffix(function[1], ")"), ",")
-					funcPatterns := m["patterns"][funcName]
-					funcDef := strings.Split(strings.TrimSuffix(strings.TrimPrefix(funcPatterns[0], funcName+"("), ")"), ",")
-
-					if len(funcDef) != len(funcArgs) {
-						fmt.Printf(red+"\nError: No of Arguments are different for %s\n", funcPatterns[0])
-						os.Exit(0)
-					}
-
-					for _, p := range funcPatterns[1:] {
-						var tmp = p
-						for index, arg := range funcDef {
-							tmp = strings.ReplaceAll(tmp, arg, funcArgs[index])
-						}
-						values = append(values, tmp)
-					}
-					params[cmd] = values
-					continue
-				}
-			}
-
-			if strings.Contains(value, ":") {
-				if strings.Count(value, ":") == 2 {
-					// File is starting from E: C: D: for windows + Regex is supplied
-					tmp := strings.SplitN(value, ":", 3)
-
-					one := tmp[0]
-					two := tmp[1]
-					three := tmp[2]
-					test1 := one + ":" + two
-					test2 := two + ":" + three
-
-					if _, err := os.Stat(test1); err == nil {
-						values = findRegex(test1, three)
-					} else if _, err := os.Stat(test2); err == nil {
-						values = findRegex(one, test2)
-					} else {
-						values = strings.Split(value, ",")
-					}
-
-				} else if strings.Count(value, ":") == 1 {
-					if _, err := os.Stat(value); err == nil {
-						values = fileValues(value)
-					} else {
-						t := strings.SplitN(value, ":", 2)
-						file := t[0]
-						reg := t[1]
-
-						if strings.HasSuffix(file, ".txt") {
-							values = findRegex(file, reg)
-						} else if _, exists := m["files"][file]; exists {
-							values = findRegex(m["files"][file][0], reg)
-						} else {
-							values = strings.Split(value, ",")
-						}
-					}
-				}
-
-			} else if strings.HasSuffix(value, ".txt") {
-				if _, err := os.Stat(value); err == nil {
-					values = fileValues(value)
-				}
-			} else {
-				values = strings.Split(value, ",")
-			}
-
-			params[cmd] = values
+			params[cmd] = value
 		}
 	}
+}
+
+func parseValue(value string) []string {
+
+	if strings.Contains(value, "(") && strings.HasSuffix(value, ")") {
+		function := strings.SplitN(value, "(", 2)
+		funcName := function[0]
+		if _, exists := m["patterns"][funcName]; exists {
+			funcArgs := strings.Split(strings.TrimSuffix(function[1], ")"), ",")
+			funcPatterns := m["patterns"][funcName]
+			funcDef := strings.Split(strings.TrimSuffix(strings.TrimPrefix(funcPatterns[0], funcName+"("), ")"), ",")
+
+			if len(funcDef) != len(funcArgs) {
+				fmt.Printf(red+"\nError: No of Arguments are different for %s\n", funcPatterns[0])
+				os.Exit(0)
+			}
+
+			values := []string{}
+			for _, p := range funcPatterns[1:] {
+				var tmp = p
+				for index, arg := range funcDef {
+					tmp = strings.ReplaceAll(tmp, arg, funcArgs[index])
+				}
+				values = append(values, tmp)
+			}
+			return values
+		}
+	}
+
+	if strings.Contains(value, ":") {
+		if strings.Count(value, ":") == 2 {
+			// File is starting from E: C: D: for windows + Regex is supplied
+			tmp := strings.SplitN(value, ":", 3)
+
+			one := tmp[0]
+			two := tmp[1]
+			three := tmp[2]
+			test1 := one + ":" + two
+			test2 := two + ":" + three
+
+			if _, err := os.Stat(test1); err == nil {
+				return findRegex(test1, three)
+			} else if _, err := os.Stat(test2); err == nil {
+				return findRegex(one, test2)
+			} else {
+				return strings.Split(value, ",")
+			}
+
+		} else if strings.Count(value, ":") == 1 {
+			if _, err := os.Stat(value); err == nil {
+				return fileValues(value)
+			} else {
+				t := strings.SplitN(value, ":", 2)
+				file := t[0]
+				reg := t[1]
+
+				if strings.HasSuffix(file, ".txt") {
+					return findRegex(file, reg)
+				} else if _, exists := m["files"][file]; exists {
+					return findRegex(m["files"][file][0], reg)
+				} else {
+					return strings.Split(value, ",")
+				}
+			}
+		}
+	} else if strings.HasSuffix(value, ".txt") {
+		if _, err := os.Stat(value); err == nil {
+			return fileValues(value)
+		}
+	}
+
+	return strings.Split(value, ",")
 }
 
 func showHelp() {

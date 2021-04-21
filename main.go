@@ -12,9 +12,9 @@ import (
 
 var gopath = os.Getenv("GOPATH")
 var m = make(map[interface{}]map[string][]string)
-var params = make(map[string][]string)
+var params = make(map[string]string)
 var pattern = []string{}
-var version = "1.3"
+var version = "1.5"
 var verbose = false
 var min int
 
@@ -46,6 +46,7 @@ var banner = `
 var config = `
 # Character set like crunch
 charSet:
+	sep   : [_- ] #common separators
     n     : [0123456789]
     A     : [ABCDEFGHIJKLMNOPQRSTUVWXYZ]
     a     : [abcdefghijklmnopqrstuvwxyz]
@@ -58,26 +59,54 @@ charSet:
 
 # File to access from anywhere
 files:
-    raft_ext     : [E:\\tools\\wordlists\\SecLists\\Discovery\\Web-Content\\raft-large-extensions.txt]
-    robot_1000   : [E:\\tools\\wordlists\\SecLists\\Discovery\\Web-Content\\RobotsDisallowed-Top1000.txt]
+    raft_ext     : [E:\tools\wordlists\SecLists\Discovery\Web-Content\raft-large-extensions.txt]
+    raft_dir     : [E:\tools\wordlists\SecLists\Discovery\Web-Content\raft-large-directories.txt]
+    raft_files   : [E:\tools\wordlists\SecLists\Discovery\Web-Content\raft-large-files.txt]
+    robot_1000   : [E:\tools\wordlists\SecLists\Discovery\Web-Content\RobotsDisallowed-Top1000.txt]
 
-# Create your word's set
+# Create your lists
 lists:
-    admin_set    : [admin, root, su, administration]
-    password_set : [123, "@123", "#123"]
+    schemas      : [aim, callto, cvs, data, facetime, feed, file, ftp, git, gopher, gtalk, h323, hdl, http, https, imap, irc, irc6, ircs, itms, javascript, magnet, mailto, mms, msnim, news, nntp, prospero, rsync, rtsp, rtspu, sftp, shttp, sip, sips, skype, smb, snews, ssh, svn, svn, svn+ssh, telnet, tel, wais, ymsg]
+    bypass       : ["%00", "%09", "%0A", "%0D", "%0D%0A"]
+
+    admin_set    : [admin, root, su, superuser, administration]
+    api          : [/v1/,/v2/,/v3/,/v4/,/v5/,/api/]
+    pass_ends    : [123, "@123", "#123"]
+
     months       : [January, February, March, April, May, June, July, August, September, October, November, December]
     mons         : [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
 
+# Patterns
+patterns:
+    date : 
+        - date(D,M,Y)
+        - DMY  
+        - MDY 
+        - D/M/Y  
+        - M/D/Y 
+        - D-M-Y  
+        - M-D-Y   
+        - D.M.Y  
+        - M.D.Y  
+        - D.Y  
+        - M.Y  
+        - D.M
+
 # Extension Set, . will added before using this
 extensions:
-    archive : [7z, a, apk, xapk, ar, bz2, cab, cpio, deb, dmg, egg, gz, iso, jar, lha, mar, pea, rar, rpm, s7z, shar, tar, tbz2, tgz, tlz, war, whl, xpi, zip, zipx, xz, pak]
-    config  : [conf, config]
-    sheet   : [ods, xls, xlsx, csv, ics vcf]
-    exec    : [exe, msi, bin, command, sh, bat, crx]
-    code    : [c, cc, class, clj, cpp, cs, cxx, el, go, h, java, lua, m, m4, php, php3, php5, php7, pl, po, py, rb, rs, sh, swift, vb, vcxproj, xcodeproj, xml, diff, patch, js, jsx]
-    web     : [html, html5, htm, css, js, jsx, less, scss, wasm, php, php3, php5, php7]
+    config  : [conf, confq, config]
+    data    : [xml, json, yaml, yml]
     backup  : [bak, backup, backup1, backup2]
-    slide   : [ppt, odp]
+    exec    : [exe, msi, bin, command, sh, bat, crx]
+    web     : [html, html5, htm, js, jsx, jsp, wasm, php, php3, php5, php7]
+    iis     : [asax, ascx, asmx, aspx, exe, aspx.cs, ashx, axd, config, htm, jar, js, rdl, swf, txt, xls, xml, xsl, zpd, suo, sln]
+    archive : [7z, a, apk, xapk, ar, bz2, cab, cpio, deb, dmg, egg, gz, iso, jar, lha, mar, pea, rar, rpm, s7z, shar, tar, tbz2, tgz, tlz, war, whl, xpi, zip, zipx, xz, pak, tar.gz, gz]
+    code    : [c, cc, class, clj, cpp, cs, cxx, el, go, h, java, lua, m, m4, php, php3, php5, php7, pl, po, py, rb, rs, sh, swift, vb, vcxproj, xcodeproj, xml, diff, patch, js, jsx]
+
+    #Rest
+    css_type: [css, less, scss]
+    sheet   : [ods, xls, xlsx, csv, ics vcf]
+    slide   : [ppt, pptx, odp]
     font    : [eot, otf, ttf, woff, woff2]
     text    : [doc, docx, ebook, log, md, msg, odt, org, pages, pdf, rtf, rst, tex, txt, wpd, wps]
     audio   : [aac, aiff, ape, au, flac, gsm, it, m3u, m4a, mid, mod, mp3, mpa, pls, ra, s3m, sid, wav, wma, xm]
@@ -184,25 +213,25 @@ func main() {
 				columnValues = append(columnValues, val...)
 				continue
 			}
-			if _, exists := params[p]; exists {
-				columnValues = append(columnValues, params[p]...)
+			if val, exists := params[p]; exists {
+				columnValues = append(columnValues, parseValue(val)...)
 				continue
 			}
-			if _, exists := m["charSet"][p]; exists {
-				chars := strings.Split(m["charSet"][p][0], "")
+			if val, exists := m["charSet"][p]; exists {
+				chars := strings.Split(val[0], "")
 				columnValues = append(columnValues, chars...)
 				continue
 			}
-			if _, exists := m["files"][p]; exists {
-				columnValues = append(columnValues, fileValues(m["files"][p][0])...)
+			if val, exists := m["files"][p]; exists {
+				columnValues = append(columnValues, fileValues(val[0])...)
 				continue
 			}
-			if _, exists := m["lists"][p]; exists {
-				columnValues = append(columnValues, m["lists"][p]...)
+			if val, exists := m["lists"][p]; exists {
+				columnValues = append(columnValues, val...)
 				continue
 			}
-			if _, exists := m["extensions"][p]; exists {
-				for _, ext := range m["extensions"][p] {
+			if val, exists := m["extensions"][p]; exists {
+				for _, ext := range val {
 					columnValues = append(columnValues, "."+ext)
 				}
 				continue
