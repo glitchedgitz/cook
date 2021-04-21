@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"os"
 	"regexp"
-	"strconv"
 	"strings"
 
 	"gopkg.in/yaml.v2"
@@ -16,6 +15,19 @@ var m = make(map[interface{}]map[string][]string)
 var params = make(map[string][]string)
 var pattern = []string{}
 var version = "1.3"
+var verbose = false
+var min int
+
+const (
+	blue   = "\u001b[38;5;14m"
+	green  = "\u001b[38;5;46m"
+	purple = "\u001b[38;5;207m"
+	red    = "\u001b[38;5;196m"
+	bold   = "\u001b[1m"
+	white  = "\u001b[38;5;255m"
+	reset  = "\u001b[0m"
+)
+
 var banner = `
 
                              
@@ -26,28 +38,9 @@ var banner = `
  ▄████▄   ▒█████   ▒█████   ██ ▄█▀           A CUSTOMIZABLE WORDLIST
 ▒██▀ ▀█  ▒██▒  ██▒▒██▒  ██▒ ██▄█▒            AND PASSWORD GENERATOR
 ▒▓█    ▄ ▒██░  ██▒▒██░  ██▒▓███▄░ 
-▒▓▓▄ ▄██▒▒██   ██░▒██   ██░▓██ █▄            by Gitesh Sharma 
+▒▓▓▄ ▄██▒▒██   ██░▒██   ██░▓██ █▄            dev by Gitesh Sharma 
  ▒ ▓███▀ ░░ ████▓▒░░ ████▓▒░▒██▒ █▄ ` + version + `      @giteshnxtlvl
 
-`
-
-var help = `
-
-COMPLETE USAGE
-	https://github.com/giteshnxtlvl/cook
-
-BASIC USAGE
-	cook -start admin,root  -sep _,-  -end secret,critical  start:sep:end
-
-OUTPUT
-	admin_secret
-	admin_critical
-	admin-secret
-	admin-critical
-	root_secret
-	root_critical
-	root-secret
-	root-critical
 `
 
 var config = `
@@ -69,7 +62,7 @@ files:
     robot_1000   : [E:\\tools\\wordlists\\SecLists\\Discovery\\Web-Content\\RobotsDisallowed-Top1000.txt]
 
 # Create your word's set
-words:
+lists:
     admin_set    : [admin, root, su, administration]
     password_set : [123, "@123", "#123"]
     months       : [January, February, March, April, May, June, July, August, September, October, November, December]
@@ -93,24 +86,6 @@ extensions:
     image   : [3dm, 3ds, max, bmp, dds, gif, jpg, jpeg, png, psd, xcf, tga, thm, tif, tiff, yuv, ai, eps, ps, svg, dwg, dxf, gpx, kml, kmz, webp]
 `
 
-func parseCommand(list []string, val string) ([]string, bool) {
-	for i, l := range list {
-		if l == val {
-			return append(list[:i], list[i+1:]...), true
-		}
-	}
-	return list, false
-}
-
-func parseCommandArg(list []string, val string) ([]string, string) {
-	for i, l := range list {
-		if l == val {
-			return append(list[:i], list[i+2:]...), list[i+1]
-		}
-	}
-	return list, ""
-}
-
 func valueInSlice(list []string, val string) bool {
 	for _, l := range list {
 		if l == val {
@@ -133,7 +108,7 @@ func findRegex(file, expresssion string) []string {
 		panic(err)
 	}
 
-	data := strings.ReplaceAll(string(content), "\r\n", "\n")
+	data := strings.ReplaceAll(string(content), "\r", "")
 	extensions_list := r.FindAllString(data, -1)
 
 	for _, found := range extensions_list {
@@ -145,122 +120,15 @@ func findRegex(file, expresssion string) []string {
 	return founded
 }
 
-var columnCases = make(map[int][]string)
+func fileValues(file string) []string {
+	content, err := ioutil.ReadFile(file)
 
-//Parse Input
-func parseInput(commands []string) {
-
-	if len(commands) == 0 {
-		fmt.Println(banner)
-		os.Exit(0)
+	if err != nil {
+		fmt.Println(file)
+		panic(err)
 	}
 
-	if valueInSlice(commands, "-h") {
-		fmt.Println(banner)
-		fmt.Println(help)
-		fmt.Println(config)
-		os.Exit(0)
-	}
-
-	// commands, toUpper = parseCommand(commands, "-upper")
-	// commands, toLower = parseCommand(commands, "-lower")
-	commands, caseValue := parseCommandArg(commands, "-case")
-
-	last := len(commands) - 1
-	pattern = strings.Split(commands[last], ":")
-
-	if caseValue != "" {
-		caseValue = strings.ToUpper(caseValue)
-		if !strings.Contains(caseValue, ":") {
-			tmp := strings.Split(caseValue, "")
-
-			//For Camel Case Only
-			if strings.Contains(caseValue, "C") {
-				columnCases[0] = append(columnCases[0], "L")
-				for i := 1; i < len(pattern); i++ {
-					columnCases[i] = append(columnCases[i], "T")
-				}
-			}
-
-			for i := 0; i < len(pattern); i++ {
-				columnCases[i] = append(columnCases[i], tmp...)
-			}
-		} else {
-			for _, val := range strings.Split(caseValue, ",") {
-				v := strings.SplitN(val, ":", 2)
-				i, err := strconv.Atoi(v[0])
-				if err != nil {
-					panic(err)
-				}
-				columnCases[i] = strings.Split(v[1], "")
-			}
-		}
-	}
-
-	for i, cmd := range commands[:last] {
-
-		if strings.HasPrefix(cmd, "-") {
-			cmd = strings.Replace(cmd, "-", "", 1)
-			value := commands[i+1]
-			values := []string{}
-
-			//Checking regex
-			if strings.Contains(value, ":") {
-				t := strings.SplitN(value, ":", 2)
-				file := t[0]
-				reg := t[1]
-
-				if strings.HasSuffix(file, ".txt") {
-					values = findRegex(file, reg)
-				} else if _, exists := m["files"][file]; exists {
-					values = findRegex(m["files"][file][0], reg)
-				} else {
-					values = strings.Split(value, ",")
-				}
-
-			} else if strings.HasSuffix(value, ".txt") {
-				content, err := ioutil.ReadFile(value)
-
-				if err != nil {
-					values = strings.Split(value, ",")
-				} else {
-					fileData := strings.ReplaceAll(string(content), "\r\n", "\n")
-					values = strings.Split(fileData, "\n")
-				}
-			} else {
-				values = strings.Split(value, ",")
-			}
-
-			params[cmd] = values
-		}
-	}
-}
-
-func parseIntRanges(p string) ([]string, bool) {
-	val := []string{}
-	if strings.HasPrefix(p, "[") && strings.HasSuffix(p, "]") && strings.Contains(p, "-") {
-		p = strings.ReplaceAll(p, "[", "")
-		p = strings.ReplaceAll(p, "]", "")
-		numRange := strings.SplitN(p, "-", 2)
-
-		start, err := strconv.Atoi(numRange[0])
-		if err != nil {
-			return val, false
-		}
-
-		stop, err := strconv.Atoi(numRange[1])
-		if err != nil {
-			return val, false
-		}
-
-		for start <= stop {
-			val = append(val, strconv.Itoa(start))
-			start++
-		}
-
-		return val, true //get all ranges
-	}
-	return val, false
+	return strings.Split(strings.ReplaceAll(string(content), "\r", ""), "\n")
 }
 
 func cookConfig() {
@@ -272,10 +140,9 @@ func cookConfig() {
 
 	} else if _, err := os.Stat(configFile); err == nil {
 		// If file exists
-		var err2 error
-		content, err2 = ioutil.ReadFile(configFile)
-		if err2 != nil {
-			fmt.Printf("Config File Reading Error: %v\n", err2)
+		content, err = ioutil.ReadFile(configFile)
+		if err != nil {
+			fmt.Printf("Config File Reading Error: %v\n", err)
 		}
 
 		//If file is empty
@@ -283,6 +150,7 @@ func cookConfig() {
 			ioutil.WriteFile(configFile, []byte(config), 0644)
 			content = []byte(config)
 		}
+
 	} else if os.IsNotExist(err) {
 		err := ioutil.WriteFile(configFile, []byte(config), 0644)
 		if err != nil {
@@ -326,20 +194,11 @@ func main() {
 				continue
 			}
 			if _, exists := m["files"][p]; exists {
-
-				content, err := ioutil.ReadFile(m["files"][p][0])
-
-				if err != nil {
-					fmt.Println("In cook.yaml, " + m["files"][p][0])
-					panic(err)
-				}
-
-				fileData := strings.ReplaceAll(string(content), "\r\n", "\n")
-				columnValues = append(columnValues, strings.Split(fileData, "\n")...)
+				columnValues = append(columnValues, fileValues(m["files"][p][0])...)
 				continue
 			}
-			if _, exists := m["words"][p]; exists {
-				columnValues = append(columnValues, m["words"][p]...)
+			if _, exists := m["lists"][p]; exists {
+				columnValues = append(columnValues, m["lists"][p]...)
 				continue
 			}
 			if _, exists := m["extensions"][p]; exists {
@@ -357,36 +216,42 @@ func main() {
 		// Using cases for columnValues
 		if _, exists := columnCases[columnNum]; exists {
 
-			//A: All cases
-			A := false
-
+			//All cases
 			if valueInSlice(columnCases[columnNum], "A") {
-				A = true
-			}
-
-			if A || valueInSlice(columnCases[columnNum], "U") {
 				for _, t := range final {
 					for _, v := range columnValues {
 						temp = append(temp, t+strings.ToUpper(v))
-					}
-				}
-			}
-
-			if A || valueInSlice(columnCases[columnNum], "L") {
-				for _, t := range final {
-					for _, v := range columnValues {
 						temp = append(temp, t+strings.ToLower(v))
-					}
-				}
-			}
-
-			if A || valueInSlice(columnCases[columnNum], "T") {
-				for _, t := range final {
-					for _, v := range columnValues {
 						temp = append(temp, t+strings.Title(v))
 					}
 				}
+			} else {
+
+				if valueInSlice(columnCases[columnNum], "U") {
+					for _, t := range final {
+						for _, v := range columnValues {
+							temp = append(temp, t+strings.ToUpper(v))
+						}
+					}
+				}
+
+				if valueInSlice(columnCases[columnNum], "L") {
+					for _, t := range final {
+						for _, v := range columnValues {
+							temp = append(temp, t+strings.ToLower(v))
+						}
+					}
+				}
+
+				if valueInSlice(columnCases[columnNum], "T") {
+					for _, t := range final {
+						for _, v := range columnValues {
+							temp = append(temp, t+strings.Title(v))
+						}
+					}
+				}
 			}
+
 		} else {
 			for _, t := range final {
 				for _, v := range columnValues {
@@ -396,10 +261,10 @@ func main() {
 		}
 
 		final = temp
+		if columnNum >= min {
+			for _, v := range final {
+				fmt.Println(v)
+			}
+		}
 	}
-
-	for _, v := range final {
-		fmt.Println(v)
-	}
-
 }
