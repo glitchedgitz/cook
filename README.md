@@ -136,7 +136,7 @@ If you like/love this project
 - Update Below topics. (Give direct PRs)
   - [Useful Resources](#useful-resources)
   - [Using COOK with other tools](#using-cook-with-other-tools)
-- [Buy me some coffie](https://www.buymeacoffee.com/giteshnxtlvl)
+- [Buy me some coffee](https://www.buymeacoffee.com/giteshnxtlvl)
 <img width="300" src="./images/coffee.png">
 
 # Using COOK with other tools
