@@ -11,13 +11,13 @@
   - [Basic Permutation](#basic-permutation)
   - [Advance Permutation](#advance-permutation)
   - [Customizing tool](#customizing-tool)
-- [Predefined Sets](#predefined-sets)
+- Predefined Sets
   - [Extension Sets](#predefined-sets)
   - [Words Sets](#create-your-own-unique-sets)
   - [Character sets - Use it like crunch](#use-it-like-crunch)
   - [Patterns/Functions](#patternsfunctions)
   - [Int Ranges](#int-ranges)
-- [Using Files](#using-files)
+- Using Files
   - [Regex Input from File](#regex-input-from-file)
   - [File Not Found](#regex-input-from-file)
   - [Save your wordlists by unique names](#save-wordlists-by-unique-names)
