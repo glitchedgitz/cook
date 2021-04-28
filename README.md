@@ -4,11 +4,13 @@
 <h3 align="center">A customizable wordlist and password generator</h3>
 
 
-- [Introduction](#Introduction)
+
+- [Introduction](#introduction)
 - [Installation](#installation)
-- [Customizing tool](#customizing-tool)
-- [Basic Usage](#basic-permutation)
-- [Advance Usage](#advance-permutation)
+- Usage
+  - [Basic Permutation](#basic-permutation)
+  - [Advance Permutation](#advance-permutation)
+  - [Customizing tool](#customizing-tool)
 - [Predefined Sets](#predefined-sets)
   - [Extension Sets](#predefined-sets)
   - [Words Sets](#create-your-own-unique-sets)
@@ -20,15 +22,16 @@
   - [File Not Found](#regex-input-from-file)
   - [Save your wordlists by unique names](#save-wordlists-by-unique-names)
 - [Uppercase, Lowercase, Titlecase, Camelcase or All](#cases)
-- [Using COOK with other tools](#using-cook-with-other-tools)
-- [Useful Resources](#useful-resources)
+- [Contribute](#contribute)
+  - [Using COOK with other tools](#using-cook-with-other-tools)
+  - [Useful Resources](#useful-resources)
 - [Todo](#todo)
 - [All predefined sets list](#all-sets)
 
 # Introduction
-Easily create permutations and combinations of words with predefined sets of extensions, words and patterns/function. You can use this tool to easily create complex endpoints and passwords.
+Easily create permutations and combinations of words with predefined sets of extensions, words and patterns/function to create complex endpoints, wordlists and passwords.
 [Customizing tool](#customizing-tool) according to your **unique secrets keywords**.     
-Easy UX, Checkout [Usage](#usage)     
+Easy UX, Checkout [Usage](#basic-permutation)     
 
 # Installation
 #### Using Go
@@ -129,6 +132,15 @@ Understanding concept is important!
 # Cases
 
 <img src="./images/12.png">
+
+# Contribute
+If you like/love this project
+- Share your awesome recipes. Create [issue](https://github.com/giteshnxtlvl/cook/issues).
+- Share useful lists and patterns for COOK. Create [issue](https://github.com/giteshnxtlvl/cook/issues).
+- Share Ideas or new Feature Request. Create [discussions](https://github.com/giteshnxtlvl/cook/discussions)
+- Update Below topics. (Give direct PRs)
+  - [Useful Resources](#useful-resources)
+  - [Using COOK with other tools](#using-cook-with-other-tools)
 
 # Using COOK with other tools
 ### Direct fuzzing with [GoBuster](https://github.com/OJ/gobuster)
