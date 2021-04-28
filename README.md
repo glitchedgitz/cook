@@ -2,10 +2,10 @@
 
 <h1 align="center">COOK</h1>
 <h3 align="center">A customizable wordlist and password generator</h3>
+<h4 align="center">Easily create permutations and combinations of words with predefined sets of extensions, words and patterns/function to create complex endpoints, wordlists and passwords. Easy UX, Checkout Usage</h4>
 
 
 
-- [Introduction](#introduction)
 - [Installation](#installation)
 - Usage
   - [Basic Permutation](#basic-permutation)
@@ -27,11 +27,6 @@
   - [Useful Resources](#useful-resources)
 - [Todo](#todo)
 - [All predefined sets list](#all-sets)
-
-# Introduction
-Easily create permutations and combinations of words with predefined sets of extensions, words and patterns/function to create complex endpoints, wordlists and passwords.
-[Customizing tool](#customizing-tool) according to your **unique secrets keywords**.     
-Easy UX, Checkout [Usage](#basic-permutation)     
 
 # Installation
 #### Using Go
