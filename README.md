@@ -1,10 +1,10 @@
-<img src="./images/banner1.png"> 
+<img src="./images/banner2.png"> 
 
 <h3 align="center">
-<a href=""><img src="./images/twitter.png"></a>
-<a href=""><img src="./images/New Feature Ideas.png"></a>
-<a href=""><img src="./images/New ListPattern.png"></a>
-<a href=""><img src="./images/BMEC.png"></a>
+<a href="https://twitter.com/giteshnxtlvl"><img src="./images/twitter.png"></a>
+<a href="https://github.com/giteshnxtlvl/cook/discussions/new"><img src="./images/New Feature Ideas.png"></a>
+<a href="https://github.com/giteshnxtlvl/cook/issues/new"><img src="./images/New ListPattern.png"></a>
+<a href="https://www.buymeacoffee.com/giteshnxtlvl"><img src="./images/BMEC.png"></a>
 </h3>
 
 <h1 align="center">COOK</h1>
