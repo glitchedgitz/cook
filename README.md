@@ -54,7 +54,7 @@ Download [cook.yaml](https://github.com/giteshnxtlvl/cook/blob/main/cook.yaml)
 1. Create an environment variable `COOK` =`Path of file`
     [How to setup up env variable?](https://www.schrodinger.com/kb/1842)
 3. Done, Run `cook -config`
-> Nore if you don't want to customize tool, then just don't set `COOK` in env variables.
+> Note: If you don't want to customize tool, then just don't set `COOK` in env variables.
 
 # Basic Permutation
 
