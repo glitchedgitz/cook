@@ -1,4 +1,11 @@
-<img src="./images/01.png">
+<img src="./images/banner1.png"> 
+
+<h3 align="center">
+<a href=""><img src="./images/twitter.png"></a>
+<a href=""><img src="./images/New Feature Ideas.png"></a>
+<a href=""><img src="./images/New ListPattern.png"></a>
+<a href=""><img src="./images/BMEC.png"></a>
+</h3>
 
 <h1 align="center">COOK</h1>
 <h3 align="center">A customizable wordlist and password generator</h3>
