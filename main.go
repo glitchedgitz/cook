@@ -46,7 +46,7 @@ var banner = `
 var config = `
 # Character set like crunch
 charSet:
-	sep   : [_- ] #common separators
+    sep   : [_- ] #common separators
     n     : [0123456789]
     A     : [ABCDEFGHIJKLMNOPQRSTUVWXYZ]
     a     : [abcdefghijklmnopqrstuvwxyz]
