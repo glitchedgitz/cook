@@ -138,7 +138,7 @@ If you like/love this project
   - [Useful Resources](#useful-resources)
   - [Using COOK with other tools](#using-cook-with-other-tools)
 - [Buy me some coffee](https://www.buymeacoffee.com/giteshnxtlvl)
-<img width="300" src="./images/coffee.png">
+<a href="https://www.buymeacoffee.com/giteshnxtlvl"><img width="300" src="./images/coffee.png"></a>
 
 # Using COOK with other tools
 ### Direct fuzzing with [GoBuster](https://github.com/OJ/gobuster)
