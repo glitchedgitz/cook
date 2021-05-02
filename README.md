@@ -158,7 +158,7 @@ If you like/love this project
 ### Direct fuzzing with [ffuf](https://github.com/ffuf/ffuf)
 
 ```
- cook admin,root:_:archive | ffuf -u https://example.com/ -w -
+ cook admin,root:_:archive | ffuf -u https://example.com/FUZZ -w -
 ```
 
 # Useful Resources
