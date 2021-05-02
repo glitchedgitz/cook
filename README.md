@@ -148,9 +148,17 @@ If you like/love this project
 <a href="https://www.buymeacoffee.com/giteshnxtlvl"><img width="300" src="./images/coffee.png"></a>
 
 # Using COOK with other tools
+
 ### Direct fuzzing with [GoBuster](https://github.com/OJ/gobuster)
+
 ```
  cook admin,root:_:archive | gobuster dir -u https://example.com/ -w -
+```
+
+### Direct fuzzing with [ffuf](https://github.com/ffuf/ffuf)
+
+```
+ cook admin,root:_:archive | ffuf -u https://example.com/ -w -
 ```
 
 # Useful Resources
