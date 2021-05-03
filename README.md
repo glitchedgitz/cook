@@ -174,6 +174,10 @@ Understanding concept is important!
 - Endpoints Analyser
 - Interactive mode for configuring `cook.yaml`
 
+# Contributors
+- @giteshnxtlvl - Core
+- @noraj - Added ffuf command in [Using COOK with other tools](#using-cook-with-other-tools)
+
 # All Sets
 ```yaml
 # Character set like crunch
