@@ -137,10 +137,11 @@ Understanding concept is important!
 <img src="./images/12.png">
 
 # Contribute
-Create [discussions](https://github.com/giteshnxtlvl/cook/discussions).
+Create [discussions] for these(https://github.com/giteshnxtlvl/cook/discussions).
 - Share your awesome recipes.
 - Share useful lists and patterns for COOK.
 - Share Ideas or new Feature Request.
+- Check out [discussions](https://github.com/giteshnxtlvl/cook/discussions).
 - Update Below topics.
   - [Useful Resources](#useful-resources)
   - [Using COOK with other tools](#using-cook-with-other-tools)
