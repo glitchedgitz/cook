@@ -137,26 +137,25 @@ Understanding concept is important!
 <img src="./images/12.png">
 
 # Contribute
-If you like/love this project
-- Share your awesome recipes. Create [issue](https://github.com/giteshnxtlvl/cook/issues).
-- Share useful lists and patterns for COOK. Create [issue](https://github.com/giteshnxtlvl/cook/issues).
-- Share Ideas or new Feature Request. Create [discussions](https://github.com/giteshnxtlvl/cook/discussions)
-- Update Below topics. (Give direct PRs)
+Create [discussions](https://github.com/giteshnxtlvl/cook/discussions).
+- Share your awesome recipes.
+- Share useful lists and patterns for COOK.
+- Share Ideas or new Feature Request.
+- Update Below topics.
   - [Useful Resources](#useful-resources)
   - [Using COOK with other tools](#using-cook-with-other-tools)
-- [Buy me some coffee](https://www.buymeacoffee.com/giteshnxtlvl)  
+
+# Support
 <a href="https://www.buymeacoffee.com/giteshnxtlvl"><img width="300" src="./images/coffee.png"></a>
 
 # Using COOK with other tools
 
 ### Direct fuzzing with [GoBuster](https://github.com/OJ/gobuster)
-
 ```
  cook admin,root:_:archive | gobuster dir -u https://example.com/ -w -
 ```
 
 ### Direct fuzzing with [ffuf](https://github.com/ffuf/ffuf)
-
 ```
  cook admin,root:_:archive | ffuf -u https://example.com/FUZZ -w -
 ```
