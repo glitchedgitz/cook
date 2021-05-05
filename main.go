@@ -10,12 +10,12 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-var gopath = os.Getenv("GOPATH")
 var m = make(map[interface{}]map[string][]string)
 var params = make(map[string]string)
 var pattern = []string{}
 var version = "1.5"
-var verbose = false
+
+// var verbose = false
 var min int
 
 const (
@@ -32,14 +32,14 @@ var banner = `
 
                              
   ░            ░ ░      ░ ░  ░  ░   
- ░        ░ ░ ░ ▒  ░ ░ ░ ▒  ░ ░░ ░ 
-  ░  ▒     ░ ▒ ▒░   ░ ▒ ▒░ ░ ░▒ ▒░
+  ░ ░        ░ ░ ░ ▒  ░ ░ ░ ▒  ░    
+░░▒ ▒░    ░ ▒ ▒░   ░ ▒ ▒░ ░ ░ ▒ ░
 ░ ░▒ ▒  ░░ ▒░▒░▒░ ░ ▒░▒░▒░ ▒ ▒▒ ▓▒
  ▄████▄   ▒█████   ▒█████   ██ ▄█▀           A CUSTOMIZABLE WORDLIST
 ▒██▀ ▀█  ▒██▒  ██▒▒██▒  ██▒ ██▄█▒            AND PASSWORD GENERATOR
 ▒▓█    ▄ ▒██░  ██▒▒██░  ██▒▓███▄░ 
 ▒▓▓▄ ▄██▒▒██   ██░▒██   ██░▓██ █▄            dev by Gitesh Sharma 
- ▒ ▓███▀ ░░ ████▓▒░░ ████▓▒░▒██▒ █▄ ` + version + `      @giteshnxtlvl
+ ▒▓███▀ ░░ ████▓▒░░ ████▓▒░▒██▒ █▄ ` + version + `      @giteshnxtlvl
 
 `
 
@@ -208,7 +208,7 @@ func main() {
 
 		for _, p := range strings.Split(param, ",") {
 
-			val, success := parseIntRanges(p)
+			val, success := parseRanges(p)
 			if success {
 				columnValues = append(columnValues, val...)
 				continue
