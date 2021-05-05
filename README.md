@@ -55,11 +55,8 @@ OR
 # Customizing tool
 By customizing you will able to make and use your own lists and patterns/functions.
 
-1. Create empty file named `cook.yaml`  
-*or*  
-Download [cook.yaml](https://github.com/giteshnxtlvl/cook/blob/main/cook.yaml)
+1. Create empty file named `cook.yaml` *or* Download [cook.yaml](https://github.com/giteshnxtlvl/cook/blob/main/cook.yaml)
 1. Create an environment variable `COOK` =`Path of file`  
-    [How to setup up env variable?](https://www.schrodinger.com/kb/1842)
 3. Done, Run `cook -config`
 > Note: If you don't want to customize tool, then just don't set `COOK` in env variables.
 
@@ -106,7 +103,7 @@ Understanding concept is important!
 ```
 
 # Ranges
-<img width="768" src="./images/13.png"> 
+<img width="640" src="./images/13.png"> 
 
 # Files
   ### Regex Input from File  
