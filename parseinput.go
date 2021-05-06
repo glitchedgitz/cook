@@ -1,7 +1,6 @@
 package main
 
 import (
-	goflags "cook/pkg"
 	"fmt"
 	"os"
 	"strconv"
@@ -97,7 +96,6 @@ func updateCases(caseValue string, noOfColumns int) {
 }
 
 func parseInput(commands []string) {
-	goflags.Parse(commands)
 
 	if len(commands) == 0 {
 		fmt.Println(banner)
