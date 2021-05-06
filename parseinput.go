@@ -25,36 +25,76 @@ func parseCommandArg(list []string, val string) ([]string, string) {
 	return list, ""
 }
 
-func parseIntRanges(p string) ([]string, bool) {
+func parseRanges(p string) ([]string, bool) {
 	val := []string{}
+	success := false
+	chars := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+
 	if strings.HasPrefix(p, "[") && strings.HasSuffix(p, "]") && strings.Contains(p, "-") {
-		p = strings.ReplaceAll(p, "[", "")
-		p = strings.ReplaceAll(p, "]", "")
+
+		p = strings.ReplaceAll(strings.ReplaceAll(p, "[", ""), "]", "")
 		numRange := strings.SplitN(p, "-", 2)
+		from := numRange[0]
+		to := numRange[1]
 
-		start, err := strconv.Atoi(numRange[0])
-		if err != nil {
-			return val, false
+		start, err1 := strconv.Atoi(from)
+		stop, err2 := strconv.Atoi(to)
+
+		if err1 == nil && err2 == nil {
+			for start <= stop {
+				val = append(val, strconv.Itoa(start))
+				start++
+			}
+			success = true
 		}
 
-		stop, err := strconv.Atoi(numRange[1])
-		if err != nil {
-			return val, false
-		}
+		if !success && len(from) == 1 && len(to) == 1 && strings.Contains(chars, from) && strings.Contains(chars, to) {
+			start = strings.Index(chars, from)
+			stop = strings.Index(chars, to)
 
-		for start <= stop {
-			val = append(val, strconv.Itoa(start))
-			start++
+			if start < stop {
+				charsList := strings.Split(chars, "")
+				for start <= stop {
+					val = append(val, charsList[start])
+					start++
+				}
+				success = true
+			}
 		}
-
-		return val, true //get all ranges
 	}
-	return val, false
+	return val, success
 }
 
 var columnCases = make(map[int][]string)
 
-//Parse Input
+func updateCases(caseValue string, noOfColumns int) {
+	caseValue = strings.ToUpper(caseValue)
+	if !strings.Contains(caseValue, ":") {
+		tmp := strings.Split(caseValue, "")
+
+		//For Camel Case Only
+		if strings.Contains(caseValue, "C") {
+			columnCases[0] = append(columnCases[0], "L")
+			for i := 1; i < noOfColumns; i++ {
+				columnCases[i] = append(columnCases[i], "T")
+			}
+		}
+
+		for i := 0; i < noOfColumns; i++ {
+			columnCases[i] = append(columnCases[i], tmp...)
+		}
+	} else {
+		for _, val := range strings.Split(caseValue, ",") {
+			v := strings.SplitN(val, ":", 2)
+			i, err := strconv.Atoi(v[0])
+			if err != nil {
+				panic(err)
+			}
+			columnCases[i] = strings.Split(v[1], "")
+		}
+	}
+}
+
 func parseInput(commands []string) {
 
 	if len(commands) == 0 {
@@ -70,7 +110,7 @@ func parseInput(commands []string) {
 		showConfig()
 	}
 
-	commands, verbose = parseCommand(commands, "-v")
+	// commands, verbose = parseCommand(commands, "-v")
 	commands, caseValue := parseCommandArg(commands, "-case")
 	commands, minValue := parseCommandArg(commands, "-min")
 
@@ -90,31 +130,7 @@ func parseInput(commands []string) {
 	}
 
 	if caseValue != "" {
-		caseValue = strings.ToUpper(caseValue)
-		if !strings.Contains(caseValue, ":") {
-			tmp := strings.Split(caseValue, "")
-
-			//For Camel Case Only
-			if strings.Contains(caseValue, "C") {
-				columnCases[0] = append(columnCases[0], "L")
-				for i := 1; i < noOfColumns; i++ {
-					columnCases[i] = append(columnCases[i], "T")
-				}
-			}
-
-			for i := 0; i < noOfColumns; i++ {
-				columnCases[i] = append(columnCases[i], tmp...)
-			}
-		} else {
-			for _, val := range strings.Split(caseValue, ",") {
-				v := strings.SplitN(val, ":", 2)
-				i, err := strconv.Atoi(v[0])
-				if err != nil {
-					panic(err)
-				}
-				columnCases[i] = strings.Split(v[1], "")
-			}
-		}
+		updateCases(caseValue, noOfColumns)
 	}
 
 	for i, cmd := range commands[:last] {
@@ -128,6 +144,7 @@ func parseInput(commands []string) {
 
 func parseValue(value string) []string {
 
+	//Checking for patterns/functions
 	if strings.Contains(value, "(") && strings.HasSuffix(value, ")") {
 		function := strings.SplitN(value, "(", 2)
 		funcName := function[0]
@@ -153,6 +170,7 @@ func parseValue(value string) []string {
 		}
 	}
 
+	// Checking for File and Regex
 	if strings.Contains(value, ":") {
 		if strings.Count(value, ":") == 2 {
 			// File is starting from E: C: D: for windows + Regex is supplied

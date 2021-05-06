@@ -23,16 +23,16 @@
   - [Words Sets](#create-your-own-unique-sets)
   - [Character sets - Use it like crunch](#use-it-like-crunch)
   - [Patterns/Functions](#patternsfunctions)
-  - [Int Ranges](#int-ranges)
+  - [Ranges](#ranges)
 - Using Files
   - [Regex Input from File](#regex-input-from-file)
   - [File Not Found](#regex-input-from-file)
   - [Save your wordlists by unique names](#save-wordlists-by-unique-names)
-- [Uppercase, Lowercase, Titlecase, Camelcase or All](#cases)
+- [Cases](#cases)
+- [Using COOK with other tools](#using-cook-with-other-tools)
+- [Useful Resources](#useful-resources)
 - [Contribute](#contribute)
-  - [Using COOK with other tools](#using-cook-with-other-tools)
-  - [Useful Resources](#useful-resources)
-- [Todo](#todo)
+- [Upcoming Features](#upcoming-features)
 - [All predefined sets list](#all-sets)
 
 # Installation
@@ -55,11 +55,8 @@ OR
 # Customizing tool
 By customizing you will able to make and use your own lists and patterns/functions.
 
-1. Create empty file named `cook.yaml`
-*or*
-Download [cook.yaml](https://github.com/giteshnxtlvl/cook/blob/main/cook.yaml)
-1. Create an environment variable `COOK` =`Path of file`
-    [How to setup up env variable?](https://www.schrodinger.com/kb/1842)
+1. Create empty file named `cook.yaml` *or* Download [cook.yaml](https://github.com/giteshnxtlvl/cook/blob/main/cook.yaml)
+1. Create an environment variable `COOK` =`Path of file`  
 3. Done, Run `cook -config`
 > Note: If you don't want to customize tool, then just don't set `COOK` in env variables.
 
@@ -105,8 +102,8 @@ Understanding concept is important!
   cook -name elliot -birth date(17,Sep,1994) name:birth
 ```
 
-# Int Ranges
-<img width="768" src="./images/13.png"> 
+# Ranges
+<img width="640" src="./images/13.png"> 
 
 # Files
   ### Regex Input from File  
@@ -133,22 +130,8 @@ Understanding concept is important!
   ```
 
 # Cases
-
 <img src="./images/12.png">
 
-# Contribute
-- Share your awesome recipes.
-- Share useful lists and patterns for COOK.
-- Share Ideas or new Feature Request.
-- Check out [discussions](https://github.com/giteshnxtlvl/cook/discussions).
-- Update Below topics.
-  - [Useful Resources](#useful-resources)
-  - [Using COOK with other tools](#using-cook-with-other-tools)
-
-> Create [discussions](https://github.com/giteshnxtlvl/cook/discussions) for these.
-
-# Support
-<a href="https://www.buymeacoffee.com/giteshnxtlvl"><img width="300" src="./images/coffee.png"></a>
 
 # Using COOK with other tools
 
@@ -169,14 +152,28 @@ Understanding concept is important!
 | [all_tlds.txt](https://raw.githubusercontent.com/publicsuffix/list/master/public_suffix_list.dat) | List of all tlds |
 | [Tip](https://twitter.com/krizzsk/status/1377666014347980801) by [Joel Verghese](https://twitter.com/krizzsk) | FUZZ CDNs - Logical Fuzzing |
 
+# Contribute
+- Share your awesome recipes.
+- Share useful lists and patterns for COOK.
+- Share Ideas or new Feature Request.
+- Check out [discussions](https://github.com/giteshnxtlvl/cook/discussions).
+- Add [Useful Resources](#useful-resources)
+- Add [Using COOK with other tools](#using-cook-with-other-tools)
 
-# Todo
-- Endpoints Analyser
-- Interactive mode for configuring `cook.yaml`
+> Create [discussions](https://github.com/giteshnxtlvl/cook/discussions) for these.
+
+# Support  
+If you like the tool, support the development of tool, this will speed up development of [Upcoming Features](#upcoming-features)  
+
+<a href="https://www.buymeacoffee.com/giteshnxtlvl"><img width="300" src="./images/BMEC2X.png"></a>
 
 # Contributors
 - @giteshnxtlvl - Core
 - @noraj - Added ffuf command in [Using COOK with other tools](#using-cook-with-other-tools)
+
+# Upcoming Features
+- Endpoints Analyser
+- Interactive mode for configuring `cook.yaml`
 
 # All Sets
 ```yaml
@@ -227,7 +224,6 @@ patterns:
         - D.Y  
         - M.Y  
         - D.M
-
 
 # Extension Set, . will added before using this
 extensions:
