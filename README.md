@@ -163,7 +163,7 @@ Understanding concept is important!
 > Create [discussions](https://github.com/giteshnxtlvl/cook/discussions) for these.
 
 # Support
-If you like the tool.
+If you like the tool. Support the development of tool, this will fast track building up [Upcoming Features](#upcoming-features)
 <a href="https://www.buymeacoffee.com/giteshnxtlvl"><img width="300" src="./images/BMEC2X.png"></a>
 
 # Upcoming Features
