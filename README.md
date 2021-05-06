@@ -162,17 +162,18 @@ Understanding concept is important!
 
 > Create [discussions](https://github.com/giteshnxtlvl/cook/discussions) for these.
 
-# Support
-If you like the tool. Support the development of tool, this will fast track building up [Upcoming Features](#upcoming-features)
-<a href="https://www.buymeacoffee.com/giteshnxtlvl"><img width="300" src="./images/BMEC2X.png"></a>
+# Support  
+If you like the tool, support the development of tool, this will speed up development of [Upcoming Features](#upcoming-features)  
 
-# Upcoming Features
-- Endpoints Analyser
-- Interactive mode for configuring `cook.yaml`
+<a href="https://www.buymeacoffee.com/giteshnxtlvl"><img width="300" src="./images/BMEC2X.png"></a>
 
 # Contributors
 - @giteshnxtlvl - Core
 - @noraj - Added ffuf command in [Using COOK with other tools](#using-cook-with-other-tools)
+
+# Upcoming Features
+- Endpoints Analyser
+- Interactive mode for configuring `cook.yaml`
 
 # All Sets
 ```yaml
