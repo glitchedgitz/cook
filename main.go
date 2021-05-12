@@ -138,9 +138,9 @@ func findRegex(file, expresssion string) []string {
 	}
 
 	data := strings.ReplaceAll(string(content), "\r", "")
-	extensions_list := r.FindAllString(data, -1)
+	extensionsList := r.FindAllString(data, -1)
 
-	for _, found := range extensions_list {
+	for _, found := range extensionsList {
 		if !valueInSlice(founded, found) {
 			founded = append(founded, found)
 		}
@@ -194,13 +194,66 @@ func cookConfig() {
 	}
 }
 
+func applyColumnCases(columnValues []string, columnNum int) {
+	temp := []string{}
+
+	// Using cases for columnValues
+	if _, exists := columnCases[columnNum]; exists {
+
+		//All cases
+		if valueInSlice(columnCases[columnNum], "A") {
+			for _, t := range final {
+				for _, v := range columnValues {
+					temp = append(temp, t+strings.ToUpper(v))
+					temp = append(temp, t+strings.ToLower(v))
+					temp = append(temp, t+strings.Title(v))
+				}
+			}
+		} else {
+
+			if valueInSlice(columnCases[columnNum], "U") {
+				for _, t := range final {
+					for _, v := range columnValues {
+						temp = append(temp, t+strings.ToUpper(v))
+					}
+				}
+			}
+
+			if valueInSlice(columnCases[columnNum], "L") {
+				for _, t := range final {
+					for _, v := range columnValues {
+						temp = append(temp, t+strings.ToLower(v))
+					}
+				}
+			}
+
+			if valueInSlice(columnCases[columnNum], "T") {
+				for _, t := range final {
+					for _, v := range columnValues {
+						temp = append(temp, t+strings.Title(v))
+					}
+				}
+			}
+		}
+
+	} else {
+		for _, t := range final {
+			for _, v := range columnValues {
+				temp = append(temp, t+v)
+			}
+		}
+	}
+
+	final = temp
+}
+
+//Initializing with empty string, so loops will run for 1st column
+var final = []string{""}
+
 func main() {
 
 	cookConfig()
 	parseInput(os.Args[1:])
-
-	//Initializing with empty string, so loops will run for 1st column
-	final := []string{""}
 
 	for columnNum, param := range pattern {
 
@@ -240,56 +293,8 @@ func main() {
 			columnValues = append(columnValues, p)
 		}
 
-		temp := []string{}
+		applyColumnCases(columnValues, columnNum)
 
-		// Using cases for columnValues
-		if _, exists := columnCases[columnNum]; exists {
-
-			//All cases
-			if valueInSlice(columnCases[columnNum], "A") {
-				for _, t := range final {
-					for _, v := range columnValues {
-						temp = append(temp, t+strings.ToUpper(v))
-						temp = append(temp, t+strings.ToLower(v))
-						temp = append(temp, t+strings.Title(v))
-					}
-				}
-			} else {
-
-				if valueInSlice(columnCases[columnNum], "U") {
-					for _, t := range final {
-						for _, v := range columnValues {
-							temp = append(temp, t+strings.ToUpper(v))
-						}
-					}
-				}
-
-				if valueInSlice(columnCases[columnNum], "L") {
-					for _, t := range final {
-						for _, v := range columnValues {
-							temp = append(temp, t+strings.ToLower(v))
-						}
-					}
-				}
-
-				if valueInSlice(columnCases[columnNum], "T") {
-					for _, t := range final {
-						for _, v := range columnValues {
-							temp = append(temp, t+strings.Title(v))
-						}
-					}
-				}
-			}
-
-		} else {
-			for _, t := range final {
-				for _, v := range columnValues {
-					temp = append(temp, t+v)
-				}
-			}
-		}
-
-		final = temp
 		if columnNum >= min {
 			for _, v := range final {
 				fmt.Println(v)
