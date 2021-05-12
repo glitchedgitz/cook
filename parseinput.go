@@ -7,14 +7,14 @@ import (
 	"strings"
 )
 
-// func parseCommand(list []string, val string) ([]string, bool) {
-// 	for i, l := range list {
-// 		if l == val {
-// 			return append(list[:i], list[i+1:]...), true
-// 		}
-// 	}
-// 	return list, false
-// }
+func parseCommand(list []string, val string) ([]string, bool) {
+	for i, l := range list {
+		if l == val {
+			return append(list[:i], list[i+1:]...), true
+		}
+	}
+	return list, false
+}
 
 func parseCommandArg(list []string, val string) ([]string, string) {
 	for i, l := range list {
@@ -95,8 +95,6 @@ func updateCases(caseValue string, noOfColumns int) {
 	}
 }
 
-// This is lame parsing but works for now
-// In Future there will be a package for advance flags parsing
 func parseInput(commands []string) {
 
 	if len(commands) == 0 {
@@ -244,6 +242,7 @@ func showHelp() {
     -min    : Minimum no of columns to print. (Default min = no of columns)
               Same as minimum of crunch			  
     -config : Config Information *cook.yaml*
+    -v      : Verbose Output 
     -h      : Help
 	`
 	fmt.Println(help)
