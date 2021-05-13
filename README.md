@@ -132,7 +132,7 @@ Understanding concept is important!
 # Cases
 <img src="./images/12.png">
 
-# Usefult Resources
+# Usefull Resources
 Checkout [Resources.md](./Resources.md)
 - [Using COOK with other tools](./Resources.md)
 - [Awesome Wordlists, Tips and Tricks](./Resources.md)
