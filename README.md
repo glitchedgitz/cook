@@ -134,8 +134,8 @@ Understanding concept is important!
 
 # Usefult Resources
 Checkout [Resources.md](./Resources.md)
-- [Using COOK with other tools]
-- [Awesome Wordlists, Tips and Tricks]
+- [Using COOK with other tools](./Resources.md)
+- [Awesome Wordlists, Tips and Tricks](./Resources.md)
 
 # Contribute
 - Share your awesome recipes.
@@ -144,7 +144,7 @@ Checkout [Resources.md](./Resources.md)
 - Check out [discussions](https://github.com/giteshnxtlvl/cook/discussions).
 - Update [Resources.md](./Resources.md)
   - Add Useful Resources
-  - Add tools we can use COOK with.
+  - Add tools we can use with COOK.
 
 > Create [discussions](https://github.com/giteshnxtlvl/cook/discussions) for these.
 
