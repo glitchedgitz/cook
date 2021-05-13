@@ -132,33 +132,19 @@ Understanding concept is important!
 # Cases
 <img src="./images/12.png">
 
-
-# Using COOK with other tools
-
-### Direct fuzzing with [GoBuster](https://github.com/OJ/gobuster)
-```
- cook admin,root:_:archive | gobuster dir -u https://example.com/ -w -
-```
-
-### Direct fuzzing with [ffuf](https://github.com/ffuf/ffuf)
-```
- cook admin,root:_:archive | ffuf -u https://example.com/FUZZ -w -
-```
-
-# Useful Resources
-| List | Description |
-| --- | --- |
-| [raft-large-extensions.txt](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/raft-large-extensions.txt) | List of all extensions |
-| [all_tlds.txt](https://raw.githubusercontent.com/publicsuffix/list/master/public_suffix_list.dat) | List of all tlds |
-| [Tip](https://twitter.com/krizzsk/status/1377666014347980801) by [Joel Verghese](https://twitter.com/krizzsk) | FUZZ CDNs - Logical Fuzzing |
+# Usefult Resources
+Checkout [Resources.md](./Resources.md)
+- [Using COOK with other tools](./Resources.md)
+- [Awesome Wordlists, Tips and Tricks](./Resources.md)
 
 # Contribute
 - Share your awesome recipes.
 - Share useful lists and patterns for COOK.
 - Share Ideas or new Feature Request.
 - Check out [discussions](https://github.com/giteshnxtlvl/cook/discussions).
-- Add [Useful Resources](#useful-resources)
-- Add [Using COOK with other tools](#using-cook-with-other-tools)
+- Update [Resources.md](./Resources.md)
+  - Add Useful Resources
+  - Add tools we can use with COOK.
 
 > Create [discussions](https://github.com/giteshnxtlvl/cook/discussions) for these.
 
