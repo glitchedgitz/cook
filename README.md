@@ -132,6 +132,20 @@ Understanding concept is important!
 # Cases
 <img src="./images/12.png">
 
+## Some Features
+### Minimum
+Use `-min <num>` to print minimum no of columns to print.  
+Example this command will print 1,2,3 digit numbers
+```
+cook n:n:n -min 
+```
+
+### Pipe input
+Use `-` as param value to take pipe input
+```
+cook -d - d:anything
+```
+
 # Usefull Resources
 Checkout [Resources.md](./Resources.md)
 - [Using COOK with other tools](./Resources.md)
