@@ -109,7 +109,6 @@ func updateCases(caseValue string, noOfColumns int) {
 func parseInput(commands []string) {
 
 	if len(commands) == 0 {
-		fmt.Println(banner)
 		os.Exit(0)
 	}
 

@@ -18,6 +18,7 @@ var version = "1.5"
 
 // var verbose = false
 var min int
+var total = 0
 
 const (
 	blue   = "\u001b[38;5;14m"
@@ -32,15 +33,15 @@ const (
 var banner = `
 
                              
-  ░            ░ ░      ░ ░  ░  ░   
-  ░ ░        ░ ░ ░ ▒  ░ ░ ░ ▒  ░    
-░░▒ ▒░    ░ ▒ ▒░   ░ ▒ ▒░ ░ ░ ▒ ░
-░ ░▒ ▒  ░░ ▒░▒░▒░ ░ ▒░▒░▒░ ▒ ▒▒ ▓▒
- ▄████▄   ▒█████   ▒█████   ██ ▄█▀           A CUSTOMIZABLE WORDLIST
-▒██▀ ▀█  ▒██▒  ██▒▒██▒  ██▒ ██▄█▒            AND PASSWORD GENERATOR
-▒▓█    ▄ ▒██░  ██▒▒██░  ██▒▓███▄░ 
-▒▓▓▄ ▄██▒▒██   ██░▒██   ██░▓██ █▄            dev by Gitesh Sharma 
- ▒▓███▀ ░░ ████▓▒░░ ████▓▒░▒██▒ █▄ ` + version + `      @giteshnxtlvl
+  ░            ░ ░      ░ ░  ░  ░            Created by a person who
+  ░ ░        ░ ░ ░ ▒  ░ ░ ░ ▒  ░             got frustated creating 
+░░▒ ▒░    ░ ▒ ▒░   ░ ▒ ▒░ ░ ░ ▒ ░            permutation and combination 
+░ ░▒ ▒  ░░ ▒░▒░▒░ ░ ▒░▒░▒░ ▒ ▒▒ ▓▒           of words manually.
+ ▄████▄   ▒█████   ▒█████   ██ ▄█▀           
+▒██▀ ▀█  ▒██▒  ██▒▒██▒  ██▒ ██▄█▒            How the fk you guys were
+▒▓█    ▄ ▒██░  ██▒▒██░  ██▒▓███▄░            working without this till yet?
+▒▓▓▄ ▄██▒▒██   ██░▒██   ██░▓██ █▄             
+ ▒▓███▀ ░░ ████▓▒░░ ████▓▒░▒██▒ █▄ ` + version + `       -Gitesh Sharma @giteshnxtlvl
 
 `
 
@@ -116,6 +117,7 @@ extensions:
     image   : [3dm, 3ds, max, bmp, dds, gif, jpg, jpeg, png, psd, xcf, tga, thm, tif, tiff, yuv, ai, eps, ps, svg, dwg, dxf, gpx, kml, kmz, webp]
 `
 
+// Goona remove this in future as flag pkg done
 func valueInSlice(list []string, val string) bool {
 	for _, l := range list {
 		if l == val {
@@ -259,7 +261,7 @@ func applyColumnCases(columnValues []string, columnNum int) {
 var final = []string{""}
 
 func main() {
-
+	fmt.Fprintln(os.Stderr, banner)
 	cookConfig()
 	parseInput(os.Args[1:])
 
@@ -305,8 +307,10 @@ func main() {
 
 		if columnNum >= min {
 			for _, v := range final {
+				total++
 				fmt.Println(v)
 			}
 		}
 	}
+	fmt.Fprintln(os.Stderr, "Total Words Generated", total)
 }
