@@ -138,14 +138,15 @@ func findRegex(file, expresssion string) []string {
 	}
 
 	data := strings.ReplaceAll(string(content), "\r", "")
-	extensionsList := r.FindAllString(data, -1)
 
-	for _, found := range extensionsList {
-		if !valueInSlice(founded, found) {
-			founded = append(founded, found)
-		}
+	e := make(map[string]bool)
+	for _, found := range r.FindAllString(data, -1) {
+		e[found] = true
 	}
 
+	for k := range e {
+		founded = append(founded, k)
+	}
 	return founded
 }
 
@@ -198,10 +199,10 @@ func applyColumnCases(columnValues []string, columnNum int) {
 	temp := []string{}
 
 	// Using cases for columnValues
-	if _, exists := columnCases[columnNum]; exists {
+	if len(columnCases[columnNum]) > 0 {
 
 		//All cases
-		if valueInSlice(columnCases[columnNum], "A") {
+		if columnCases[columnNum]["A"] {
 			for _, t := range final {
 				for _, v := range columnValues {
 					temp = append(temp, t+strings.ToUpper(v))
@@ -211,7 +212,7 @@ func applyColumnCases(columnValues []string, columnNum int) {
 			}
 		} else {
 
-			if valueInSlice(columnCases[columnNum], "U") {
+			if columnCases[columnNum]["U"] {
 				for _, t := range final {
 					for _, v := range columnValues {
 						temp = append(temp, t+strings.ToUpper(v))
@@ -219,7 +220,7 @@ func applyColumnCases(columnValues []string, columnNum int) {
 				}
 			}
 
-			if valueInSlice(columnCases[columnNum], "L") {
+			if columnCases[columnNum]["L"] {
 				for _, t := range final {
 					for _, v := range columnValues {
 						temp = append(temp, t+strings.ToLower(v))
@@ -227,7 +228,7 @@ func applyColumnCases(columnValues []string, columnNum int) {
 				}
 			}
 
-			if valueInSlice(columnCases[columnNum], "T") {
+			if columnCases[columnNum]["T"] {
 				for _, t := range final {
 					for _, v := range columnValues {
 						temp = append(temp, t+strings.Title(v))

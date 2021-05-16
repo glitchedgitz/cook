@@ -65,32 +65,41 @@ func parseRanges(p string) ([]string, bool) {
 	return val, success
 }
 
-var columnCases = make(map[int][]string)
+var columnCases = make(map[int]map[string]bool)
 
 func updateCases(caseValue string, noOfColumns int) {
 	caseValue = strings.ToUpper(caseValue)
+
+	for i := 0; i < noOfColumns; i++ {
+		columnCases[i] = make(map[string]bool)
+	}
+
+	//Global Cases
 	if !strings.Contains(caseValue, ":") {
-		tmp := strings.Split(caseValue, "")
 
 		//For Camel Case Only
 		if strings.Contains(caseValue, "C") {
-			columnCases[0] = append(columnCases[0], "L")
+			columnCases[0]["L"] = true
 			for i := 1; i < noOfColumns; i++ {
-				columnCases[i] = append(columnCases[i], "T")
+				columnCases[i]["T"] = true
 			}
 		}
 
 		for i := 0; i < noOfColumns; i++ {
-			columnCases[i] = append(columnCases[i], tmp...)
+			for _, c := range strings.Split(caseValue, "") {
+				columnCases[i][c] = true
+			}
 		}
-	} else {
+	} else { //Column Wise Cases
 		for _, val := range strings.Split(caseValue, ",") {
 			v := strings.SplitN(val, ":", 2)
 			i, err := strconv.Atoi(v[0])
 			if err != nil {
-				panic(err)
+				fmt.Println("Err: Invalid column index for cases")
 			}
-			columnCases[i] = strings.Split(v[1], "")
+			for _, j := range strings.Split(v[1], "") {
+				columnCases[i][j] = true
+			}
 		}
 	}
 }
