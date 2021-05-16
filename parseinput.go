@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"strconv"
@@ -153,6 +154,15 @@ func parseInput(commands []string) {
 }
 
 func parseValue(value string) []string {
+	if value == "-" {
+		tmp := []string{}
+		sc := bufio.NewScanner(os.Stdin)
+
+		for sc.Scan() {
+			tmp = append(tmp, sc.Text())
+		}
+		return tmp
+	}
 
 	//Checking for patterns/functions
 	if strings.Contains(value, "(") && strings.HasSuffix(value, ")") {
