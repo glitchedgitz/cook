@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -151,14 +152,22 @@ func findRegex(file, expresssion string) []string {
 }
 
 func fileValues(file string) []string {
-	content, err := ioutil.ReadFile(file)
+	tmp := []string{}
+	readFile, err := os.Open(file)
 
 	if err != nil {
-		fmt.Println(file)
-		panic(err)
+		fmt.Println("Err: Opening File ", file)
 	}
 
-	return strings.Split(strings.ReplaceAll(string(content), "\r", ""), "\n")
+	defer readFile.Close()
+
+	fileScanner := bufio.NewScanner(readFile)
+
+	for fileScanner.Scan() {
+		tmp = append(tmp, fileScanner.Text())
+	}
+
+	return tmp
 }
 
 func cookConfig() {
