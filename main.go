@@ -138,10 +138,8 @@ func findRegex(file, expresssion string) []string {
 		panic(err)
 	}
 
-	data := strings.ReplaceAll(string(content), "\r", "")
-
 	e := make(map[string]bool)
-	for _, found := range r.FindAllString(data, -1) {
+	for _, found := range r.FindAllString(string(content), -1) {
 		e[found] = true
 	}
 
