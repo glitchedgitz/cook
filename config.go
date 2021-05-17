@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"path"
 	"sort"
@@ -24,6 +25,25 @@ func helpCommand(title string, description string, command string) {
 		}
 		fmt.Printf(" " + v)
 	}
+}
+
+var content []byte
+var home, _ = os.UserHomeDir()
+var configFile = path.Join(home, ".config", "cook", "cook.yaml")
+
+func getConfigFile() []byte {
+
+	fmt.Println("Downloading/Updating cook.yaml...")
+	res, err := http.Get("https://raw.githubusercontent.com/giteshnxtlvl/cook/main/cook.yaml")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	data, _ := ioutil.ReadAll(res.Body)
+
+	res.Body.Close()
+
+	return data
 }
 
 func showHelp() {
@@ -108,6 +128,7 @@ func cookConfig() {
 		if err != nil {
 			log.Fatalln("Err: Writing Config File", err)
 		}
+		content = []byte(config)
 	}
 
 	err := yaml.Unmarshal([]byte(content), &m)
