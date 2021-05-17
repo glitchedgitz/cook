@@ -54,11 +54,17 @@ OR
 
 # Customizing tool
 By customizing you will able to make and use your own lists and patterns/functions.
+**Method 1**
+Cook's config file default location is `$HOME/.config/cook/cook.yaml`. For windows it will be `%USERPROFILE%/.config/cook/cook.yaml`
 
-1. Create empty file named `cook.yaml` *or* Download [cook.yaml](https://github.com/giteshnxtlvl/cook/blob/main/cook.yaml)
+**Method 2**
+1. Download [cook.yaml](https://github.com/giteshnxtlvl/cook/blob/main/cook.yaml)
 1. Create an environment variable `COOK` =`Path of file`  
 3. Done, Run `cook -config`
-> Note: If you don't want to customize tool, then just don't set `COOK` in env variables.
+
+**Method 3**
+Use `-config-path` flag to specify location of the file. This is useful if you want to try somebody else config file. This method will override `COOK` env variable.
+
 
 # Basic Permutation
 
@@ -176,7 +182,7 @@ If you like the tool, support the development of tool, this will speed up develo
 
 # Contributors
 - @giteshnxtlvl - Core
-- @noraj - Added ffuf command in [Using COOK with other tools](#using-cook-with-other-tools)
+- @noraj - Added ffuf command in [Using COOK with other tools](#using-cook-with-other-tools) and suggested nice appraoch for config file.
 
 # Upcoming Features
 - Endpoints Analyser

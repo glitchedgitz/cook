@@ -51,6 +51,7 @@ func showHelp() {
     -min    : Minimum no of columns to print. (Default min = no of columns)
               Same as minimum of crunch			  
     -config : Config Information *cook.yaml*
+-config-path : Specify path for custom yaml file.
     -h      : Help
 	`
 	fmt.Println(help)

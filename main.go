@@ -26,7 +26,6 @@ const (
 	green = "\u001b[38;5;40m"
 	grey  = "\u001b[38;5;252m"
 	red   = "\u001b[38;5;196m"
-	bold  = "\u001b[1m"
 	white = "\u001b[38;5;255m"
 	reset = "\u001b[0m"
 )
@@ -34,15 +33,15 @@ const (
 var banner = `
 
                              
-  ░            ░ ░      ░ ░  ░  ░            Created by a person who
-  ░ ░        ░ ░ ░ ▒  ░ ░ ░ ▒  ░             got frustated creating 
-░░▒ ▒░    ░ ▒ ▒░   ░ ▒ ▒░ ░ ░ ▒ ░            permutation and combination 
-░ ░▒ ▒  ░░ ▒░▒░▒░ ░ ▒░▒░▒░ ▒ ▒▒ ▓▒           of words manually.
- ▄████▄   ▒█████   ▒█████   ██ ▄█▀           
-▒██▀ ▀█  ▒██▒  ██▒▒██▒  ██▒ ██▄█▒            How the fk you guys were
-▒▓█    ▄ ▒██░  ██▒▒██░  ██▒▓███▄░            working without this till yet?
+  ░            ░ ░      ░ ░  ░  ░            
+  ░ ░        ░ ░ ░ ▒  ░ ░ ░ ▒  ░             Words Permutation & 
+░░▒ ▒░    ░ ▒ ▒░   ░ ▒ ▒░ ░ ░ ▒ ░            Combination Generator
+░ ░▒ ▒  ░░ ▒░▒░▒░ ░ ▒░▒░▒░ ▒ ▒▒ ▓▒           
+ ▄████▄   ▒█████   ▒█████   ██ ▄█▀           Create complex wordlist
+▒██▀ ▀█  ▒██▒  ██▒▒██▒  ██▒ ██▄█▒            and passwords's pattern
+▒▓█    ▄ ▒██░  ██▒▒██░  ██▒▓███▄░            without pain.
 ▒▓▓▄ ▄██▒▒██   ██░▒██   ██░▓██ █▄             
- ▒▓███▀ ░░ ████▓▒░░ ████▓▒░▒██▒ █▄ ` + version + `       -Gitesh Sharma @giteshnxtlvl
+ ▒▓███▀ ░░ ████▓▒░░ ████▓▒░▒██▒ █▄ ` + version + `       Gitesh Sharma @giteshnxtlvl
 
 ===========================================================================
 `
