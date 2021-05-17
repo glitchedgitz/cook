@@ -1,4 +1,4 @@
-<img src="./images/banner2.png"> 
+<img src="./images/01.png"> 
 
 <h3 align="center">
 <a href="https://twitter.com/giteshnxtlvl"><img src="./images/twitter.png"></a>
@@ -55,10 +55,17 @@ OR
 # Customizing tool
 By customizing you will able to make and use your own lists and patterns/functions.
 
-1. Create empty file named `cook.yaml` *or* Download [cook.yaml](https://github.com/giteshnxtlvl/cook/blob/main/cook.yaml)
+**Method 1**  
+Cook's config file default location is `$HOME/.config/cook/cook.yaml`. For windows it will be `%USERPROFILE%/.config/cook/cook.yaml`
+
+**Method 2**
+1. Download [cook.yaml](https://github.com/giteshnxtlvl/cook/blob/main/cook.yaml)
 1. Create an environment variable `COOK` =`Path of file`  
 3. Done, Run `cook -config`
-> Note: If you don't want to customize tool, then just don't set `COOK` in env variables.
+
+**Method 3**   
+Use `-config-path` flag to specify location of the file. This is useful if you want to try somebody else config file. This method will override `COOK` env variable.
+
 
 # Basic Permutation
 
@@ -132,10 +139,31 @@ Understanding concept is important!
 # Cases
 <img src="./images/12.png">
 
+## Some Features
+### Minimum
+Use `-min <num>` to print minimum no of columns to print.  
+Example this command will print 1,2,3 digit numbers
+```
+cook n:n:n -min 1
+```
+
+### Pipe input
+Use `-` as param value for pipe input
+```
+cook -d - d:anything
+```
+
+### Raw String
+Don't parse the value
+```
+cook -word `date(10,12,1999)`
+```
+
 # Usefull Resources
 Checkout [Resources.md](./Resources.md)
 - [Using COOK with other tools](./Resources.md)
 - [Awesome Wordlists, Tips and Tricks](./Resources.md)
+- [Fuzzing IIS Shortname Scanner](./Resources.md)
 
 # Contribute
 - Share your awesome recipes.
@@ -155,7 +183,7 @@ If you like the tool, support the development of tool, this will speed up develo
 
 # Contributors
 - @giteshnxtlvl - Core
-- @noraj - Added ffuf command in [Using COOK with other tools](#using-cook-with-other-tools)
+- @noraj - Added ffuf command in [Using COOK with other tools](#using-cook-with-other-tools) and suggested nice appraoch for config file.
 
 # Upcoming Features
 - Endpoints Analyser
