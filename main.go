@@ -46,16 +46,6 @@ var banner = `
 
 `
 
-// Goona remove this in future as flag pkg done
-func valueInSlice(list []string, val string) bool {
-	for _, l := range list {
-		if l == val {
-			return true
-		}
-	}
-	return false
-}
-
 func findRegex(file, expresssion string) []string {
 	founded := []string{}
 
@@ -127,9 +117,7 @@ func applyColumnCases(columnValues []string, columnNum int) {
 		if columnCases[columnNum]["A"] {
 			for _, t := range final {
 				for _, v := range columnValues {
-					temp = append(temp, t+strings.ToUpper(v))
-					temp = append(temp, t+strings.ToLower(v))
-					temp = append(temp, t+strings.Title(v))
+					temp = append(temp, t+strings.ToUpper(v), t+strings.ToLower(v), t+strings.Title(v))
 				}
 			}
 		} else {
@@ -175,8 +163,10 @@ var final = []string{""}
 
 func main() {
 	fmt.Fprintln(os.Stderr, banner)
+
+	commands = os.Args[1:]
+	parseInput()
 	cookConfig()
-	parseInput(os.Args[1:])
 
 	for columnNum, param := range pattern {
 

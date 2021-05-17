@@ -6,12 +6,13 @@ import (
 	"log"
 	"os"
 	"path"
+	"sort"
+	"strings"
 
 	"gopkg.in/yaml.v2"
 )
 
 func showHelp() {
-	fmt.Println(banner)
 
 	fmt.Println(green + "\nGITHUB" + white)
 	fmt.Println(blue + "    https://github.com/giteshnxtlvl/cook" + reset)
@@ -51,10 +52,13 @@ func showHelp() {
 }
 
 func cookConfig() {
-
-	if len(os.Getenv("COOK")) > 0 {
+	if len(configPath) > 0 {
+		configFile = configPath
+	} else if len(os.Getenv("COOK")) > 0 {
 		configFile = os.Getenv("COOK")
 	}
+
+	vPrint(fmt.Sprintf("Config File  %s", configFile))
 
 	if _, err := os.Stat(configFile); err == nil {
 
@@ -90,31 +94,29 @@ func cookConfig() {
 	}
 }
 
+func showMap(set string) {
+	fmt.Println("\n" + green + strings.ToUpper(set) + reset)
+
+	keys := []string{}
+	for k := range m[set] {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	for _, k := range keys {
+		fmt.Printf(blue+"  %-12s "+white+"%v\n", k, m[set][k])
+	}
+}
+
 func showConfig() {
 
 	fmt.Println(green + "\nCOOK.YAML " + reset)
+	fmt.Printf(blue+"  %-11s "+white+" %v\n", "Location", configFile)
 
-	fmt.Printf(blue+"  %-12s "+white+": %v\n", "Location", configFile)
+	showMap("charSet")
+	showMap("files")
+	showMap("lists")
+	showMap("patterns")
+	showMap("extensions")
 
-	fmt.Println(green + "\nCHARACTER SETS" + reset)
-	for k, v := range m["charSet"] {
-		fmt.Printf(blue+"  %-12s "+white+"%v\n", k, v[0])
-	}
-	fmt.Println(green + "\nFILES" + reset)
-	for k, v := range m["files"] {
-		fmt.Printf(blue+"  %-12s "+white+"%s\n", k, v[0])
-	}
-	fmt.Println(green + "\nLISTS" + reset)
-	for k, v := range m["lists"] {
-		fmt.Printf(blue+"  %-12s "+white+"%v\n", k, v)
-	}
-	fmt.Println(green + "\nPATTERNS" + reset)
-	for k, v := range m["patterns"] {
-		fmt.Printf(blue+"  %-12s "+white+"%v\n", k, v)
-	}
-	fmt.Println(green + "\nEXTENSIONS" + reset)
-	for k, v := range m["extensions"] {
-		fmt.Printf(blue+"  %-12s "+white+"%v\n", k, v)
-	}
 	os.Exit(0)
 }

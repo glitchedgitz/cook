@@ -3,27 +3,54 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"strings"
 )
 
-// func parseCommand(list []string, val string) ([]string, bool) {
-// 	for i, l := range list {
-// 		if l == val {
-// 			return append(list[:i], list[i+1:]...), true
-// 		}
-// 	}
-// 	return list, false
-// }
-
-func parseCommandArg(list []string, val string) ([]string, string) {
-	for i, l := range list {
-		if l == val {
-			return append(list[:i], list[i+2:]...), list[i+1]
+func parseBoolArg(flag string) bool {
+	for i, cmd := range commands {
+		if cmd == flag {
+			commands = append(commands[:i], commands[i+1:]...)
+			return true
 		}
 	}
-	return list, ""
+	return false
+}
+
+func parseStringArg(flag string) string {
+	for i, cmd := range commands {
+		if cmd == flag {
+			value := commands[i+1]
+			commands = append(commands[:i], commands[i+2:]...)
+			return value
+		}
+	}
+
+	return ""
+}
+
+func parseIntArg(flag string) int {
+	intValue := 0
+	for i, l := range commands {
+		if l == flag {
+			if commands[i+1] == "" {
+				log.Fatalf("Err: Flag %s don't have value", flag)
+				// min = noOfColumns - 1
+			} else {
+				var err error
+				intValue, err = strconv.Atoi(commands[i+1])
+				// min -= 1
+				if err != nil {
+					log.Fatalf("Err: Flag %s needs integer value", flag)
+				}
+			}
+			commands = append(commands[:i], commands[i+2:]...)
+			return intValue
+		}
+	}
+	return 0
 }
 
 func parseRanges(p string) ([]string, bool) {
@@ -66,78 +93,44 @@ func parseRanges(p string) ([]string, bool) {
 	return val, success
 }
 
-var columnCases = make(map[int]map[string]bool)
+var configPath string
+var commands []string
+var verbose bool
 
-func updateCases(caseValue string, noOfColumns int) {
-	caseValue = strings.ToUpper(caseValue)
-
-	for i := 0; i < noOfColumns; i++ {
-		columnCases[i] = make(map[string]bool)
-	}
-
-	//Global Cases
-	if !strings.Contains(caseValue, ":") {
-
-		//For Camel Case Only
-		if strings.Contains(caseValue, "C") {
-			columnCases[0]["L"] = true
-			for i := 1; i < noOfColumns; i++ {
-				columnCases[i]["T"] = true
-			}
-		}
-
-		for i := 0; i < noOfColumns; i++ {
-			for _, c := range strings.Split(caseValue, "") {
-				columnCases[i][c] = true
-			}
-		}
-	} else { //Column Wise Cases
-		for _, val := range strings.Split(caseValue, ",") {
-			v := strings.SplitN(val, ":", 2)
-			i, err := strconv.Atoi(v[0])
-			if err != nil {
-				fmt.Println("Err: Invalid column index for cases")
-			}
-			for _, j := range strings.Split(v[1], "") {
-				columnCases[i][j] = true
-			}
-		}
+func vPrint(msg string) {
+	if verbose {
+		fmt.Fprintln(os.Stderr, msg)
 	}
 }
 
-// This is lame parsing but works for now
-// In Future there will be a package for advance flags parsing
-func parseInput(commands []string) {
+func parseInput() {
 
 	if len(commands) == 0 {
 		os.Exit(0)
 	}
 
-	if valueInSlice(commands, "-h") {
-		showHelp()
-	}
-
-	if valueInSlice(commands, "-config") {
-		showConfig()
-	}
-
-	// commands, verbose = parseCommand(commands, "-v")
-	commands, caseValue := parseCommandArg(commands, "-case")
-	commands, minValue := parseCommandArg(commands, "-min")
-
 	last := len(commands) - 1
 	pattern = strings.Split(commands[last], ":")
 	noOfColumns := len(pattern)
 
-	if minValue == "" {
+	verbose = parseBoolArg("-v")
+	if parseBoolArg("-h") {
+		showHelp()
+	}
+	configPath = parseStringArg("-config-path")
+
+	if parseBoolArg("-config") {
+		cookConfig()
+		showConfig()
+	}
+
+	caseValue := parseStringArg("-case")
+	min = parseIntArg("-min")
+
+	if min == 0 {
 		min = noOfColumns - 1
 	} else {
-		var err error
-		min, err = strconv.Atoi(minValue)
 		min -= 1
-		if err != nil {
-			panic(err)
-		}
 	}
 
 	if caseValue != "" {
@@ -148,12 +141,15 @@ func parseInput(commands []string) {
 		if strings.HasPrefix(cmd, "-") {
 			cmd = strings.Replace(cmd, "-", "", 1)
 			value := commands[i+1]
+			vPrint(fmt.Sprintf("%12s %s", cmd, value))
 			params[cmd] = value
 		}
 	}
 }
 
 func parseValue(value string) []string {
+
+	// Pipe input
 	if value == "-" {
 		tmp := []string{}
 		sc := bufio.NewScanner(os.Stdin)
@@ -162,6 +158,11 @@ func parseValue(value string) []string {
 			tmp = append(tmp, sc.Text())
 		}
 		return tmp
+	}
+
+	// Raw String using `
+	if strings.HasPrefix(value, "`") && strings.HasSuffix(value, "`") {
+		return []string{value}
 	}
 
 	//Checking for patterns/functions
@@ -213,18 +214,17 @@ func parseValue(value string) []string {
 		} else if strings.Count(value, ":") == 1 {
 			if _, err := os.Stat(value); err == nil {
 				return fileValues(value)
-			} else {
-				t := strings.SplitN(value, ":", 2)
-				file := t[0]
-				reg := t[1]
+			}
+			t := strings.SplitN(value, ":", 2)
+			file := t[0]
+			reg := t[1]
 
-				if strings.HasSuffix(file, ".txt") {
-					return findRegex(file, reg)
-				} else if _, exists := m["files"][file]; exists {
-					return findRegex(m["files"][file][0], reg)
-				} else {
-					return strings.Split(value, ",")
-				}
+			if strings.HasSuffix(file, ".txt") {
+				return findRegex(file, reg)
+			} else if _, exists := m["files"][file]; exists {
+				return findRegex(m["files"][file][0], reg)
+			} else {
+				return strings.Split(value, ",")
 			}
 		}
 	} else if strings.HasSuffix(value, ".txt") {
@@ -234,4 +234,43 @@ func parseValue(value string) []string {
 	}
 
 	return strings.Split(value, ",")
+}
+
+var columnCases = make(map[int]map[string]bool)
+
+func updateCases(caseValue string, noOfColumns int) {
+	caseValue = strings.ToUpper(caseValue)
+
+	for i := 0; i < noOfColumns; i++ {
+		columnCases[i] = make(map[string]bool)
+	}
+
+	//Global Cases
+	if !strings.Contains(caseValue, ":") {
+
+		//For Camel Case Only
+		if strings.Contains(caseValue, "C") {
+			columnCases[0]["L"] = true
+			for i := 1; i < noOfColumns; i++ {
+				columnCases[i]["T"] = true
+			}
+		}
+
+		for i := 0; i < noOfColumns; i++ {
+			for _, c := range strings.Split(caseValue, "") {
+				columnCases[i][c] = true
+			}
+		}
+	} else { //Column Wise Cases
+		for _, val := range strings.Split(caseValue, ",") {
+			v := strings.SplitN(val, ":", 2)
+			i, err := strconv.Atoi(v[0])
+			if err != nil {
+				fmt.Println("Err: Invalid column index for cases")
+			}
+			for _, j := range strings.Split(v[1], "") {
+				columnCases[i][j] = true
+			}
+		}
+	}
 }
