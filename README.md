@@ -55,7 +55,7 @@ OR
 # Customizing tool
 By customizing you will able to make and use your own lists and patterns/functions.
 
-**Method 1**
+**Method 1**  
 Cook's config file default location is `$HOME/.config/cook/cook.yaml`. For windows it will be `%USERPROFILE%/.config/cook/cook.yaml`
 
 **Method 2**
