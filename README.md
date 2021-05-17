@@ -54,6 +54,7 @@ OR
 
 # Customizing tool
 By customizing you will able to make and use your own lists and patterns/functions.
+
 **Method 1**
 Cook's config file default location is `$HOME/.config/cook/cook.yaml`. For windows it will be `%USERPROFILE%/.config/cook/cook.yaml`
 
@@ -62,7 +63,7 @@ Cook's config file default location is `$HOME/.config/cook/cook.yaml`. For windo
 1. Create an environment variable `COOK` =`Path of file`  
 3. Done, Run `cook -config`
 
-**Method 3**
+**Method 3**   
 Use `-config-path` flag to specify location of the file. This is useful if you want to try somebody else config file. This method will override `COOK` env variable.
 
 
