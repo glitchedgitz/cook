@@ -5,9 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"net/http"
 	"os"
-	"path"
 	"regexp"
 	"strings"
 )
@@ -88,24 +86,6 @@ func fileValues(file string) []string {
 
 	return tmp
 }
-
-func getConfigFile() []byte {
-
-	res, err := http.Get("https://raw.githubusercontent.com/giteshnxtlvl/cook/main/cook.yaml")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	data, _ := ioutil.ReadAll(res.Body)
-
-	res.Body.Close()
-
-	return data
-}
-
-var content []byte
-var home, _ = os.UserHomeDir()
-var configFile = path.Join(home, ".config", "cook", "cook.yaml")
 
 func applyCase(values []string, fn func(string) string) []string {
 	tmp := []string{}
