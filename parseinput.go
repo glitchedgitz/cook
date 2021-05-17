@@ -108,12 +108,6 @@ func parseInput() {
 	if len(commands) == 0 {
 		os.Exit(0)
 	}
-
-	last := len(commands) - 1
-	pattern = strings.Split(commands[last], ":")
-	noOfColumns := len(pattern)
-
-	verbose = parseBoolArg("-v")
 	if parseBoolArg("-h") {
 		showHelp()
 	}
@@ -124,8 +118,13 @@ func parseInput() {
 		showConfig()
 	}
 
+	verbose = parseBoolArg("-v")
 	caseValue := parseStringArg("-case")
 	min = parseIntArg("-min")
+
+	last := len(commands) - 1
+	pattern = strings.Split(commands[last], ":")
+	noOfColumns := len(pattern)
 
 	if min == 0 {
 		min = noOfColumns - 1
@@ -162,7 +161,7 @@ func parseValue(value string) []string {
 
 	// Raw String using `
 	if strings.HasPrefix(value, "`") && strings.HasSuffix(value, "`") {
-		return []string{value}
+		return []string{strings.TrimSuffix(strings.TrimPrefix(value, "`"), "`")}
 	}
 
 	//Checking for patterns/functions
@@ -175,17 +174,15 @@ func parseValue(value string) []string {
 			funcDef := strings.Split(strings.TrimSuffix(strings.TrimPrefix(funcPatterns[0], funcName+"("), ")"), ",")
 
 			if len(funcDef) != len(funcArgs) {
-				fmt.Printf(red+"\nError: No of Arguments are different for %s\n", funcPatterns[0])
-				os.Exit(0)
+				log.Fatalln(red+"\nErr: No of Arguments are different for %s\n", funcPatterns[0])
 			}
 
 			values := []string{}
 			for _, p := range funcPatterns[1:] {
-				var tmp = p
 				for index, arg := range funcDef {
-					tmp = strings.ReplaceAll(tmp, arg, funcArgs[index])
+					p = strings.ReplaceAll(p, arg, funcArgs[index])
 				}
-				values = append(values, tmp)
+				values = append(values, p)
 			}
 			return values
 		}
@@ -194,38 +191,34 @@ func parseValue(value string) []string {
 	// Checking for File and Regex
 	if strings.Contains(value, ":") {
 		if strings.Count(value, ":") == 2 {
-			// File is starting from E: C: D: for windows + Regex is supplied
+			// File may starts from E: C: D: for windows + Regex is supplied
 			tmp := strings.SplitN(value, ":", 3)
 
-			one := tmp[0]
-			two := tmp[1]
-			three := tmp[2]
-			test1 := one + ":" + two
-			test2 := two + ":" + three
+			one, two, three := tmp[0], tmp[1], tmp[2]
+			test1, test2 := one+":"+two, two+":"+three
 
 			if _, err := os.Stat(test1); err == nil {
 				return findRegex(test1, three)
 			} else if _, err := os.Stat(test2); err == nil {
 				return findRegex(one, test2)
-			} else {
-				return strings.Split(value, ",")
 			}
+
+			return strings.Split(value, ",")
 
 		} else if strings.Count(value, ":") == 1 {
 			if _, err := os.Stat(value); err == nil {
 				return fileValues(value)
 			}
 			t := strings.SplitN(value, ":", 2)
-			file := t[0]
-			reg := t[1]
+			file, reg := t[0], t[1]
 
 			if strings.HasSuffix(file, ".txt") {
 				return findRegex(file, reg)
 			} else if _, exists := m["files"][file]; exists {
 				return findRegex(m["files"][file][0], reg)
-			} else {
-				return strings.Split(value, ",")
 			}
+
+			return strings.Split(value, ",")
 		}
 	} else if strings.HasSuffix(value, ".txt") {
 		if _, err := os.Stat(value); err == nil {
@@ -266,7 +259,7 @@ func updateCases(caseValue string, noOfColumns int) {
 			v := strings.SplitN(val, ":", 2)
 			i, err := strconv.Atoi(v[0])
 			if err != nil {
-				fmt.Println("Err: Invalid column index for cases")
+				log.Fatalln("Err: Invalid column index for cases")
 			}
 			for _, j := range strings.Split(v[1], "") {
 				columnCases[i][j] = true

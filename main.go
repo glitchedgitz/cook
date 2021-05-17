@@ -15,20 +15,20 @@ import (
 var m = make(map[interface{}]map[string][]string)
 var params = make(map[string]string)
 var pattern = []string{}
-var version = "1.5"
+var version = "1.6"
 
 // var verbose = false
 var min int
 var total = 0
 
 const (
-	blue   = "\u001b[38;5;14m"
-	green  = "\u001b[38;5;46m"
-	purple = "\u001b[38;5;207m"
-	red    = "\u001b[38;5;196m"
-	bold   = "\u001b[1m"
-	white  = "\u001b[38;5;255m"
-	reset  = "\u001b[0m"
+	blue  = "\u001b[38;5;44m"
+	green = "\u001b[38;5;40m"
+	grey  = "\u001b[38;5;252m"
+	red   = "\u001b[38;5;196m"
+	bold  = "\u001b[1m"
+	white = "\u001b[38;5;255m"
+	reset = "\u001b[0m"
 )
 
 var banner = `
@@ -44,6 +44,7 @@ var banner = `
 ▒▓▓▄ ▄██▒▒██   ██░▒██   ██░▓██ █▄             
  ▒▓███▀ ░░ ████▓▒░░ ████▓▒░▒██▒ █▄ ` + version + `       -Gitesh Sharma @giteshnxtlvl
 
+===========================================================================
 `
 
 func findRegex(file, expresssion string) []string {
@@ -56,7 +57,7 @@ func findRegex(file, expresssion string) []string {
 
 	r, err := regexp.Compile(expresssion)
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 
 	e := make(map[string]bool)
@@ -75,7 +76,7 @@ func fileValues(file string) []string {
 	readFile, err := os.Open(file)
 
 	if err != nil {
-		fmt.Println("Err: Opening File ", file)
+		log.Fatalln("Err: Opening File ", file)
 	}
 
 	defer readFile.Close()
@@ -107,6 +108,16 @@ var content []byte
 var home, _ = os.UserHomeDir()
 var configFile = path.Join(home, ".config", "cook", "cook.yaml")
 
+func applyCase(values []string, fn func(string) string) []string {
+	tmp := []string{}
+	for _, t := range final {
+		for _, v := range values {
+			tmp = append(tmp, t+fn(v))
+		}
+	}
+	return tmp
+}
+
 func applyColumnCases(columnValues []string, columnNum int) {
 	temp := []string{}
 
@@ -115,35 +126,21 @@ func applyColumnCases(columnValues []string, columnNum int) {
 
 		//All cases
 		if columnCases[columnNum]["A"] {
-			for _, t := range final {
-				for _, v := range columnValues {
-					temp = append(temp, t+strings.ToUpper(v), t+strings.ToLower(v), t+strings.Title(v))
-				}
-			}
+			temp = append(temp, applyCase(columnValues, strings.ToUpper)...)
+			temp = append(temp, applyCase(columnValues, strings.ToLower)...)
+			temp = append(temp, applyCase(columnValues, strings.Title)...)
 		} else {
 
 			if columnCases[columnNum]["U"] {
-				for _, t := range final {
-					for _, v := range columnValues {
-						temp = append(temp, t+strings.ToUpper(v))
-					}
-				}
+				temp = append(temp, applyCase(columnValues, strings.ToUpper)...)
 			}
 
 			if columnCases[columnNum]["L"] {
-				for _, t := range final {
-					for _, v := range columnValues {
-						temp = append(temp, t+strings.ToLower(v))
-					}
-				}
+				temp = append(temp, applyCase(columnValues, strings.ToLower)...)
 			}
 
 			if columnCases[columnNum]["T"] {
-				for _, t := range final {
-					for _, v := range columnValues {
-						temp = append(temp, t+strings.Title(v))
-					}
-				}
+				temp = append(temp, applyCase(columnValues, strings.Title)...)
 			}
 		}
 
@@ -215,5 +212,5 @@ func main() {
 			}
 		}
 	}
-	fmt.Fprintln(os.Stderr, "Total Words Generated", total)
+	fmt.Fprintln(os.Stderr, "\nTotal Words Generated", total)
 }

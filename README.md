@@ -137,19 +137,26 @@ Understanding concept is important!
 Use `-min <num>` to print minimum no of columns to print.  
 Example this command will print 1,2,3 digit numbers
 ```
-cook n:n:n -min 
+cook n:n:n -min 1
 ```
 
 ### Pipe input
-Use `-` as param value to take pipe input
+Use `-` as param value for pipe input
 ```
 cook -d - d:anything
+```
+
+### Raw String
+Don't parse the value
+```
+cook -word `date(10,12,1999)`
 ```
 
 # Usefull Resources
 Checkout [Resources.md](./Resources.md)
 - [Using COOK with other tools](./Resources.md)
 - [Awesome Wordlists, Tips and Tricks](./Resources.md)
+- [Fuzzing IIS Shortname Scanner](./Resources.md)
 
 # Contribute
 - Share your awesome recipes.
