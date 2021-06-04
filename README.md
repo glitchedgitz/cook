@@ -168,13 +168,12 @@ Checkout [Resources.md](./Resources.md)
 # Contribute
 - Share your awesome recipes.
 - Share useful lists and patterns for COOK.
+  Modify here https://gist.github.com/giteshnxtlvl/55048a76a060da849ca8fefde2258da3#file-cook-yaml
 - Share Ideas or new Feature Request.
 - Check out [discussions](https://github.com/giteshnxtlvl/cook/discussions).
 - Update [Resources.md](./Resources.md)
   - Add Useful Resources
   - Add tools we can use with COOK.
-
-> Create [discussions](https://github.com/giteshnxtlvl/cook/discussions) for these.
 
 # Support  
 If you like the tool, support the development of tool, this will speed up development of [Upcoming Features](#upcoming-features)  
@@ -189,7 +188,9 @@ If you like the tool, support the development of tool, this will speed up develo
 - Endpoints Analyser
 - Interactive mode for configuring `cook.yaml`
 
-# All Sets
+# All sets
+Modify here https://gist.github.com/giteshnxtlvl/55048a76a060da849ca8fefde2258da3#file-cook-yaml
+
 ```yaml
 # Character set like crunch
 charSet:
