@@ -28,9 +28,7 @@ const (
 	reset = "\u001b[0m"
 )
 
-var banner = `
-
-                             
+var banner = `                            
   ░            ░ ░      ░ ░  ░  ░            
   ░ ░        ░ ░ ░ ▒  ░ ░ ░ ▒  ░             Words Permutation & 
 ░░▒ ▒░    ░ ▒ ▒░   ░ ▒ ▒░ ░ ░ ▒ ░            Combination Generator
@@ -40,9 +38,11 @@ var banner = `
 ▒▓█    ▄ ▒██░  ██▒▒██░  ██▒▓███▄░            without pain.
 ▒▓▓▄ ▄██▒▒██   ██░▒██   ██░▓██ █▄             
  ▒▓███▀ ░░ ████▓▒░░ ████▓▒░▒██▒ █▄ ` + version + `       Gitesh Sharma @giteshnxtlvl
-
-===========================================================================
-`
+ 
+ Usage  : cook [PARAM-1 VALUES] [PARAM-2 VALUES] ... [PARAM-N VALUES]  [PATTERN]
+          cook -param1 val1,val2 -param2 file.txt param1:param2
+ Help   : cook -h 
+ Config : cook -config`
 
 func findRegex(file, expresssion string) []string {
 	founded := []string{}
@@ -138,7 +138,7 @@ func applyColumnCases(columnValues []string, columnNum int) {
 var final = []string{""}
 
 func main() {
-	fmt.Fprintln(os.Stderr, banner)
+	// fmt.Fprintln(os.Stderr, banner)
 
 	commands = os.Args[1:]
 	parseInput()
@@ -191,5 +191,5 @@ func main() {
 			}
 		}
 	}
-	fmt.Fprintln(os.Stderr, "\nTotal Words Generated", total)
+	// fmt.Fprintln(os.Stderr, "\nTotal Words Generated", total)
 }

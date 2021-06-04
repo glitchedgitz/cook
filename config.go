@@ -47,32 +47,33 @@ func getConfigFile() []byte {
 }
 
 func showHelp() {
+	fmt.Println(banner)
 
 	fmt.Println(green + "\nGITHUB" + white)
 	fmt.Println(blue + "    https://github.com/giteshnxtlvl/cook" + reset)
 
 	fmt.Println(green + "\nFLAGS" + white)
-	help := `    -case   : Define Cases
-              * Use for complete list
-                  -case A for ALL 
-                  -case U for Uppercase
-                  -case L for Lowercase
-                  -case T for Titlecase
-                  -case C for Camelcase
+	help := `    -case        : Define Cases
+                 * Use for complete list
+                     -case A for ALL 
+                     -case U for Uppercase
+                     -case L for Lowercase
+                     -case T for Titlecase
+                     -case C for Camelcase
 
-              * Use column wise, no camel case for this
-                  -case 0:U,2:T
-                      Column 0 will be in Uppercase
-                      Column 2 will be in Titlecase,
-                      Rest columns will be default output
-                  Multiple Cases
-                      -case 0:UT,2:A 
-
-    -min    : Minimum no of columns to print. (Default min = no of columns)
-              Same as minimum of crunch			  
-    -config : Config Information *cook.yaml*
--config-path : Specify path for custom yaml file.
-    -h      : Help
+                 * Use column wise, no camel case for this
+                     -case 0:U,2:T
+                         Column 0 will be in Uppercase
+                         Column 2 will be in Titlecase,
+                         Rest columns will be default output
+                     Multiple Cases
+                         -case 0:UT,2:A 
+ 
+    -min         : Minimum no of columns to print. (Default min = no of columns)
+                   Same as minimum of crunch			  
+    -config      : Config Information *cook.yaml*
+    -config-path : Specify path for custom yaml file.
+    -h           : Help
 	`
 	fmt.Println(help)
 
