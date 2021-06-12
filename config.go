@@ -14,9 +14,9 @@ import (
 )
 
 func helpCommand(title string, description string, command string) {
-	fmt.Println("\n\n" + green + title + white)
+	fmt.Println(red + "\n\n" + title + white)
 	fmt.Println(grey + description)
-	fmt.Printf("%s   $ cook", white)
+	fmt.Printf("%s    $ cook", white)
 	for _, v := range strings.Split(command, " ") {
 		if strings.HasPrefix(v, "-") {
 			v = green + v
@@ -31,10 +31,10 @@ var content []byte
 var home, _ = os.UserHomeDir()
 var configFile = path.Join(home, ".config", "cook", "cook.yaml")
 
-func getConfigFile() []byte {
+func getData(url string) []byte {
+	fmt.Fprintf(os.Stderr, "Fetching: %s\n", url)
 
-	fmt.Println("Downloading/Updating cook.yaml...")
-	res, err := http.Get("https://raw.githubusercontent.com/giteshnxtlvl/cook/main/cook.yaml")
+	res, err := http.Get(url)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -68,13 +68,12 @@ func showHelp() {
                          Rest columns will be default output
                      Multiple Cases
                          -case 0:UT,2:A 
- 
-    -min         : Minimum no of columns to print. (Default min = no of columns)
-                   Same as minimum of crunch			  
+    -min         : Minimum no of columns to print			  
     -config      : Config Information *cook.yaml*
     -config-path : Specify path for custom yaml file.
-    -h           : Help
-	`
+    -update-all  : Update all files from urls
+    -h           : Help`
+
 	fmt.Println(help)
 
 	fmt.Println(green + "\nBASIC USAGE" + white)
@@ -84,12 +83,12 @@ func showHelp() {
 	fmt.Println(green + "\nFILE WITH REGEX" + white)
 	fmt.Printf("   $ cook %[1]s-s %[2]scompany %[1]s-ext %[2]sraft-large-extensions%[3]s:%[3]s\\.asp.*  %[2]s/%[3]s:%[1]ss%[3]s:%[1]sexp\n", green, blue, white, grey)
 
-	helpCommand("FUNCTIONS", "Use functions such as date for different variations of values", "-name elliot -birth date(17,Sep,1994) name:birth")
-	helpCommand("RANGES", "Use ranges like [1-100], [A-Z], [a-z] or [A-z] in pattern of command", "-name elliot -birth date(17,Sep,1994) name:birth")
-	helpCommand("USING CASES", "Uppercase, lowercase, titlecase, camelcase or ALL \nFor use case check FLGAS above", "camel:[1-10]:case -case C")
-	helpCommand("RAW STRINGS", "Print value without any parsing/modification.\nUse to take \",\", \":\", \"`\" or any pre-defined sets or functions as raw strings.", "-date `date(17,Sep,1994)` raw:date")
-	helpCommand("PIPE INPUT", "Use - as param value for pipe input", "-d - d:/:test")
-	helpCommand("USING -min", "Print value without any parsing/modification", "n:n:n -min 1")
+	helpCommand("FUNCTIONS", "    Use functions such as date for different variations of values", "-name elliot -birth date(17,Sep,1994) name:birth")
+	helpCommand("RANGES", "    Use ranges like [1-100], [A-Z], [a-z] or [A-z] in pattern of command", "-name elliot -birth date(17,Sep,1994) name:birth")
+	helpCommand("USING CASES", "    Uppercase, lowercase, titlecase, camelcase or ALL \n    For use case check FLGAS above", "camel:[1-10]:case -case C")
+	helpCommand("RAW STRINGS", "    Print value without any parsing/modification.\n    Use to take \",\", \":\", \"`\" or any pre-defined sets or functions as raw strings.", "-date `date(17,Sep,1994)` raw:date")
+	helpCommand("PIPE INPUT", "    Use - as param value for pipe input", "-d - d:/:test")
+	helpCommand("USING -min", "    Print value without any parsing/modification", "n:n:n -min 1")
 
 	fmt.Println(reset)
 	os.Exit(0)
@@ -112,7 +111,9 @@ func cookConfig() {
 		}
 
 		if len(content) == 0 {
-			config := getConfigFile()
+			fmt.Println("Downloading/Updating cook.yaml...")
+
+			config := getData("https://raw.githubusercontent.com/giteshnxtlvl/cook/main/cook.yaml")
 			ioutil.WriteFile(configFile, []byte(config), 0644)
 			content = []byte(config)
 		}
@@ -124,7 +125,9 @@ func cookConfig() {
 			log.Fatalln("Err: Making .config folder in HOME/USERPROFILE ", err)
 		}
 
-		config := getConfigFile()
+		fmt.Println("Downloading/Updating cook.yaml...")
+
+		config := getData("https://raw.githubusercontent.com/giteshnxtlvl/cook/main/cook.yaml")
 		err = ioutil.WriteFile(configFile, []byte(config), 0644)
 		if err != nil {
 			log.Fatalln("Err: Writing Config File", err)

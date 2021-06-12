@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path"
+	"path/filepath"
 	"regexp"
 	"strings"
 )
@@ -20,22 +22,22 @@ var min int
 var total = 0
 
 const (
-	blue  = "\u001b[38;5;44m"
-	green = "\u001b[38;5;40m"
+	blue  = "\u001b[38;5;77m"
+	green = "\u001b[38;5;45m"
 	grey  = "\u001b[38;5;252m"
-	red   = "\u001b[38;5;196m"
+	red   = "\u001b[38;5;42m"
 	white = "\u001b[38;5;255m"
 	reset = "\u001b[0m"
 )
 
 var banner = `                            
   ░            ░ ░      ░ ░  ░  ░            
-  ░ ░        ░ ░ ░ ▒  ░ ░ ░ ▒  ░             Words Permutation & 
-░░▒ ▒░    ░ ▒ ▒░   ░ ▒ ▒░ ░ ░ ▒ ░            Combination Generator
+  ░ ░        ░ ░ ░ ▒  ░ ░ ░ ▒  ░             
+░░▒ ▒░    ░ ▒ ▒░   ░ ▒ ▒░ ░ ░ ▒ ░            
 ░ ░▒ ▒  ░░ ▒░▒░▒░ ░ ▒░▒░▒░ ▒ ▒▒ ▓▒           
- ▄████▄   ▒█████   ▒█████   ██ ▄█▀           Create complex wordlist
-▒██▀ ▀█  ▒██▒  ██▒▒██▒  ██▒ ██▄█▒            and passwords's pattern
-▒▓█    ▄ ▒██░  ██▒▒██░  ██▒▓███▄░            without pain.
+ ▄████▄   ▒█████   ▒█████   ██ ▄█▀           
+▒██▀ ▀█  ▒██▒  ██▒▒██▒  ██▒ ██▄█▒            
+▒▓█    ▄ ▒██░  ██▒▒██░  ██▒▓███▄░            
 ▒▓▓▄ ▄██▒▒██   ██░▒██   ██░▓██ █▄             
  ▒▓███▀ ░░ ████▓▒░░ ████▓▒░▒██▒ █▄ ` + version + `       Gitesh Sharma @giteshnxtlvl
  
@@ -44,7 +46,7 @@ var banner = `
  Help   : cook -h 
  Config : cook -config`
 
-func findRegex(file, expresssion string) []string {
+func findRegex(file, expresssion string, array *[]string) []string {
 	founded := []string{}
 
 	content, err := ioutil.ReadFile(file)
@@ -58,7 +60,8 @@ func findRegex(file, expresssion string) []string {
 	}
 
 	e := make(map[string]bool)
-	for _, found := range r.FindAllString(string(content), -1) {
+	// replacing \r (carriage return) as cursor moves to start of the line
+	for _, found := range r.FindAllString(strings.ReplaceAll(string(content), "\r", ""), -1) {
 		e[found] = true
 	}
 
@@ -68,8 +71,8 @@ func findRegex(file, expresssion string) []string {
 	return founded
 }
 
-func fileValues(file string) []string {
-	tmp := []string{}
+func fileValues(file string, array *[]string) {
+
 	readFile, err := os.Open(file)
 
 	if err != nil {
@@ -81,20 +84,58 @@ func fileValues(file string) []string {
 	fileScanner := bufio.NewScanner(readFile)
 
 	for fileScanner.Scan() {
-		tmp = append(tmp, fileScanner.Text())
+		*array = append(*array, fileScanner.Text())
 	}
-
-	return tmp
 }
 
-func applyCase(values []string, fn func(string) string) []string {
-	tmp := []string{}
-	for _, t := range final {
-		for _, v := range values {
-			tmp = append(tmp, t+fn(v))
+func appendToFile(filepath string, data []byte) {
+	f, err := os.OpenFile(filepath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
+	if err != nil {
+		panic(err)
+	}
+
+	defer f.Close()
+
+	if _, err = f.Write(data); err != nil {
+		panic(err)
+	}
+}
+
+func checkFileCache(url string, array *[]string) {
+	filename := filepath.Base(url)
+
+	err := os.MkdirAll(path.Join(home, ".cache", "cook"), os.ModePerm)
+	if err != nil {
+		log.Fatalln("Err: Making .cache folder in HOME/USERPROFILE ", err)
+	}
+
+	if _, err := os.Stat(path.Join(home, ".cache", "cook", filename)); err != nil {
+		appendToFile(path.Join(home, ".cache", "cook", filename), getData(url))
+	}
+
+	fileValues(path.Join(home, ".cache", "cook", filename), array)
+}
+
+func updateCache() {
+	fmt.Println(banner)
+	for key, files := range m["files"] {
+		fmt.Println("\n" + blue + key + reset)
+		for _, file := range files {
+			if strings.HasPrefix(file, "http://") || strings.HasPrefix(file, "https://") {
+				filename := filepath.Base(file)
+				// fmt.Printf("\n%s Updating %-14s:%s %s", blue, filename, reset, file)
+				appendToFile(path.Join(home, ".cache", "cook", filename), getData(file))
+			}
 		}
 	}
-	return tmp
+}
+
+func applyCase(values []string, array *[]string, fn func(string) string) {
+	for _, t := range final {
+		for _, v := range values {
+			*array = append(*array, t+fn(v))
+		}
+	}
 }
 
 func applyColumnCases(columnValues []string, columnNum int) {
@@ -105,21 +146,21 @@ func applyColumnCases(columnValues []string, columnNum int) {
 
 		//All cases
 		if columnCases[columnNum]["A"] {
-			temp = append(temp, applyCase(columnValues, strings.ToUpper)...)
-			temp = append(temp, applyCase(columnValues, strings.ToLower)...)
-			temp = append(temp, applyCase(columnValues, strings.Title)...)
+			applyCase(columnValues, &temp, strings.ToUpper)
+			applyCase(columnValues, &temp, strings.ToLower)
+			applyCase(columnValues, &temp, strings.Title)
 		} else {
 
 			if columnCases[columnNum]["U"] {
-				temp = append(temp, applyCase(columnValues, strings.ToUpper)...)
+				applyCase(columnValues, &temp, strings.ToUpper)
 			}
 
 			if columnCases[columnNum]["L"] {
-				temp = append(temp, applyCase(columnValues, strings.ToLower)...)
+				applyCase(columnValues, &temp, strings.ToLower)
 			}
 
 			if columnCases[columnNum]["T"] {
-				temp = append(temp, applyCase(columnValues, strings.Title)...)
+				applyCase(columnValues, &temp, strings.Title)
 			}
 		}
 
@@ -150,28 +191,38 @@ func main() {
 
 		for _, p := range strings.Split(param, ",") {
 
-			val, success := parseRanges(p)
+			success := parseRanges(p, &columnValues)
 			if success {
-				columnValues = append(columnValues, val...)
 				continue
 			}
+
 			if val, exists := params[p]; exists {
-				columnValues = append(columnValues, parseValue(val)...)
+				parseValue(val, &columnValues)
 				continue
 			}
+
 			if val, exists := m["charSet"][p]; exists {
-				chars := strings.Split(val[0], "")
-				columnValues = append(columnValues, chars...)
+				columnValues = append(columnValues, strings.Split(val[0], "")...)
 				continue
 			}
-			if val, exists := m["files"][p]; exists {
-				columnValues = append(columnValues, fileValues(val[0])...)
+
+			if files, exists := m["files"][p]; exists {
+
+				for _, file := range files {
+					if strings.HasPrefix(file, "http://") || strings.HasPrefix(file, "https://") {
+						checkFileCache(file, &columnValues)
+					} else {
+						fileValues(file, &columnValues)
+					}
+				}
 				continue
 			}
+
 			if val, exists := m["lists"][p]; exists {
 				columnValues = append(columnValues, val...)
 				continue
 			}
+
 			if val, exists := m["extensions"][p]; exists {
 				for _, ext := range val {
 					columnValues = append(columnValues, "."+ext)
@@ -191,5 +242,4 @@ func main() {
 			}
 		}
 	}
-	// fmt.Fprintln(os.Stderr, "\nTotal Words Generated", total)
 }

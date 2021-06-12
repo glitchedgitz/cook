@@ -53,8 +53,8 @@ func parseIntArg(flag string) int {
 	return 0
 }
 
-func parseRanges(p string) ([]string, bool) {
-	val := []string{}
+func parseRanges(p string, array *[]string) bool {
+
 	success := false
 	chars := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
@@ -70,7 +70,7 @@ func parseRanges(p string) ([]string, bool) {
 
 		if err1 == nil && err2 == nil {
 			for start <= stop {
-				val = append(val, strconv.Itoa(start))
+				*array = append(*array, strconv.Itoa(start))
 				start++
 			}
 			success = true
@@ -83,14 +83,14 @@ func parseRanges(p string) ([]string, bool) {
 			if start < stop {
 				charsList := strings.Split(chars, "")
 				for start <= stop {
-					val = append(val, charsList[start])
+					*array = append(*array, charsList[start])
 					start++
 				}
 				success = true
 			}
 		}
 	}
-	return val, success
+	return success
 }
 
 var configPath string
@@ -117,6 +117,12 @@ func parseInput() {
 	if parseBoolArg("-config") {
 		cookConfig()
 		showConfig()
+	}
+
+	if parseBoolArg("-update-all") {
+		cookConfig()
+		updateCache()
+		os.Exit(0)
 	}
 
 	verbose = parseBoolArg("-v")
@@ -147,87 +153,93 @@ func parseInput() {
 	}
 }
 
-func parseValue(value string) []string {
+func parseValue(value string, array *[]string) {
 
 	// Pipe input
 	if value == "-" {
-		tmp := []string{}
+
 		sc := bufio.NewScanner(os.Stdin)
 
 		for sc.Scan() {
-			tmp = append(tmp, sc.Text())
+			*array = append(*array, sc.Text())
 		}
-		return tmp
+		return
 	}
 
 	// Raw String using `
 	if strings.HasPrefix(value, "`") && strings.HasSuffix(value, "`") {
-		return []string{strings.TrimSuffix(strings.TrimPrefix(value, "`"), "`")}
+		lv := len(value)
+		*array = append(*array, []string{value[1 : lv-1]}...)
+		return
 	}
 
 	//Checking for patterns/functions
 	if strings.Contains(value, "(") && strings.HasSuffix(value, ")") {
 		function := strings.SplitN(value, "(", 2)
 		funcName := function[0]
-		if _, exists := m["patterns"][funcName]; exists {
+		if funcPatterns, exists := m["patterns"][funcName]; exists {
 			funcArgs := strings.Split(strings.TrimSuffix(function[1], ")"), ",")
-			funcPatterns := m["patterns"][funcName]
 			funcDef := strings.Split(strings.TrimSuffix(strings.TrimPrefix(funcPatterns[0], funcName+"("), ")"), ",")
 
 			if len(funcDef) != len(funcArgs) {
 				log.Fatalln(red+"\nErr: No of Arguments are different for %s\n", funcPatterns[0])
 			}
 
-			values := []string{}
 			for _, p := range funcPatterns[1:] {
 				for index, arg := range funcDef {
 					p = strings.ReplaceAll(p, arg, funcArgs[index])
 				}
-				values = append(values, p)
+				*array = append(*array, p)
 			}
-			return values
+			return
+		}
+	}
+
+	// Checking for file
+	if strings.HasSuffix(value, ".txt") {
+		if _, err := os.Stat(value); err == nil {
+			fileValues(value, array)
+			return
 		}
 	}
 
 	// Checking for File and Regex
 	if strings.Contains(value, ":") {
+		// File may starts from E: C: D: for windows + Regex is supplied
 		if strings.Count(value, ":") == 2 {
-			// File may starts from E: C: D: for windows + Regex is supplied
 			tmp := strings.SplitN(value, ":", 3)
 
 			one, two, three := tmp[0], tmp[1], tmp[2]
 			test1, test2 := one+":"+two, two+":"+three
 
 			if _, err := os.Stat(test1); err == nil {
-				return findRegex(test1, three)
+				findRegex(test1, three, array)
+				return
 			} else if _, err := os.Stat(test2); err == nil {
-				return findRegex(one, test2)
+				findRegex(one, test2, array)
+				return
 			}
+		}
 
-			return strings.Split(value, ",")
-
-		} else if strings.Count(value, ":") == 1 {
+		if strings.Count(value, ":") == 1 {
 			if _, err := os.Stat(value); err == nil {
-				return fileValues(value)
+				fileValues(value, array)
+				return
 			}
 			t := strings.SplitN(value, ":", 2)
 			file, reg := t[0], t[1]
 
 			if strings.HasSuffix(file, ".txt") {
-				return findRegex(file, reg)
+				findRegex(file, reg, array)
+				return
 			} else if _, exists := m["files"][file]; exists {
-				return findRegex(m["files"][file][0], reg)
+				findRegex(m["files"][file][0], reg, array)
+				return
 			}
-
-			return strings.Split(value, ",")
-		}
-	} else if strings.HasSuffix(value, ".txt") {
-		if _, err := os.Stat(value); err == nil {
-			return fileValues(value)
 		}
 	}
 
-	return strings.Split(value, ",")
+	*array = append(*array, strings.Split(value, ",")...)
 }
 
 var columnCases = make(map[int]map[string]bool)
