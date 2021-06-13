@@ -23,6 +23,7 @@ func parseStringArg(flag string) string {
 	for i, cmd := range commands {
 		if cmd == flag {
 			value := commands[i+1]
+			vPrint(fmt.Sprintf("Param: %s Value: %s", cmd, value))
 			commands = append(commands[:i], commands[i+2:]...)
 			return value
 		}
@@ -95,7 +96,7 @@ func parseRanges(p string, array *[]string) bool {
 
 var configPath string
 var commands []string
-var verbose bool
+var verbose = false
 
 func vPrint(msg string) {
 	if verbose {
@@ -109,9 +110,11 @@ func parseInput() {
 		fmt.Println(banner)
 		os.Exit(0)
 	}
+
 	if parseBoolArg("-h") {
 		showHelp()
 	}
+
 	configPath = parseStringArg("-config-path")
 
 	if parseBoolArg("-config") {
@@ -129,8 +132,19 @@ func parseInput() {
 	caseValue := parseStringArg("-case")
 	min = parseIntArg("-min")
 
-	last := len(commands) - 1
-	pattern = strings.Split(commands[last], ":")
+	tmp := []string{}
+
+	tmp = append(tmp, commands...)
+
+	for _, cmd := range tmp {
+		if len(cmd) > 1 && strings.HasPrefix(cmd, "-") {
+			value := parseStringArg(cmd)
+			cmd = strings.Replace(cmd, "-", "", 1)
+			params[cmd] = value
+		}
+	}
+
+	pattern = commands
 	noOfColumns := len(pattern)
 
 	if min == 0 {
@@ -143,21 +157,39 @@ func parseInput() {
 		updateCases(caseValue, noOfColumns)
 	}
 
-	for i, cmd := range commands[:last] {
-		if strings.HasPrefix(cmd, "-") {
-			cmd = strings.Replace(cmd, "-", "", 1)
-			value := commands[i+1]
-			vPrint(fmt.Sprintf("%12s %s", cmd, value))
-			params[cmd] = value
+}
+
+//Checking for patterns/functions
+func parseFunc(value string, array *[]string) bool {
+
+	function := strings.SplitN(value, "(", 2)
+	funcName := function[0]
+
+	if funcPatterns, exists := m["patterns"][funcName]; exists {
+
+		funcArgs := strings.Split(function[1][:len(function[1])-1], ",")
+		funcDef := strings.Split(strings.TrimSuffix(funcPatterns[0][len(funcName)+1:], ")"), ",")
+
+		if len(funcDef) != len(funcArgs) {
+			log.Fatalf(red+"\nErr: No of Arguments are different for %s\n", funcPatterns)
 		}
+
+		for _, p := range funcPatterns[1:] {
+			for index, arg := range funcDef {
+				p = strings.ReplaceAll(p, arg, funcArgs[index])
+			}
+			*array = append(*array, p)
+		}
+
+		return true
 	}
+	return false
 }
 
 func parseValue(value string, array *[]string) {
 
 	// Pipe input
 	if value == "-" {
-
 		sc := bufio.NewScanner(os.Stdin)
 
 		for sc.Scan() {
@@ -166,33 +198,15 @@ func parseValue(value string, array *[]string) {
 		return
 	}
 
-	// Raw String using `
 	if strings.HasPrefix(value, "`") && strings.HasSuffix(value, "`") {
 		lv := len(value)
 		*array = append(*array, []string{value[1 : lv-1]}...)
 		return
 	}
 
-	//Checking for patterns/functions
-	if strings.Contains(value, "(") && strings.HasSuffix(value, ")") {
-		function := strings.SplitN(value, "(", 2)
-		funcName := function[0]
-		if funcPatterns, exists := m["patterns"][funcName]; exists {
-			funcArgs := strings.Split(strings.TrimSuffix(function[1], ")"), ",")
-			funcDef := strings.Split(strings.TrimSuffix(strings.TrimPrefix(funcPatterns[0], funcName+"("), ")"), ",")
-
-			if len(funcDef) != len(funcArgs) {
-				log.Fatalln(red+"\nErr: No of Arguments are different for %s\n", funcPatterns[0])
-			}
-
-			for _, p := range funcPatterns[1:] {
-				for index, arg := range funcDef {
-					p = strings.ReplaceAll(p, arg, funcArgs[index])
-				}
-				*array = append(*array, p)
-			}
-			return
-		}
+	success := parseFunc(value, array)
+	if success {
+		return
 	}
 
 	// Checking for file
@@ -213,10 +227,10 @@ func parseValue(value string, array *[]string) {
 			test1, test2 := one+":"+two, two+":"+three
 
 			if _, err := os.Stat(test1); err == nil {
-				findRegex(test1, three, array)
+				findRegex([]string{test1}, three, array)
 				return
 			} else if _, err := os.Stat(test2); err == nil {
-				findRegex(one, test2, array)
+				findRegex([]string{one}, test2, array)
 				return
 			}
 		}
@@ -230,10 +244,10 @@ func parseValue(value string, array *[]string) {
 			file, reg := t[0], t[1]
 
 			if strings.HasSuffix(file, ".txt") {
-				findRegex(file, reg, array)
+				findRegex([]string{file}, reg, array)
 				return
-			} else if _, exists := m["files"][file]; exists {
-				findRegex(m["files"][file][0], reg, array)
+			} else if files, exists := m["files"][file]; exists {
+				findRegex(files, reg, array)
 				return
 			}
 		}

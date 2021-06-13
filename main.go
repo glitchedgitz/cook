@@ -17,7 +17,6 @@ var params = make(map[string]string)
 var pattern = []string{}
 var version = "1.6"
 
-// var verbose = false
 var min int
 var total = 0
 
@@ -46,29 +45,34 @@ var banner = `
  Help   : cook -h 
  Config : cook -config`
 
-func findRegex(file, expresssion string, array *[]string) []string {
-	founded := []string{}
+func findRegex(files []string, expresssion string, array *[]string) {
 
-	content, err := ioutil.ReadFile(file)
-	if err != nil {
-		return []string{file + ":" + expresssion}
-	}
+	for _, file := range files {
+		if strings.HasPrefix(file, "http://") || strings.HasPrefix(file, "https://") {
+			checkFileCache(file)
+			file = path.Join(home, ".cache", "cook", filepath.Base(file))
+		}
 
-	r, err := regexp.Compile(expresssion)
-	if err != nil {
-		log.Fatalln(err)
-	}
+		content, err := ioutil.ReadFile(file)
+		if err != nil {
+			log.Fatalln("Error reading file" + file)
+		}
 
-	e := make(map[string]bool)
-	// replacing \r (carriage return) as cursor moves to start of the line
-	for _, found := range r.FindAllString(strings.ReplaceAll(string(content), "\r", ""), -1) {
-		e[found] = true
-	}
+		r, err := regexp.Compile(expresssion)
+		if err != nil {
+			log.Fatalln(err)
+		}
 
-	for k := range e {
-		founded = append(founded, k)
+		e := make(map[string]bool)
+		// replacing \r (carriage return) as cursor moves to start of the line
+		for _, found := range r.FindAllString(strings.ReplaceAll(string(content), "\r", ""), -1) {
+			e[found] = true
+		}
+
+		for k := range e {
+			*array = append(*array, k)
+		}
 	}
-	return founded
 }
 
 func fileValues(file string, array *[]string) {
@@ -101,7 +105,7 @@ func appendToFile(filepath string, data []byte) {
 	}
 }
 
-func checkFileCache(url string, array *[]string) {
+func checkFileCache(url string) {
 	filename := filepath.Base(url)
 
 	err := os.MkdirAll(path.Join(home, ".cache", "cook"), os.ModePerm)
@@ -113,7 +117,6 @@ func checkFileCache(url string, array *[]string) {
 		appendToFile(path.Join(home, ".cache", "cook", filename), getData(url))
 	}
 
-	fileValues(path.Join(home, ".cache", "cook", filename), array)
 }
 
 func updateCache() {
@@ -188,10 +191,11 @@ func main() {
 	for columnNum, param := range pattern {
 
 		columnValues := []string{}
+		var success bool
 
 		for _, p := range strings.Split(param, ",") {
 
-			success := parseRanges(p, &columnValues)
+			success = parseRanges(p, &columnValues)
 			if success {
 				continue
 			}
@@ -201,16 +205,23 @@ func main() {
 				continue
 			}
 
+			// Raw String using `
+			if strings.HasPrefix(p, "`") && strings.HasSuffix(p, "`") {
+				lv := len(p)
+				columnValues = append(columnValues, []string{p[1 : lv-1]}...)
+				continue
+			}
+
 			if val, exists := m["charSet"][p]; exists {
 				columnValues = append(columnValues, strings.Split(val[0], "")...)
 				continue
 			}
 
 			if files, exists := m["files"][p]; exists {
-
 				for _, file := range files {
 					if strings.HasPrefix(file, "http://") || strings.HasPrefix(file, "https://") {
-						checkFileCache(file, &columnValues)
+						checkFileCache(file)
+						fileValues(path.Join(home, ".cache", "cook", filepath.Base(file)), &columnValues)
 					} else {
 						fileValues(file, &columnValues)
 					}
@@ -242,4 +253,6 @@ func main() {
 			}
 		}
 	}
+
+	vPrint(fmt.Sprintf("Total words generated: %d", total))
 }

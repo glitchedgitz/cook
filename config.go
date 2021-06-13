@@ -71,7 +71,7 @@ func showHelp() {
     -min         : Minimum no of columns to print			  
     -config      : Config Information *cook.yaml*
     -config-path : Specify path for custom yaml file.
-    -update-all  : Update all files from urls
+    -update-all  : Update all file's cache
     -h           : Help`
 
 	fmt.Println(help)
