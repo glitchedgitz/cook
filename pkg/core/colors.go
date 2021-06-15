@@ -1,6 +1,6 @@
 package core
 
-const (
+var (
 	Blue  = "\u001b[38;5;77m"
 	Green = "\u001b[38;5;45m"
 	Grey  = "\u001b[38;5;252m"

@@ -19,8 +19,8 @@ var M = make(map[interface{}]map[string][]string)
 
 func CookConfig() {
 
-	if len(configPath) > 0 {
-		configFile = configPath
+	if len(ConfigPath) > 0 {
+		configFile = ConfigPath
 	} else if len(os.Getenv("COOK")) > 0 {
 		configFile = os.Getenv("COOK")
 	}

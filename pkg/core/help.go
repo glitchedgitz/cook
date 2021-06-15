@@ -25,7 +25,7 @@ var Banner = `
 // var verbose = false
 
 func VPrint(msg string) {
-	if verbose {
+	if Verbose {
 		fmt.Fprintln(os.Stderr, msg)
 	}
 }
@@ -44,7 +44,7 @@ func helpCommand(title string, description string, command string) {
 	}
 }
 
-func showHelp() {
+func ShowHelp() {
 	fmt.Println(Banner)
 
 	fmt.Println(Green + "\nGITHUB" + White)

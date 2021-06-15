@@ -6,56 +6,21 @@ import (
 	"os"
 	"strconv"
 	"strings"
-
-	"cook/pkg/parse"
 )
 
-var params = make(map[string]string)
+// var params = make(map[string]string)
 
 var (
-	help             = parse.Bool("-h")
-	verbose          = parse.Bool("-v")
-	Min              = parse.Int("-Min")
-	showConfig       = parse.Bool("-config")
-	configPath       = parse.String("-config-path")
-	caseValue        = parse.String("-case")
-	updateCacheFiles = parse.Bool("-update-all")
+	Help    = false
+	Verbose = false
+	// Min     = 0
+	// showConfig       = false
+	ConfigPath = ""
+	// caseValue        = ""
+	// updateCacheFiles = false
+	UpperCase = false
+	LowerCase = false
 )
-
-func ParseInput() (map[string]string, []string) {
-
-	if help {
-		showHelp()
-	}
-
-	if showConfig {
-		CookConfig()
-		ShowConfig()
-	}
-
-	if updateCacheFiles {
-		CookConfig()
-		UpdateCache()
-		os.Exit(0)
-	}
-
-	params = parse.UserDefinedFlags()
-
-	pattern := parse.Commands
-	noOfColumns := len(pattern)
-
-	if Min == 0 {
-		Min = noOfColumns - 1
-	} else {
-		Min -= 1
-	}
-
-	if caseValue != "" {
-		updateCases(caseValue, noOfColumns)
-	}
-
-	return params, pattern
-}
 
 //Checking for patterns/functions
 func ParseFunc(value string, array *[]string) bool {
@@ -156,41 +121,60 @@ func ParseValue(value string, array *[]string) {
 
 var columnCases = make(map[int]map[string]bool)
 
-func updateCases(caseValue string, noOfColumns int) {
+func UpdateCases(caseValue string, noOfColumns int) map[int]map[string]bool {
 	caseValue = strings.ToUpper(caseValue)
 
 	for i := 0; i < noOfColumns; i++ {
 		columnCases[i] = make(map[string]bool)
 	}
 
-	//Global Cases
-	if !strings.Contains(caseValue, ":") {
-
-		//For Camel Case Only
-		if strings.Contains(caseValue, "C") {
-			columnCases[0]["L"] = true
-			for i := 1; i < noOfColumns; i++ {
-				columnCases[i]["T"] = true
-			}
-		}
-
-		for i := 0; i < noOfColumns; i++ {
-			for _, c := range strings.Split(caseValue, "") {
-				columnCases[i][c] = true
-			}
-		}
-	} else { //Column Wise Cases
+	//Column Wise Cases
+	if strings.Contains(caseValue, ":") {
 		for _, val := range strings.Split(caseValue, ",") {
 			v := strings.SplitN(val, ":", 2)
 			i, err := strconv.Atoi(v[0])
 			if err != nil {
-				log.Fatalln("Err: Invalid column index for cases")
+				log.Fatalf("Err: Invalid column index %s", v[0])
 			}
 			for _, j := range strings.Split(v[1], "") {
 				columnCases[i][j] = true
 			}
 		}
+	} else {
+		//Global Cases
+		all := false
+		if caseValue == "A" {
+			all = true
+			caseValue = ""
+		}
+
+		if all || strings.Contains(caseValue, "C") {
+			columnCases[0]["L"] = true
+			for i := 1; i < noOfColumns; i++ {
+				columnCases[i]["T"] = true
+			}
+			caseValue = strings.ReplaceAll(caseValue, "C", "")
+		}
+
+		if all || strings.Contains(caseValue, "U") {
+			UpperCase = true
+			caseValue = strings.ReplaceAll(caseValue, "U", "")
+		}
+
+		if all || strings.Contains(caseValue, "L") {
+			LowerCase = true
+			caseValue = strings.ReplaceAll(caseValue, "L", "")
+		}
+
+		if all || strings.Contains(caseValue, "T") {
+			for i := 0; i < noOfColumns; i++ {
+				columnCases[i]["T"] = true
+			}
+		}
+
 	}
+
+	return columnCases
 }
 
 func ParseRanges(p string, array *[]string) bool {

@@ -3,11 +3,10 @@ package main
 import (
 	"fmt"
 	"os"
-	"path"
-	"path/filepath"
 	"strings"
 
 	"cook/pkg/core"
+	"cook/pkg/parse"
 )
 
 // var version = "1.6"
@@ -15,7 +14,7 @@ import (
 var total = 0
 
 // var home, _ = os.UserHomeDir()
-
+var otherCases = false
 var columnCases = make(map[int]map[string]bool)
 
 func applyCase(values []string, array *[]string, fn func(string) string) {
@@ -31,15 +30,17 @@ func applyColumnCases(columnValues []string, columnNum int) {
 
 	// Using cases for columnValues
 	if len(columnCases[columnNum]) > 0 {
-
+		otherCases = true
 		//All cases
 		if columnCases[columnNum]["A"] {
+
 			applyCase(columnValues, &temp, strings.ToUpper)
 			applyCase(columnValues, &temp, strings.ToLower)
 			applyCase(columnValues, &temp, strings.Title)
+
 		} else {
 
-			if columnCases[columnNum]["U"] {
+			if !core.UpperCase && columnCases[columnNum]["U"] {
 				applyCase(columnValues, &temp, strings.ToUpper)
 			}
 
@@ -50,6 +51,7 @@ func applyColumnCases(columnValues []string, columnNum int) {
 			if columnCases[columnNum]["T"] {
 				applyCase(columnValues, &temp, strings.Title)
 			}
+
 		}
 
 	} else {
@@ -66,18 +68,130 @@ func applyColumnCases(columnValues []string, columnNum int) {
 //Initializing with empty string, so loops will run for 1st column
 var final = []string{""}
 
+var (
+	help             = parse.B("-h")
+	verbose          = parse.B("-v")
+	Min              = parse.I("-min")
+	showConfig       = parse.B("-config")
+	configPath       = parse.S("-config-path")
+	caseValue        = parse.S("-case")
+	updateCacheFiles = parse.B("-update-all")
+	l337             = parse.I("-1337")
+)
+
+var params = make(map[string]string)
+var leetValues = make(map[string][]string)
+
+func leetBegin() {
+	leetValues["0"] = []string{"o", "O"}
+	leetValues["1"] = []string{"i", "I", "l", "L"}
+	leetValues["3"] = []string{"e", "E"}
+	leetValues["4"] = []string{"a", "A"}
+	leetValues["5"] = []string{"s", "S"}
+	leetValues["6"] = []string{"b"}
+	leetValues["7"] = []string{"t", "T"}
+	leetValues["8"] = []string{"B"}
+}
+
+func parseInput() (map[string]string, []string) {
+
+	parse.Help = core.Banner
+	parse.Parse()
+
+	if help {
+		core.ShowHelp()
+	}
+
+	if showConfig {
+		core.CookConfig()
+		core.ShowConfig()
+	}
+
+	if updateCacheFiles {
+		core.CookConfig()
+		core.UpdateCache()
+		os.Exit(0)
+	}
+
+	core.ConfigPath = configPath
+	core.Verbose = verbose
+
+	params = parse.UserDefinedFlags()
+	pattern := parse.Args
+
+	noOfColumns := len(pattern)
+
+	if Min == 0 {
+		Min = noOfColumns - 1
+	} else {
+		Min -= 1
+	}
+
+	if caseValue != "" {
+		columnCases = core.UpdateCases(caseValue, noOfColumns)
+	}
+
+	if l337 > -1 {
+		if l337 > 1 {
+			fmt.Println("Err: -1337 can be 0 or 1, 0 - Calm Mode & 1 - Angry Mode", l337)
+			os.Exit(0)
+		}
+		leetBegin()
+	}
+
+	return params, pattern
+}
+
+func useless(s string) string {
+	return s
+}
+
+func printIt(fn func(string) string) {
+	if l337 > -1 {
+		for _, v := range final {
+			v = fn(v)
+			fmt.Println(v)
+			v2 := v
+			for l, ch := range leetValues {
+				for _, c := range ch {
+					if strings.Contains(v, c) {
+						total++
+						t := strings.ReplaceAll(v, c, l)
+						v2 = strings.ReplaceAll(v2, c, l)
+						if l337 == 1 {
+							fmt.Println(t)
+							if t != v2 {
+								fmt.Println(v2)
+							}
+						}
+					}
+				}
+			}
+			if l337 == 0 {
+				fmt.Println(v2)
+			}
+		}
+	} else {
+		// otherCases = true
+		for _, v := range final {
+			v = fn(v)
+			total++
+			fmt.Println(v)
+		}
+	}
+}
+
 func main() {
 	// fmt.Fprintln(os.Stderr, banner)
 
-	params, pattern := core.ParseInput()
+	params, pattern := parseInput()
 
-	var home, _ = os.UserHomeDir()
 	core.CookConfig()
 
 	for columnNum, param := range pattern {
 
 		columnValues := []string{}
-		var success bool
+		var success = false
 
 		for _, p := range strings.Split(param, ",") {
 
@@ -98,32 +212,8 @@ func main() {
 				continue
 			}
 
-			if val, exists := core.M["charSet"][p]; exists {
-				columnValues = append(columnValues, strings.Split(val[0], "")...)
-				continue
-			}
-
-			if files, exists := core.M["files"][p]; exists {
-				for _, file := range files {
-					if strings.HasPrefix(file, "http://") || strings.HasPrefix(file, "https://") {
-						core.CheckFileCache(file)
-						core.FileValues(path.Join(home, ".cache", "cook", filepath.Base(file)), &columnValues)
-					} else {
-						core.FileValues(file, &columnValues)
-					}
-				}
-				continue
-			}
-
-			if val, exists := core.M["lists"][p]; exists {
-				columnValues = append(columnValues, val...)
-				continue
-			}
-
-			if val, exists := core.M["extensions"][p]; exists {
-				for _, ext := range val {
-					columnValues = append(columnValues, "."+ext)
-				}
+			success = core.CheckYaml(p, &columnValues)
+			if success {
 				continue
 			}
 
@@ -132,10 +222,15 @@ func main() {
 
 		applyColumnCases(columnValues, columnNum)
 
-		if columnNum >= core.Min {
-			for _, v := range final {
-				total++
-				fmt.Println(v)
+		if columnNum >= Min {
+			if core.UpperCase {
+				printIt(strings.ToUpper)
+			}
+			if core.LowerCase {
+				printIt(strings.ToLower)
+			}
+			if (!core.LowerCase && !core.UpperCase) || otherCases {
+				printIt(useless)
 			}
 		}
 	}

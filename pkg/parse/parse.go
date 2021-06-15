@@ -1,29 +1,37 @@
 package parse
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strconv"
 	"strings"
 )
 
-var Commands = os.Args[1:]
+var Args = os.Args[1:]
+var showError = false
+var Help = ""
 
-func Bool(flag string) bool {
-	for i, cmd := range Commands {
+func B(flag string) bool {
+	for i, cmd := range Args {
 		if cmd == flag {
-			Commands = append(Commands[:i], Commands[i+1:]...)
+			Args = append(Args[:i], Args[i+1:]...)
 			return true
 		}
 	}
 	return false
 }
 
-func String(flag string) string {
-	for i, cmd := range Commands {
+func S(flag string) string {
+	l := len(Args)
+	for i, cmd := range Args {
 		if cmd == flag {
-			value := Commands[i+1]
-			Commands = append(Commands[:i], Commands[i+2:]...)
+			if i+1 == l {
+				fmt.Printf("Err: Flag '%s' doesn't have any value", cmd)
+				os.Exit(0)
+			}
+			value := Args[i+1]
+			Args = append(Args[:i], Args[i+2:]...)
 			return value
 		}
 	}
@@ -31,26 +39,28 @@ func String(flag string) string {
 	return ""
 }
 
-func Int(flag string) int {
+func I(flag string) int {
 	intValue := 0
-	for i, l := range Commands {
-		if l == flag {
-			if Commands[i+1] == "" {
-				log.Fatalf("Err: Flag %s don't have value", flag)
-				// min = noOfColumns - 1
+	l := len(Args)
+
+	for i, cmd := range Args {
+		if cmd == flag {
+			if i+1 == l || Args[i+1] == "" {
+				fmt.Printf("Err: Flag '%s' doesn't have any value", cmd)
+				os.Exit(0)
 			} else {
 				var err error
-				intValue, err = strconv.Atoi(Commands[i+1])
+				intValue, err = strconv.Atoi(Args[i+1])
 				// min -= 1
 				if err != nil {
 					log.Fatalf("Err: Flag %s needs integer value", flag)
 				}
 			}
-			Commands = append(Commands[:i], Commands[i+2:]...)
+			Args = append(Args[:i], Args[i+2:]...)
 			return intValue
 		}
 	}
-	return 0
+	return -4541
 }
 
 var userDefined = make(map[string]string)
@@ -58,15 +68,26 @@ var userDefined = make(map[string]string)
 func UserDefinedFlags() map[string]string {
 	tmp := []string{}
 
-	tmp = append(tmp, Commands...)
+	tmp = append(tmp, Args...)
 
 	for _, cmd := range tmp {
 		if len(cmd) > 1 && strings.HasPrefix(cmd, "-") {
-			value := String(cmd)
+			value := S(cmd)
 			cmd = strings.Replace(cmd, "-", "", 1)
 			userDefined[cmd] = value
 		}
 	}
 
 	return userDefined
+}
+
+func Parse() {
+
+	if len(os.Args) < 2 {
+		print(Help)
+	}
+
+	if showError && len(userDefined) > 0 {
+		panic(fmt.Sprintf("Undefined Flags%v", userDefined))
+	}
 }
