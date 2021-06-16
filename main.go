@@ -17,54 +17,6 @@ var total = 0
 var otherCases = false
 var columnCases = make(map[int]map[string]bool)
 
-func applyCase(values []string, array *[]string, fn func(string) string) {
-	for _, t := range final {
-		for _, v := range values {
-			*array = append(*array, t+fn(v))
-		}
-	}
-}
-
-func applyColumnCases(columnValues []string, columnNum int) {
-	temp := []string{}
-
-	// Using cases for columnValues
-	if len(columnCases[columnNum]) > 0 {
-		otherCases = true
-		//All cases
-		if columnCases[columnNum]["A"] {
-
-			applyCase(columnValues, &temp, strings.ToUpper)
-			applyCase(columnValues, &temp, strings.ToLower)
-			applyCase(columnValues, &temp, strings.Title)
-
-		} else {
-
-			if !core.UpperCase && columnCases[columnNum]["U"] {
-				applyCase(columnValues, &temp, strings.ToUpper)
-			}
-
-			if columnCases[columnNum]["L"] {
-				applyCase(columnValues, &temp, strings.ToLower)
-			}
-
-			if columnCases[columnNum]["T"] {
-				applyCase(columnValues, &temp, strings.Title)
-			}
-
-		}
-
-	} else {
-		for _, t := range final {
-			for _, v := range columnValues {
-				temp = append(temp, t+v)
-			}
-		}
-	}
-
-	final = temp
-}
-
 //Initializing with empty string, so loops will run for 1st column
 var final = []string{""}
 
@@ -72,6 +24,7 @@ var (
 	help             = parse.B("-h")
 	verbose          = parse.B("-v")
 	Min              = parse.I("-min")
+	lineMode         = parse.B("-line-mode")
 	showConfig       = parse.B("-config")
 	configPath       = parse.S("-config-path")
 	caseValue        = parse.S("-case")
@@ -121,9 +74,14 @@ func parseInput() (map[string]string, []string) {
 
 	noOfColumns := len(pattern)
 
-	if Min == 0 {
+	if Min < 0 {
+
 		Min = noOfColumns - 1
 	} else {
+		if Min > noOfColumns {
+			fmt.Println("Err: Min is greator than no of columns")
+			os.Exit(0)
+		}
 		Min -= 1
 	}
 
@@ -144,6 +102,60 @@ func parseInput() (map[string]string, []string) {
 
 func useless(s string) string {
 	return s
+}
+
+func prefixSufixMode(values []string, array *[]string, fn func(string) string) {
+	till := len(final)
+	if len(final) > len(values) {
+		till = len(values)
+	}
+	for i := 0; i < till; i++ {
+		*array = append(*array, final[i]+fn(values[i]))
+	}
+}
+
+func applyCase(values []string, array *[]string, fn func(string) string) {
+	for _, t := range final {
+		for _, v := range values {
+			*array = append(*array, t+fn(v))
+		}
+	}
+}
+
+func applyColumnCases(columnValues []string, columnNum int, applyFunc func([]string, *[]string, func(string) string)) {
+	temp := []string{}
+
+	// Using cases for columnValues
+	if len(columnCases[columnNum]) > 0 {
+		otherCases = true
+		//All cases
+		if columnCases[columnNum]["A"] {
+
+			applyFunc(columnValues, &temp, strings.ToUpper)
+			applyFunc(columnValues, &temp, strings.ToLower)
+			applyFunc(columnValues, &temp, strings.Title)
+
+		} else {
+
+			if !core.UpperCase && columnCases[columnNum]["U"] {
+				applyFunc(columnValues, &temp, strings.ToUpper)
+			}
+
+			if columnCases[columnNum]["L"] {
+				applyFunc(columnValues, &temp, strings.ToLower)
+			}
+
+			if columnCases[columnNum]["T"] {
+				applyFunc(columnValues, &temp, strings.Title)
+			}
+
+		}
+
+	} else {
+		applyFunc(columnValues, &temp, useless)
+	}
+
+	final = temp
 }
 
 func printIt(fn func(string) string) {
@@ -220,7 +232,11 @@ func main() {
 			columnValues = append(columnValues, p)
 		}
 
-		applyColumnCases(columnValues, columnNum)
+		if !lineMode || columnNum == 0 {
+			applyColumnCases(columnValues, columnNum, applyCase)
+		} else {
+			applyColumnCases(columnValues, columnNum, prefixSufixMode)
+		}
 
 		if columnNum >= Min {
 			if core.UpperCase {

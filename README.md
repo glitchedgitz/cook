@@ -1,4 +1,4 @@
-<img src="./images/vvv.png"> 
+<img src="./images/test1.png"> 
 
 <h3 align="center">
 <a href="https://twitter.com/giteshnxtlvl"><img src="./images/twitter.png"></a>
@@ -8,50 +8,58 @@
 </h3>
 
 <h1 align="center">COOK</h1>
-<h3 align="center">A customizable wordlist and password generator</h3>
-<h4 align="center">Easily create permutations and combinations of words with predefined sets of extensions, words and patterns/function to create complex endpoints, wordlists and passwords. Easy UX, Checkout Usage</h4>
+<h4 align="center">Next level wordlist and password generator.</h4>
 
+# WHY?
+- Because creating/modifing wordlists are painful and time consuming process.
+- Every target is fking uniq and we need to modify our wordlist according to it...
+- And we have literaly too many wordlist out there, that managment and updating them is another sort of burdern.
 
+# Features
+:heavy_check_mark: Wordlist URL Support
+:heavy_check_mark: 1337 Mode
+:heavy_check_mark: 
 
+# Fast Travel
+- [WHY?](#why)
+- [Features](#features)
+- [Fast Travel](#fast-travel)
 - [Installation](#installation)
-- Usage
-  - [Basic Permutation](#basic-permutation)
-  - [Advance Permutation](#advance-permutation)
-  - [Customizing tool](#customizing-tool)
-- Predefined Sets
-  - [Extension Sets](#predefined-sets)
-  - [Words Sets](#create-your-own-unique-sets)
-  - [Character sets - Use it like crunch](#use-it-like-crunch)
-  - [Patterns/Functions](#patternsfunctions)
-  - [Ranges](#ranges)
-- Using Files
-  - [Regex Input from File](#regex-input-from-file)
-  - [File Not Found](#regex-input-from-file)
-  - [Save your wordlists by unique names](#save-wordlists-by-unique-names)
+      - [Using Go](#using-go)
+      - [Download latest builds](#download-latest-builds)
+- [Customizing tool](#customizing-tool)
+- [Basic Permutation](#basic-permutation)
+- [Advance Permutation](#advance-permutation)
+- [Predefined Sets](#predefined-sets)
+    - [Create your own unique sets](#create-your-own-unique-sets)
+    - [Use it like CRUNCH](#use-it-like-crunch)
+- [Patterns/Functions](#patternsfunctions)
+- [Ranges](#ranges)
+- [Files](#files)
+    - [Regex Input from File](#regex-input-from-file)
+    - [Save Wordlists by Unique Names](#save-wordlists-by-unique-names)
+    - [File not found](#file-not-found)
 - [Cases](#cases)
-- [Using COOK with other tools](#using-cook-with-other-tools)
-- [Useful Resources](#useful-resources)
+    - [Minimum](#minimum)
+    - [Pipe input](#pipe-input)
+    - [Raw String](#raw-string)
 - [Contribute](#contribute)
-- [Upcoming Features](#upcoming-features)
-- [All predefined sets list](#all-sets)
+- [Satisfied?](#satisfied)
+- [THE MAIN FILE](#the-main-file)
+- [Final Words](#final-words)
 
 # Installation
 #### Using Go
-Install/Update using these commands
-```
-  go get -u github.com/giteshnxtlvl/cook
-```
-on Linux
-```
-  GO111MODULE=on go get -u github.com/giteshnxtlvl/cook
-```
+Install/Update using these commands  
+`go get -u github.com/giteshnxtlvl/cook`
+OR
+`GO111MODULE=on go get -u github.com/giteshnxtlvl/cook`
 
 #### Download latest builds  
   https://github.com/giteshnxtlvl/cook/releases/
 
 # Customizing tool
-By customizing you will able to make and use your own lists and patterns/functions.
-
+Tool is using a file `cook.yaml`, this file is database for cook.  
 **Method 1**  
 Default location in linux `$HOME/.config/cook/cook.yaml`.  
 For windows it will be `%USERPROFILE%/.config/cook/cook.yaml`
@@ -59,7 +67,7 @@ For windows it will be `%USERPROFILE%/.config/cook/cook.yaml`
 **Method 2**
 1. Download [cook.yaml](https://gist.githubusercontent.com/giteshnxtlvl/55048a76a060da849ca8fefde2258da3/raw/eda15049d56d37afb1bb1f8ee07daba2db1b9628/cook.yaml)
 1. Create an environment variable `COOK` =`Path of file`  
-3. Done, Run `cook -config`
+3. Done, Run `cook -config` to confirm.
 
 **Method 3**   
 Use `-config-path` flag to specify location of the config file. This is useful if you want to try different config files.
@@ -112,7 +120,7 @@ Understanding concept is important!
 
 # Files
   ### Regex Input from File  
-  
+  Use this feature to fuzz [IIS Shortnames](https://www.youtube.com/watch?v=HrJW6Y9kHC4)
   <img src="./images/07.png">    
   
   **Recipe**
@@ -121,11 +129,11 @@ Understanding concept is important!
   ```
   
   ### Save Wordlists by Unique Names  
-
+  Now you don't need to make aliases or type those huge filenames. Just one single name.
 <img src="./images/05.png">
 
   ### File not found  
-  If file mentioned in param not found, then there will be no errors, instead it will do this
+  If file mentioned in param not found, then there will be no errors, Instead it will do this.
   ```
    cook -file file_not_exists.txt admin,root:_:file
   ```
@@ -137,7 +145,7 @@ Understanding concept is important!
 # Cases
 <img src="./images/12.png">
 
-## Some Features
+
 ### Minimum
 Use `-min <num>` to print minimum no of columns to print.  
 Example this command will print 1,2,3 digit numbers
@@ -157,108 +165,27 @@ Don't parse the value
 cook -word `date(10,12,1999)`
 ```
 
-# Usefull Resources
-Checkout [Resources.md](./Resources.md)
-- [Using COOK with other tools](./Resources.md)
-- [Awesome Wordlists, Tips and Tricks](./Resources.md)
-- [Fuzzing IIS Shortname Scanner](./Resources.md)
-
 # Contribute
 - Share your awesome recipes.
-- Share useful lists and patterns for COOK.
-  Modify here https://gist.github.com/giteshnxtlvl/55048a76a060da849ca8fefde2258da3#file-cook-yaml
+- Share useful lists and patterns.
+  Modify here [cook.yaml](https://gist.github.com/giteshnxtlvl/55048a76a060da849ca8fefde2258da3#file-cook-yaml)
 - Share Ideas or new Feature Request.
 - Check out [discussions](https://github.com/giteshnxtlvl/cook/discussions).
-- Update [Resources.md](./Resources.md)
-  - Add Useful Resources
-  - Add tools we can use with COOK.
 
-# Support  
-If you like the tool, support the development of tool, this will speed up development of [Upcoming Features](#upcoming-features)  
+# Satisfied? 
 
 <a href="https://www.buymeacoffee.com/giteshnxtlvl"><img width="300" src="./images/BMEC2X.png"></a>
 
-# Contributors
-- @giteshnxtlvl - Core
-- @noraj - Added ffuf command in [Using COOK with other tools](#using-cook-with-other-tools) and suggested nice appraoch for config file.
+# THE MAIN FILE
+Cook.yaml is the backbone of the tool.  
+Update it and share with community :)
+https://gist.github.com/giteshnxtlvl/55048a76a060da849ca8fefde2258da3#file-cook-yaml
 
-# Upcoming Features
-- Endpoints Analyser
-- Interactive mode for configuring `cook.yaml`
+# TODO
+Instead of permutations, appending to line by line mode
 
-# All sets
-Modify here https://gist.github.com/giteshnxtlvl/55048a76a060da849ca8fefde2258da3#file-cook-yaml
+# Final Words 
+> *COOKING IS AN ART, ART NEEDS CREATIVITY*    
 
-```yaml
-# Character set like crunch
-charSet:
-    sep   : [_- ] #common separators
-    n     : [0123456789]
-    A     : [ABCDEFGHIJKLMNOPQRSTUVWXYZ]
-    a     : [abcdefghijklmnopqrstuvwxyz]
-    aAn   : [abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789]
-    An    : [ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789]
-    an    : [abcdefghijklmnopqrstuvwxyz0123456789]
-    aA    : [abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ]
-    s     : ["!#$%&'()*+,-./:;<=>?@[\\]^_`{|}~&\""]
-    all   : ["!#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\""]
+This tool will not help you find bugs but your creativity does.
 
-# File to access from anywhere
-files:
-    raft_ext     : [E:\tools\wordlists\SecLists\Discovery\Web-Content\raft-large-extensions.txt]
-    raft_dir     : [E:\tools\wordlists\SecLists\Discovery\Web-Content\raft-large-directories.txt]
-    raft_files   : [E:\tools\wordlists\SecLists\Discovery\Web-Content\raft-large-files.txt]
-    robot_1000   : [E:\tools\wordlists\SecLists\Discovery\Web-Content\RobotsDisallowed-Top1000.txt]
-
-# Create your lists
-lists:
-    schemas      : [aim, callto, cvs, data, facetime, feed, file, ftp, git, gopher, gtalk, h323, hdl, http, https, imap, irc, irc6, ircs, itms, javascript, magnet, mailto, mms, msnim, news, nntp, prospero, rsync, rtsp, rtspu, sftp, shttp, sip, sips, skype, smb, snews, ssh, svn, svn, svn+ssh, telnet, tel, wais, ymsg]
-    bypass       : ["%00", "%09", "%0A", "%0D", "%0D%0A"]
-
-    admin_set    : [admin, root, su, superuser, administration]
-    api          : [/v1/,/v2/,/v3/,/v4/,/v5/,/api/]
-    pass_ends    : [123, "@123", "#123"]
-
-    months       : [January, February, March, April, May, June, July, August, September, October, November, December]
-    mons         : [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
-
-# Patterns
-patterns:
-    date : 
-        - date(D,M,Y)
-        - DMY  
-        - MDY 
-        - D/M/Y  
-        - M/D/Y 
-        - D-M-Y  
-        - M-D-Y   
-        - D.M.Y  
-        - M.D.Y  
-        - D.Y  
-        - M.Y  
-        - D.M
-
-# Extension Set, . will added before using this
-extensions:
-    config  : [conf, confq, config]
-    data    : [xml, json, yaml, yml]
-    backup  : [bak, backup, backup1, backup2]
-    exec    : [exe, msi, bin, command, sh, bat, crx]
-    web     : [html, html5, htm, js, jsx, jsp, wasm, php, php3, php5, php7]
-    iis     : [asax, ascx, asmx, aspx, exe, aspx.cs, ashx, axd, config, htm, jar, js, rdl, swf, txt, xls, xml, xsl, zpd, suo, sln]
-    archive : [7z, a, apk, xapk, ar, bz2, cab, cpio, deb, dmg, egg, gz, iso, jar, lha, mar, pea, rar, rpm, s7z, shar, tar, tbz2, tgz, tlz, war, whl, xpi, zip, zipx, xz, pak, tar.gz, gz]
-    code    : [c, cc, class, clj, cpp, cs, cxx, el, go, h, java, lua, m, m4, php, php3, php5, php7, pl, po, py, rb, rs, sh, swift, vb, vcxproj, xcodeproj, xml, diff, patch, js, jsx]
-
-    #Rest
-    css_type: [css, less, scss]
-    sheet   : [ods, xls, xlsx, csv, ics vcf]
-    slide   : [ppt, pptx, odp]
-    font    : [eot, otf, ttf, woff, woff2]
-    text    : [doc, docx, ebook, log, md, msg, odt, org, pages, pdf, rtf, rst, tex, txt, wpd, wps]
-    audio   : [aac, aiff, ape, au, flac, gsm, it, m3u, m4a, mid, mod, mp3, mpa, pls, ra, s3m, sid, wav, wma, xm]
-    book    : [mobi, epub, azw1, azw3, azw4, azw6, azw, cbr, cbz]
-    video   : [3g2, 3gp, aaf, asf, avchd, avi, drc, flv, m2v, m4p, m4v, mkv, mng, mov, mp2, mp4, mpe, mpeg, mpg, mpv, mxf, nsv, ogg, ogv, ogm, qt, rm, rmvb, roq, srt, svi, vob, webm, wmv, yuv]
-    image   : [3dm, 3ds, max, bmp, dds, gif, jpg, jpeg, png, psd, xcf, tga, thm, tif, tiff, yuv, ai, eps, ps, svg, dwg, dxf, gpx, kml, kmz, webp]
-
-
-```
