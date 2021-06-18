@@ -2,11 +2,13 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
+	"strconv"
 	"strings"
 
-	"cook/pkg/core"
-	"cook/pkg/parse"
+	"cook/core"
+	"cook/parse"
 )
 
 // var version = "1.6"
@@ -24,7 +26,7 @@ var (
 	help             = parse.B("-h")
 	verbose          = parse.B("-v")
 	Min              = parse.I("-min")
-	lineMode         = parse.B("-line-mode")
+	appendColumns    = parse.S("-append")
 	showConfig       = parse.B("-config")
 	configPath       = parse.S("-config-path")
 	caseValue        = parse.S("-case")
@@ -34,6 +36,7 @@ var (
 
 var params = make(map[string]string)
 var leetValues = make(map[string][]string)
+var appendMode = make(map[int]bool)
 
 func leetBegin() {
 	leetValues["0"] = []string{"o", "O"}
@@ -45,6 +48,29 @@ func leetBegin() {
 	leetValues["7"] = []string{"t", "T"}
 	leetValues["8"] = []string{"B"}
 }
+
+// func analyseParams(params map[string]string) {
+// 	for param, value := range params {
+// 		if strings.Contains(param, ":") {
+
+// 			words := strings.Split(param, ":")
+// 			paramName := words[len(words)-1]
+
+// 			for _, p := range words[:len(words)-1] {
+// 				if p == "a" {
+// 					appendMode[paramName] = true
+// 					params[paramName] = value
+// 					continue
+// 				}
+// 				if p == "urls" {
+// 					params[paramName] = value
+// 				}
+// 			}
+
+// 			delete(params, param)
+// 		}
+// 	}
+// }
 
 func parseInput() (map[string]string, []string) {
 
@@ -70,6 +96,8 @@ func parseInput() (map[string]string, []string) {
 	core.Verbose = verbose
 
 	params = parse.UserDefinedFlags()
+	// analyseParams(params)
+
 	pattern := parse.Args
 
 	noOfColumns := len(pattern)
@@ -95,6 +123,17 @@ func parseInput() (map[string]string, []string) {
 			os.Exit(0)
 		}
 		leetBegin()
+	}
+
+	if len(appendColumns) > 0 {
+		columns := strings.Split(appendColumns, ",")
+		for _, colNum := range columns {
+			intValue, err := strconv.Atoi(colNum)
+			if err != nil {
+				log.Fatalf("Err: Column Value %s in not integer", colNum)
+			}
+			appendMode[intValue] = true
+		}
 	}
 
 	return params, pattern
@@ -217,6 +256,19 @@ func main() {
 				continue
 			}
 
+			// Checking for url
+			if strings.Count(p, ".") == 1 {
+				u := strings.Split(p, ".")[0]
+				get := strings.Split(p, ".")[1]
+				if val, exists := params[u]; exists {
+					tmp := []string{}
+					success = core.ParseFile(val, &tmp)
+					if success {
+						core.AnalyseURLs(tmp, get, &columnValues)
+						continue
+					}
+				}
+			}
 			// Raw String using `
 			if strings.HasPrefix(p, "`") && strings.HasSuffix(p, "`") {
 				lv := len(p)
@@ -232,7 +284,7 @@ func main() {
 			columnValues = append(columnValues, p)
 		}
 
-		if !lineMode || columnNum == 0 {
+		if !appendMode[columnNum] || columnNum == 0 {
 			applyColumnCases(columnValues, columnNum, applyCase)
 		} else {
 			applyColumnCases(columnValues, columnNum, prefixSufixMode)

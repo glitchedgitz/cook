@@ -165,21 +165,20 @@ Don't parse the value
 cook -word `date(10,12,1999)`
 ```
 
-# Contribute
-- Share your awesome recipes.
+# Community Powered
+This tool is already powered by some awesome community members. Drive this power to next level by comtributing using following.
+
+Contribute 
+- [cook.yaml](https://gist.github.com/giteshnxtlvl/55048a76a060da849ca8fefde2258da3#file-cook-yaml) is the backbone of the tool.  
 - Share useful lists and patterns.
   Modify here [cook.yaml](https://gist.github.com/giteshnxtlvl/55048a76a060da849ca8fefde2258da3#file-cook-yaml)
+- Share your awesome recipes.
 - Share Ideas or new Feature Request.
 - Check out [discussions](https://github.com/giteshnxtlvl/cook/discussions).
 
 # Satisfied? 
 
 <a href="https://www.buymeacoffee.com/giteshnxtlvl"><img width="300" src="./images/BMEC2X.png"></a>
-
-# THE MAIN FILE
-Cook.yaml is the backbone of the tool.  
-Update it and share with community :)
-https://gist.github.com/giteshnxtlvl/55048a76a060da849ca8fefde2258da3#file-cook-yaml
 
 # TODO
 Instead of permutations, appending to line by line mode
