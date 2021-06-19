@@ -108,6 +108,11 @@ func ParseFunc(value string, array *[]string) bool {
 }
 
 func ParseFile(value string, array *[]string) bool {
+
+	if checkFileInYaml(value, array) {
+		return true
+	}
+
 	// Checking for file
 	if strings.HasSuffix(value, ".txt") {
 		if _, err := os.Stat(value); err == nil {

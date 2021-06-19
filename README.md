@@ -1,24 +1,22 @@
-<img src="./images/test1.png"> 
+<img src="./images/test2.png"> 
 
-<h3 align="center">
-<a href="https://twitter.com/giteshnxtlvl"><img src="./images/twitter.png"></a>
-<a href="https://github.com/giteshnxtlvl/cook/discussions/new"><img src="./images/New Feature Ideas.png"></a>
-<a href="https://github.com/giteshnxtlvl/cook/issues/new"><img src="./images/New ListPattern.png"></a>
-<a href="https://www.buymeacoffee.com/giteshnxtlvl"><img src="./images/BMEC.png"></a>
-</h3>
+# TODO 
+search wordlist
 
-<h1 align="center">COOK</h1>
-<h4 align="center">Next level wordlist and password generator.</h4>
+# COOK
+Next level wordlist and password generator.
 
 # WHY?
 - Because creating/modifing wordlists are painful and time consuming process.
 - Every target is fking uniq and we need to modify our wordlist according to it...
-- And we have literaly too many wordlist out there, that managment and updating them is another sort of burdern.
+- And we have literaly too many wordlist out there, that managment and updating them is another problem.
+- We all have custom wordlists.
 
 # Features
-:heavy_check_mark: Wordlist URL Support
-:heavy_check_mark: 1337 Mode
-:heavy_check_mark: 
+:heavy_check_mark: Pre-defined Sets &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  :heavy_check_mark: Wordlist URL  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:heavy_check_mark: Charsets like crunch    
+:heavy_check_mark: Ranges **[69-1337] [F-k]**&nbsp;&nbsp;&nbsp;  :heavy_check_mark: 1337 Mode   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:heavy_check_mark: Assetnotes Wordlists  
+:heavy_check_mark: Seclists Wordlists  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:heavy_check_mark: Files Regex    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:heavy_check_mark: Update wordlists   
+:heavy_check_mark: Clean Wordlists &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:heavy_check_mark: Url analyser &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :heavy_check_mark: Customizable
 
 # Fast Travel
 - [WHY?](#why)
@@ -47,31 +45,6 @@
 - [Satisfied?](#satisfied)
 - [THE MAIN FILE](#the-main-file)
 - [Final Words](#final-words)
-
-# Installation
-#### Using Go
-Install/Update using these commands  
-`go get -u github.com/giteshnxtlvl/cook`
-OR
-`GO111MODULE=on go get -u github.com/giteshnxtlvl/cook`
-
-#### Download latest builds  
-  https://github.com/giteshnxtlvl/cook/releases/
-
-# Customizing tool
-Tool is using a file `cook.yaml`, this file is database for cook.  
-**Method 1**  
-Default location in linux `$HOME/.config/cook/cook.yaml`.  
-For windows it will be `%USERPROFILE%/.config/cook/cook.yaml`
-
-**Method 2**
-1. Download [cook.yaml](https://gist.githubusercontent.com/giteshnxtlvl/55048a76a060da849ca8fefde2258da3/raw/eda15049d56d37afb1bb1f8ee07daba2db1b9628/cook.yaml)
-1. Create an environment variable `COOK` =`Path of file`  
-3. Done, Run `cook -config` to confirm.
-
-**Method 3**   
-Use `-config-path` flag to specify location of the config file. This is useful if you want to try different config files.
-
 
 # Basic Permutation
 
@@ -165,10 +138,47 @@ Don't parse the value
 cook -word `date(10,12,1999)`
 ```
 
+# Nutshell
+
+| Flags  | Usage |
+| ------------- | ------------- |
+|  -case  | Define Cases |
+| -min  | Minimum no of columns to print  |
+| -config  | Config Information *cook.yaml*  |
+| -config-path  | Specify path for custom yaml file.  |
+| -update-all  | Update all file's cache  |
+| -h  | Help  |
+| -v  | Verbose  |
+
+# Installation
+#### Using Go
+Install/Update using these commands  
+`go get -u github.com/giteshnxtlvl/cook`
+OR
+`GO111MODULE=on go get -u github.com/giteshnxtlvl/cook`
+
+#### Download latest builds  
+  https://github.com/giteshnxtlvl/cook/releases/
+
+# Customizing tool
+Tool is using a file `cook.yaml`, this file is database for cook.  
+**Method 1**  
+Default location in linux `$HOME/.config/cook/cook.yaml`.  
+For windows it will be `%USERPROFILE%/.config/cook/cook.yaml`
+
+**Method 2**
+1. Download [cook.yaml](https://gist.githubusercontent.com/giteshnxtlvl/55048a76a060da849ca8fefde2258da3/raw/eda15049d56d37afb1bb1f8ee07daba2db1b9628/cook.yaml)
+1. Create an environment variable `COOK` =`Path of file`  
+3. Done, Run `cook -config` to confirm.
+
+**Method 3**   
+Use `-config-path` flag to specify location of the config file. This is useful if you want to try different config files.
+
+
 # Community Powered
 This tool is already powered by some awesome community members. Drive this power to next level by comtributing using following.
 
-Contribute 
+### Contribute 
 - [cook.yaml](https://gist.github.com/giteshnxtlvl/55048a76a060da849ca8fefde2258da3#file-cook-yaml) is the backbone of the tool.  
 - Share useful lists and patterns.
   Modify here [cook.yaml](https://gist.github.com/giteshnxtlvl/55048a76a060da849ca8fefde2258da3#file-cook-yaml)
@@ -179,9 +189,6 @@ Contribute
 # Satisfied? 
 
 <a href="https://www.buymeacoffee.com/giteshnxtlvl"><img width="300" src="./images/BMEC2X.png"></a>
-
-# TODO
-Instead of permutations, appending to line by line mode
 
 # Final Words 
 > *COOKING IS AN ART, ART NEEDS CREATIVITY*    

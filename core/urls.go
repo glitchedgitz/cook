@@ -3,7 +3,7 @@ package core
 import (
 	"net"
 	"net/url"
-	"path"
+	"path/filepath"
 	"strings"
 
 	"golang.org/x/net/publicsuffix"
@@ -15,65 +15,60 @@ func AnalyseURLs(urls []string, get string, array *[]string) {
 
 		u, err := url.Parse(s)
 		if err != nil {
+			VPrint("Err: AnalyseURLs in url " + s)
 			continue
 		}
 
-		if get == "scheme" {
+		switch get {
+
+		case "s", "scheme":
 			*array = append(*array, u.Scheme)
-			continue
-		}
-		if get == "user" || get == "username" {
+
+		case "u", "user", "username":
 			*array = append(*array, u.User.Username())
-			continue
-		}
 
-		p, _ := u.User.Password()
-		if get == "pass" || get == "password" {
+		case "p", "pass", "password":
+			p, _ := u.User.Password()
 			*array = append(*array, p)
-			continue
-		}
-		if get == "u:p" || get == "user:pass" || get == "username:password" {
+
+		case "u:p", "user:pass", "username:password":
+			p, _ := u.User.Password()
 			*array = append(*array, u.User.Username()+":"+p)
-			continue
-		}
 
-		host, port, _ := net.SplitHostPort(u.Host)
-
-		if get == "h" || get == "host" {
+		case "h", "host", "hostname":
+			host, _, _ := net.SplitHostPort(u.Host)
 			if strings.Contains(u.Host, ":") {
 				*array = append(*array, host)
 			} else {
 				*array = append(*array, u.Host)
 			}
-			continue
-		}
 
-		if get == "port" {
+		case "port", "pr", "pt":
+			_, port, _ := net.SplitHostPort(u.Host)
 			*array = append(*array, port)
-			continue
-		}
-		if get == "h:p" || get == "host:port" {
+
+		case "h:p", "host:port":
+			host, port, _ := net.SplitHostPort(u.Host)
 			*array = append(*array, host+":"+port)
-			continue
-		}
-		if get == "path" {
+
+		case "path":
 			*array = append(*array, u.Path)
-			continue
-		}
-		if get == "f" || get == "fragment" {
+
+		case "f", "fragment":
 			*array = append(*array, u.Fragment)
-			continue
-		}
-		if get == "filepath" {
-			_, file := path.Split(s)
+
+		case "filepath", "fp", "fb", "filebase":
+			file := filepath.Base(s)
 			*array = append(*array, file)
-			continue
-		}
-		if get == "q" || get == "query" || get == "k" || get == "key" || get == "keys" {
+
+		case "q", "query", "k", "key", "keys":
 			*array = append(*array, u.RawQuery)
-			continue
-		}
-		if get == "tld" {
+
+		case "d", "domain":
+			*array = append(*array, u.Scheme+"://"+u.Host)
+
+		case "tld":
+			host, _, _ := net.SplitHostPort(u.Host)
 			var domain string
 			if strings.Contains(u.Host, ":") {
 				domain = host
@@ -82,8 +77,10 @@ func AnalyseURLs(urls []string, get string, array *[]string) {
 			}
 			eTLD, _ := publicsuffix.PublicSuffix(domain)
 			*array = append(*array, eTLD)
-		}
-		if get == "sub" || get == "subdomain" {
+
+		case "sub", "subdomain":
+			host, _, _ := net.SplitHostPort(u.Host)
+
 			var domain string
 			if strings.Contains(u.Host, ":") {
 				domain = host
@@ -97,9 +94,6 @@ func AnalyseURLs(urls []string, get string, array *[]string) {
 			}
 			subdomain := domain[:till]
 			*array = append(*array, subdomain)
-		}
-		if get == "domain" || get == "d" {
-			*array = append(*array, u.Scheme+"://"+u.Host)
 		}
 	}
 }

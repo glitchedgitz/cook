@@ -25,6 +25,7 @@ var final = []string{""}
 var (
 	help             = parse.B("-h")
 	verbose          = parse.B("-v")
+	showCol          = parse.B("-col")
 	Min              = parse.I("-min")
 	appendColumns    = parse.S("-append")
 	showConfig       = parse.B("-config")
@@ -134,6 +135,15 @@ func parseInput() (map[string]string, []string) {
 			}
 			appendMode[intValue] = true
 		}
+	}
+
+	if showCol {
+		fmt.Fprintln(os.Stderr)
+		for i, p := range pattern {
+			fmt.Fprintf(os.Stderr, "Col %d: %s\n", i, p)
+		}
+		fmt.Fprintln(os.Stderr)
+		os.Exit(0)
 	}
 
 	return params, pattern

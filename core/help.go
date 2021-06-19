@@ -15,12 +15,14 @@ var Banner = `
 ▒██▀ ▀█  ▒██▒  ██▒▒██▒  ██▒ ██▄█▒            
 ▒▓█    ▄ ▒██░  ██▒▒██░  ██▒▓███▄░            
 ▒▓▓▄ ▄██▒▒██   ██░▒██   ██░▓██ █▄             
- ▒▓███▀ ░░ ████▓▒░░ ████▓▒░▒██▒ █▄ ` + `       Gitesh Sharma @giteshnxtlvl
+ ▒▓███▀ ░░ ████▓▒░░ ████▓▒░▒██▒ █▄ 
+
+       Gitesh Sharma @giteshnxtlvl
  
- Usage  : cook [PARAM-1 VALUES] [PARAM-2 VALUES] ... [PARAM-N VALUES]  [PATTERN]
-          cook -param1 val1,val2 -param2 file.txt param1:param2
+ Usage  : https://github.com/giteshnxtlvl/cook/
  Help   : cook -h 
- Config : cook -config`
+ Config : cook -config
+ `
 
 // var verbose = false
 

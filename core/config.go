@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"path/filepath"
 	"sort"
 	"strings"
 
@@ -85,10 +86,28 @@ func ShowConfig() {
 	fmt.Printf(Blue+"  %-11s "+White+" %v\n", "Location", configFile)
 
 	ShowMap("charSet")
-	ShowMap("files")
 	ShowMap("lists")
 	ShowMap("patterns")
 	ShowMap("extensions")
+
+	fmt.Println("\n" + Green + strings.ToUpper("files") + Reset)
+
+	keys := []string{}
+	for k := range M["files"] {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	for _, k := range keys {
+		files := M["files"][k]
+		fmt.Printf(Blue+"  %-12s \n"+White, k)
+		for _, file := range files {
+
+			filebase := filepath.Base(file)
+			fmt.Println("\t" + strings.Replace(file, filebase, Red+filebase+Reset, 1))
+		}
+		fmt.Println()
+
+	}
 
 	os.Exit(0)
 }

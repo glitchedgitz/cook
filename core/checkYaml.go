@@ -6,12 +6,7 @@ import (
 	"strings"
 )
 
-func CheckYaml(p string, array *[]string) bool {
-	if val, exists := M["charSet"][p]; exists {
-		*array = append(*array, strings.Split(val[0], "")...)
-		return true
-	}
-
+func checkFileInYaml(p string, array *[]string) bool {
 	if files, exists := M["files"][p]; exists {
 		for _, file := range files {
 			if strings.HasPrefix(file, "http://") || strings.HasPrefix(file, "https://") {
@@ -21,6 +16,18 @@ func CheckYaml(p string, array *[]string) bool {
 				FileValues(file, array)
 			}
 		}
+		return true
+	}
+	return false
+}
+
+func CheckYaml(p string, array *[]string) bool {
+	if val, exists := M["charSet"][p]; exists {
+		*array = append(*array, strings.Split(val[0], "")...)
+		return true
+	}
+
+	if checkFileInYaml(p, array) {
 		return true
 	}
 
