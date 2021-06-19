@@ -1,8 +1,5 @@
 <img src="./images/test2.png"> 
 
-# TODO 
-search wordlist
-
 # COOK
 Next level wordlist and password generator.
 
