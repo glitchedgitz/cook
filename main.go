@@ -73,6 +73,44 @@ func leetBegin() {
 // 	}
 // }
 
+func searchMode(cmds []string) {
+	core.CookConfig()
+
+	search := cmds[0]
+	found := false
+
+	for cat, vv := range core.M {
+		for k, v := range vv {
+
+			if strings.Contains(k, search) {
+				fmt.Println()
+				if cat == "files" {
+					fmt.Println(k)
+					for _, file := range v {
+						fmt.Printf("\t%s\n", file)
+					}
+
+				} else {
+					fmt.Printf("%s %v\n", k, v)
+				}
+				found = true
+			}
+		}
+	}
+
+	if !found {
+		fmt.Println("Not Found: ", search)
+	}
+	os.Exit(0)
+}
+
+func addMode(cmds []string) {
+}
+func updateMode(cmds []string) {
+}
+func deleteMode(cmds []string) {
+}
+
 func parseInput() (map[string]string, []string) {
 
 	parse.Help = core.Banner
@@ -100,6 +138,15 @@ func parseInput() (map[string]string, []string) {
 	// analyseParams(params)
 
 	pattern := parse.Args
+	if pattern[0] == "search" {
+		searchMode(pattern[1:])
+	} else if pattern[0] == "add" {
+		addMode(pattern[1:])
+	} else if pattern[0] == "update" {
+		updateMode(pattern[1:])
+	} else if pattern[0] == "delete" {
+		deleteMode(pattern[1:])
+	}
 
 	noOfColumns := len(pattern)
 
@@ -267,22 +314,29 @@ func main() {
 			}
 
 			// Checking for url
-			if strings.Count(p, ".") == 1 {
+			if strings.Count(p, ".") > 0 {
 				u := strings.Split(p, ".")[0]
-				get := strings.Split(p, ".")[1]
+				get := strings.Split(p, ".")[1:]
 				if val, exists := params[u]; exists {
 					tmp := []string{}
-					success = core.ParseFile(val, &tmp)
-					if get == "wordplay" {
-						core.WordPlay(tmp, "*", useless, &columnValues)
-						continue
+					vallll := []string{}
+					success = core.ParseFile(val, &vallll)
+
+					for _, g := range get {
+						if success && g == "wordplay" {
+							core.WordPlay(vallll, "*", useless, &tmp)
+						} else {
+							core.AnalyzeURLs(vallll, g, &tmp)
+						}
+						vallll = tmp
+						tmp = nil
 					}
-					if success {
-						core.AnalyzeURLs(tmp, get, &columnValues)
-						continue
-					}
+
+					columnValues = append(columnValues, vallll...)
+					continue
 				}
 			}
+
 			// Raw String using `
 			if strings.HasPrefix(p, "`") && strings.HasSuffix(p, "`") {
 				lv := len(p)

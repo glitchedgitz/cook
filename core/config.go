@@ -16,7 +16,7 @@ import (
 var content []byte
 var home, _ = os.UserHomeDir()
 var configFile = path.Join(home, ".config", "cook", "cook.yaml")
-var M = make(map[interface{}]map[string][]string)
+var M = make(map[string]map[string][]string)
 
 func CookConfig() {
 
