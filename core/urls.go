@@ -9,8 +9,9 @@ import (
 	"golang.org/x/net/publicsuffix"
 )
 
-func AnalyseURLs(urls []string, get string, array *[]string) {
+func AnalyzeURLs(urls []string, get string, array *[]string) {
 	get = strings.ToLower(get)
+
 	for _, s := range urls {
 
 		u, err := url.Parse(s)
@@ -61,8 +62,17 @@ func AnalyseURLs(urls []string, get string, array *[]string) {
 			file := filepath.Base(s)
 			*array = append(*array, file)
 
-		case "q", "query", "k", "key", "keys":
+		case "q", "query":
 			*array = append(*array, u.RawQuery)
+		case "k", "key", "keys":
+			for k := range u.Query() {
+				*array = append(*array, k)
+			}
+
+		case "v", "values":
+			for _, vals := range u.Query() {
+				*array = append(*array, vals...)
+			}
 
 		case "d", "domain":
 			*array = append(*array, u.Scheme+"://"+u.Host)
@@ -94,6 +104,9 @@ func AnalyseURLs(urls []string, get string, array *[]string) {
 			}
 			subdomain := domain[:till]
 			*array = append(*array, subdomain)
+
+		case "alldir":
+			*array = append(*array, strings.Split(u.Path, "/")...)
 		}
 	}
 }

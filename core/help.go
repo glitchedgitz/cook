@@ -24,8 +24,6 @@ var Banner = `
  Config : cook -config
  `
 
-// var verbose = false
-
 func VPrint(msg string) {
 	if Verbose {
 		fmt.Fprintln(os.Stderr, msg)

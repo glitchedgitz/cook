@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"sync"
 )
 
 func GetData(url string) []byte {
@@ -44,16 +45,34 @@ func CheckFileCache(url string) {
 
 func UpdateCache() {
 	fmt.Println(Banner)
+
+	goaddresses := make(chan string)
+	var wg sync.WaitGroup
+
+	for i := 0; i < 20; i++ {
+		go func() {
+			for file := range goaddresses {
+				func(file string) {
+					defer wg.Done()
+					filename := filepath.Base(file)
+					AppendToFile(path.Join(home, ".cache", "cook", filename), GetData(file))
+				}(file)
+			}
+		}()
+	}
+
 	for key, files := range M["files"] {
 		fmt.Println("\n" + Blue + key + Reset)
+
 		for _, file := range files {
 			if strings.HasPrefix(file, "http://") || strings.HasPrefix(file, "https://") {
-				filename := filepath.Base(file)
-				// fmt.Printf("\n%s Updating %-14s:%s %s", Blue, filename, Reset, file)
-				AppendToFile(path.Join(home, ".cache", "cook", filename), GetData(file))
+				wg.Add(1)
+				goaddresses <- file
 			}
 		}
 	}
+
+	wg.Wait()
 }
 
 func AppendToFile(filepath string, data []byte) {

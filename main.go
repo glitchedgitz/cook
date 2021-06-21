@@ -273,8 +273,12 @@ func main() {
 				if val, exists := params[u]; exists {
 					tmp := []string{}
 					success = core.ParseFile(val, &tmp)
+					if get == "wordplay" {
+						core.WordPlay(tmp, "*", useless, &columnValues)
+						continue
+					}
 					if success {
-						core.AnalyseURLs(tmp, get, &columnValues)
+						core.AnalyzeURLs(tmp, get, &columnValues)
 						continue
 					}
 				}

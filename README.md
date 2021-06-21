@@ -1,33 +1,36 @@
 <img src="./images/test2.png"> 
 
-# COOK
+# What is COOK?
 Next level wordlist and password generator.
 
-# WHY?
+# Why?
 - Because creating/modifing wordlists are painful and time consuming process.
 - Every target is fking uniq and we need to modify our wordlist according to it...
 - And we have literaly too many wordlist out there, that managment and updating them is another problem.
 - We all have custom wordlists.
 
 # Features
-:heavy_check_mark: Pre-defined Sets &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  :heavy_check_mark: Wordlist URL  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:heavy_check_mark: Charsets like crunch    
-:heavy_check_mark: Ranges **[69-1337] [F-k]**&nbsp;&nbsp;&nbsp;  :heavy_check_mark: 1337 Mode   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:heavy_check_mark: Assetnotes Wordlists  
-:heavy_check_mark: Seclists Wordlists  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:heavy_check_mark: Files Regex    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:heavy_check_mark: Update wordlists   
-:heavy_check_mark: Clean Wordlists &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:heavy_check_mark: Url analyser &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :heavy_check_mark: Customizable
+<div style="display:grid;grid-template-columns: auto auto auto auto;" >
+  <div>✔ <a href="#installation">Pre-defined Sets </a></div>
+  <div>✔ <a href="#installation">Wordlist URL</a></div>
+  <div>✔ <a href="#installation">Charsets like crunch </a></div>
+  <div>✔ <a href="#installation">Ranges [69-1337] [F-k]</a></div>
+  <div>✔ <a href="#installation">1337 Mode  </a></div>
+  <div>✔ <a href="#installation">Assetnotes Wordlists </a></div>
+  <div>✔ <a href="#installation">Seclists Wordlists </a></div>
+  <div>✔ <a href="#installation">Files Regex</a></div>
+  <div>✔ <a href="#installation">Update wordlists   </a></div>
+  <div>✔ <a href="#installation">Clean Wordlists </a></div>
+  <div>✔ <a href="#installation">Url analyser</a></div>
+  <div>✔ <a href="#installation">Customizable</a></div>
+</div>
 
 # Fast Travel
-- [WHY?](#why)
-- [Features](#features)
-- [Fast Travel](#fast-travel)
 - [Installation](#installation)
-      - [Using Go](#using-go)
-      - [Download latest builds](#download-latest-builds)
 - [Customizing tool](#customizing-tool)
 - [Basic Permutation](#basic-permutation)
 - [Advance Permutation](#advance-permutation)
 - [Predefined Sets](#predefined-sets)
-    - [Create your own unique sets](#create-your-own-unique-sets)
-    - [Use it like CRUNCH](#use-it-like-crunch)
 - [Patterns/Functions](#patternsfunctions)
 - [Ranges](#ranges)
 - [Files](#files)
@@ -35,9 +38,9 @@ Next level wordlist and password generator.
     - [Save Wordlists by Unique Names](#save-wordlists-by-unique-names)
     - [File not found](#file-not-found)
 - [Cases](#cases)
-    - [Minimum](#minimum)
-    - [Pipe input](#pipe-input)
-    - [Raw String](#raw-string)
+- [Minimum](#minimum)
+- [Pipe input](#pipe-input)
+- [Raw String](#raw-string)
 - [Contribute](#contribute)
 - [Satisfied?](#satisfied)
 - [THE MAIN FILE](#the-main-file)
@@ -57,7 +60,7 @@ Next level wordlist and password generator.
 # Advance Permutation
 Understanding concept is important!
 <img src="./images/09.png">
-  
+
 
 # Predefined Sets
   <img src="./images/03.png">    
@@ -159,6 +162,7 @@ OR
 
 # Customizing tool
 Tool is using a file `cook.yaml`, this file is database for cook.  
+
 **Method 1**  
 Default location in linux `$HOME/.config/cook/cook.yaml`.  
 For windows it will be `%USERPROFILE%/.config/cook/cook.yaml`
@@ -175,6 +179,9 @@ Use `-config-path` flag to specify location of the config file. This is useful i
 # Community Powered
 This tool is already powered by some awesome community members. Drive this power to next level by comtributing using following.
 
+### Contributors
+- [@Flangvik](https://twitter.com/Flangvik)
+- [@noraj_rawsec](https://twitter.com/noraj_rawsec)
 ### Contribute 
 - [cook.yaml](https://gist.github.com/giteshnxtlvl/55048a76a060da849ca8fefde2258da3#file-cook-yaml) is the backbone of the tool.  
 - Share useful lists and patterns.
@@ -184,8 +191,22 @@ This tool is already powered by some awesome community members. Drive this power
 - Check out [discussions](https://github.com/giteshnxtlvl/cook/discussions).
 
 # Satisfied? 
-
 <a href="https://www.buymeacoffee.com/giteshnxtlvl"><img width="300" src="./images/BMEC2X.png"></a>
+
+# Todo
+- Search wordlist `cook search [wordlist]` , that means wordlists needs tag or something
+- Flag `cook update [wordlist]`, so it will update those wordlists
+- Flag `cook add [name] [wordlist]`, to add new wordlist, directly from cmd
+  - If `name` already exists, then ask to overwrite or not
+- Flag `cook delete [name]`, ask to confirm the delete
+- Get all directories from URL to create a list 
+- Updating cook.yaml from this repo and keeping user modifications
+- Add new assetnote's wordlists in their sets
+- Print url + local saved wordlist path, so user can use them
+- Specify start and stop of wordlist
+
+# TODO example
+- Coping in burp
 
 # Final Words 
 > *COOKING IS AN ART, ART NEEDS CREATIVITY*    
