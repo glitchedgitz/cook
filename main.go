@@ -9,6 +9,8 @@ import (
 
 	"cook/core"
 	"cook/parse"
+
+	"github.com/ffuf/pencode/pkg/pencode"
 )
 
 // var version = "1.6"
@@ -31,6 +33,7 @@ var (
 	showConfig       = parse.B("-config")
 	configPath       = parse.S("-config-path")
 	caseValue        = parse.S("-case")
+	encodeValue      = parse.S("-encode")
 	updateCacheFiles = parse.B("-update-all")
 	l337             = parse.I("-1337")
 )
@@ -38,6 +41,10 @@ var (
 var params = make(map[string]string)
 var leetValues = make(map[string][]string)
 var appendMode = make(map[int]bool)
+var encodeString = []string{}
+var finalFunc = func(s string) {
+	fmt.Println(s)
+}
 
 func leetBegin() {
 	leetValues["0"] = []string{"o", "O"}
@@ -131,6 +138,11 @@ func parseInput() (map[string]string, []string) {
 		os.Exit(0)
 	}
 
+	if len(encodeValue) > 0 {
+		encodeString = strings.Split(encodeValue, ",")
+		finalFunc = encode
+	}
+
 	core.ConfigPath = configPath
 	core.Verbose = verbose
 
@@ -138,17 +150,19 @@ func parseInput() (map[string]string, []string) {
 	// analyseParams(params)
 
 	pattern := parse.Args
-	if pattern[0] == "search" {
-		searchMode(pattern[1:])
-	} else if pattern[0] == "add" {
-		addMode(pattern[1:])
-	} else if pattern[0] == "update" {
-		updateMode(pattern[1:])
-	} else if pattern[0] == "delete" {
-		deleteMode(pattern[1:])
-	}
-
 	noOfColumns := len(pattern)
+
+	if noOfColumns > 0 {
+		if pattern[0] == "search" {
+			searchMode(pattern[1:])
+		} else if pattern[0] == "add" {
+			addMode(pattern[1:])
+		} else if pattern[0] == "update" {
+			updateMode(pattern[1:])
+		} else if pattern[0] == "delete" {
+			deleteMode(pattern[1:])
+		}
+	}
 
 	if Min < 0 {
 
@@ -254,11 +268,24 @@ func applyColumnCases(columnValues []string, columnNum int, applyFunc func([]str
 	final = temp
 }
 
+func encode(inputdata string) {
+	chain := pencode.NewChain()
+	err := chain.Initialize(encodeString)
+	if err != nil {
+		panic(err)
+	}
+	output, err := chain.Encode([]byte(inputdata))
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(string(output))
+}
+
 func printIt(fn func(string) string) {
 	if l337 > -1 {
 		for _, v := range final {
 			v = fn(v)
-			fmt.Println(v)
+			finalFunc(v)
 			v2 := v
 			for l, ch := range leetValues {
 				for _, c := range ch {
@@ -267,16 +294,16 @@ func printIt(fn func(string) string) {
 						t := strings.ReplaceAll(v, c, l)
 						v2 = strings.ReplaceAll(v2, c, l)
 						if l337 == 1 {
-							fmt.Println(t)
+							finalFunc(t)
 							if t != v2 {
-								fmt.Println(v2)
+								finalFunc(v2)
 							}
 						}
 					}
 				}
 			}
 			if l337 == 0 {
-				fmt.Println(v2)
+				finalFunc(v2)
 			}
 		}
 	} else {
@@ -284,7 +311,7 @@ func printIt(fn func(string) string) {
 		for _, v := range final {
 			v = fn(v)
 			total++
-			fmt.Println(v)
+			finalFunc(v)
 		}
 	}
 }
@@ -316,23 +343,32 @@ func main() {
 			// Checking for url
 			if strings.Count(p, ".") > 0 {
 				u := strings.Split(p, ".")[0]
-				get := strings.Split(p, ".")[1:]
 				if val, exists := params[u]; exists {
+					get := strings.Split(p, ".")[1:]
 					tmp := []string{}
 					vallll := []string{}
 					success = core.ParseFile(val, &vallll)
 
-					for _, g := range get {
-						if success && g == "wordplay" {
-							core.WordPlay(vallll, "*", useless, &tmp)
+					if success {
+						if get[0] == "json" {
+							core.GetJsonField(vallll, get[1:], &tmp)
+							columnValues = append(columnValues, tmp...)
 						} else {
-							core.AnalyzeURLs(vallll, g, &tmp)
+							for _, g := range get {
+								if g == "wordplay" {
+									core.WordPlay(vallll, "*", useless, &tmp)
+								} else if g == "filepath" || g == "fp" || g == "fb" || g == "filebase" {
+									core.FilePath(vallll, &tmp)
+								} else {
+									core.AnalyzeURLs(vallll, g, &tmp)
+								}
+								vallll = tmp
+								tmp = nil
+							}
+							columnValues = append(columnValues, vallll...)
 						}
-						vallll = tmp
-						tmp = nil
 					}
 
-					columnValues = append(columnValues, vallll...)
 					continue
 				}
 			}

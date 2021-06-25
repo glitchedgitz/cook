@@ -138,7 +138,7 @@ Don't parse the value
 cook -word `date(10,12,1999)`
 ```
 
-# Nutshell
+# Flags
 
 | Flags  | Usage |
 | ------------- | ------------- |
@@ -190,23 +190,34 @@ This tool is already powered by some awesome community members. Drive this power
 - Share Ideas or new Feature Request.
 - Check out [discussions](https://github.com/giteshnxtlvl/cook/discussions).
 
+# Thanks to...
+- [Assetnote](https://assetnote.io/) and [Seclist](https://github.com/danielmiessler/SecLists) for awesome wordlist
+- All the [contributors](#contributors)
+
 # Satisfied? 
 <a href="https://www.buymeacoffee.com/giteshnxtlvl"><img width="300" src="./images/BMEC2X.png"></a>
 
 # Todo
-- Search wordlist `cook search [wordlist]` , that means wordlists needs tag or something
-- Flag `cook update [wordlist]`, so it will update those wordlists
-- Flag `cook add [name] [wordlist]`, to add new wordlist, directly from cmd
-  - If `name` already exists, then ask to overwrite or not
-- Flag `cook delete [name]`, ask to confirm the delete
-- Get all directories from URL to create a list 
-- Updating cook.yaml from this repo and keeping user modifications
-- Add new assetnote's wordlists in their sets
-- Print url + local saved wordlist path, so user can use them
-- Specify start and stop of wordlist
+-  [X] Search wordlist `cook search [wordlist]` , that means wordlists needs tag or something
+-  [ ] Flag `cook update [wordlist]`, so it will update those wordlists
+-  [ ] Flag `cook add [name] [wordlist]`, to add new wordlist, directly from cmd. If `name` already exists, then ask to overwrite or not
+-  [ ] Flag `cook delete [name]`, ask to confirm the delete
+-  [ ] Get all directories from URL to create a list 
+-  [ ] Updating cook.yaml from this repo and keeping user modifications
+-  [ ] Add new assetnote's wordlists in their sets
+-  [ ] Print url + local saved wordlist path, so user can use them
+-  [ ] Specify start and stop of wordlist
 
-# TODO example
-- Coping in burp
+# TODO examples
+cypcat
+  -  [ ] Copying list in burp
+  -  [ ] github dork
+  -  [ ] shodan dork
+
+runcat
+  -  [ ] multithread any tool
+  -  [ ] automate
+
 
 # Final Words 
 > *COOKING IS AN ART, ART NEEDS CREATIVITY*    

@@ -55,14 +55,16 @@ func UpdateCache() {
 				func(file string) {
 					defer wg.Done()
 					filename := filepath.Base(file)
-					AppendToFile(path.Join(home, ".cache", "cook", filename), GetData(file))
+					filepath := path.Join(home, ".cache", "cook", filename)
+					os.Remove(filepath)
+					AppendToFile(filepath, GetData(file))
 				}(file)
 			}
 		}()
 	}
 
-	for key, files := range M["files"] {
-		fmt.Println("\n" + Blue + key + Reset)
+	for _, files := range M["files"] {
+		// fmt.Println("\n" + Blue + key + Reset)
 
 		for _, file := range files {
 			if strings.HasPrefix(file, "http://") || strings.HasPrefix(file, "https://") {
@@ -131,6 +133,7 @@ func FileValues(file string, array *[]string) {
 	fileScanner := bufio.NewScanner(readFile)
 
 	for fileScanner.Scan() {
-		*array = append(*array, fileScanner.Text())
+		line := strings.TrimRight(fileScanner.Text(), "\r")
+		*array = append(*array, line)
 	}
 }
