@@ -25,7 +25,6 @@ func GetData(url string) []byte {
 	data, _ := ioutil.ReadAll(res.Body)
 
 	res.Body.Close()
-
 	return data
 }
 
@@ -40,7 +39,6 @@ func CheckFileCache(url string) {
 	if _, err := os.Stat(path.Join(home, ".cache", "cook", filename)); err != nil {
 		AppendToFile(path.Join(home, ".cache", "cook", filename), GetData(url))
 	}
-
 }
 
 func UpdateCache() {

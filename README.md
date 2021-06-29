@@ -208,7 +208,13 @@ This tool is already powered by some awesome community members. Drive this power
 -  [ ] Print url + local saved wordlist path, so user can use them
 -  [ ] Specify start and stop of wordlist
 
+# Bugs
+-  [ ] Pipe input can't be used multiple times
+
 # TODO examples
+
+- Using cook as a encoder, decoder, and hash
+
 cypcat
   -  [ ] Copying list in burp
   -  [ ] github dork

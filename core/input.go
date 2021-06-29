@@ -2,6 +2,7 @@ package core
 
 import (
 	"bufio"
+	"cook/parse"
 	"log"
 	"os"
 	"strconv"
@@ -83,13 +84,21 @@ func UpdateCases(caseValue string, noOfColumns int) map[int]map[string]bool {
 //Checking for patterns/functions
 func ParseFunc(value string, array *[]string) bool {
 
-	function := strings.SplitN(value, "(", 2)
-	funcName := function[0]
+	if !(strings.Contains(value, "(") && strings.Contains(value, ")")) {
+		return false
+	}
+
+	funcName, funcValues := parse.ReadCrBr(value)
+	// fmt.Println(funcName)
+	// fmt.Println(funcValues)
 
 	if funcPatterns, exists := M["patterns"][funcName]; exists {
 
-		funcArgs := strings.Split(function[1][:len(function[1])-1], ",")
-		funcDef := strings.Split(strings.TrimSuffix(funcPatterns[0][len(funcName)+1:], ")"), ",")
+		funcArgs := strings.Split(funcValues[0], ",")
+		funcDef := strings.Split(funcPatterns[0][1:len(funcPatterns[0])-1], ",")
+
+		// fmt.Printf("Func Arg: %v", funcArgs)
+		// fmt.Printf("\tFunc Def: %v", funcDef)
 
 		if len(funcDef) != len(funcArgs) {
 			log.Fatalf("\nErr: No of Arguments are different for %s\n", funcPatterns)
@@ -107,18 +116,18 @@ func ParseFunc(value string, array *[]string) bool {
 	return false
 }
 
-func ParseFile(value string, array *[]string) bool {
+var InputFile = make(map[string]bool)
+
+func ParseFile(param string, value string, array *[]string) bool {
 
 	if checkFileInYaml(value, array) {
 		return true
 	}
 
 	// Checking for file
-	if strings.HasSuffix(value, ".txt") {
-		if _, err := os.Stat(value); err == nil {
-			FileValues(value, array)
-			return true
-		}
+	if InputFile[param] && !strings.Contains(value, ":") {
+		FileValues(value, array)
+		return true
 	}
 
 	// Checking for File and Regex
@@ -159,14 +168,19 @@ func ParseFile(value string, array *[]string) bool {
 	return false
 }
 
-func ParseValue(value string, array *[]string) {
+var pipe []string
+
+func ParseValue(param string, value string, array *[]string) {
 
 	// Pipe input
 	if value == "-" {
 		sc := bufio.NewScanner(os.Stdin)
-
+		if len(pipe) > 0 {
+			*array = append(*array, pipe...)
+		}
 		for sc.Scan() {
 			*array = append(*array, sc.Text())
+			pipe = append(pipe, sc.Text())
 		}
 		return
 	}
@@ -182,7 +196,7 @@ func ParseValue(value string, array *[]string) {
 		return
 	}
 
-	success = ParseFile(value, array)
+	success = ParseFile(param, value, array)
 	if success {
 		return
 	}

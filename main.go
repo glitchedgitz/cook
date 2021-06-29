@@ -28,15 +28,27 @@ var (
 	help             = parse.B("-h")
 	verbose          = parse.B("-v")
 	showCol          = parse.B("-col")
-	Min              = parse.I("-min")
-	appendColumns    = parse.S("-append")
-	showConfig       = parse.B("-config")
-	configPath       = parse.S("-config-path")
-	caseValue        = parse.S("-case")
-	encodeValue      = parse.S("-encode")
-	updateCacheFiles = parse.B("-update-all")
-	l337             = parse.I("-1337")
+	Min              = parse.I("-m")
+	appendColumns    = parse.S("-a")
+	showConfig       = parse.B("-conf")
+	caseValue        = parse.S("-c")
+	encodeValue      = parse.S("-e")
+	updateCacheFiles = parse.B("-u")
+	l337             = parse.I("-l")
 )
+
+// var (
+// 	help             = parse.B("h", "help")
+// 	verbose          = parse.B("v", "verbose")
+// 	showCol          = parse.B("c", "col")
+// 	Min              = parse.I("m", "min")
+// 	appendColumns    = parse.S("a", "append")
+// 	showConfig       = parse.B("cf", "config")
+// 	caseValue        = parse.S("ca", "case")
+// 	encodeValue      = parse.S("e", "encode")
+// 	updateCacheFiles = parse.B("u", "update")
+// 	l337             = parse.I("l", "leet")
+// )
 
 var params = make(map[string]string)
 var leetValues = make(map[string][]string)
@@ -57,28 +69,17 @@ func leetBegin() {
 	leetValues["8"] = []string{"B"}
 }
 
-// func analyseParams(params map[string]string) {
-// 	for param, value := range params {
-// 		if strings.Contains(param, ":") {
-
-// 			words := strings.Split(param, ":")
-// 			paramName := words[len(words)-1]
-
-// 			for _, p := range words[:len(words)-1] {
-// 				if p == "a" {
-// 					appendMode[paramName] = true
-// 					params[paramName] = value
-// 					continue
-// 				}
-// 				if p == "urls" {
-// 					params[paramName] = value
-// 				}
-// 			}
-
-// 			delete(params, param)
-// 		}
-// 	}
-// }
+func analyseParams(params map[string]string) {
+	for param, value := range params {
+		// fmt.Println(params)
+		if strings.HasSuffix(param, ":") {
+			delete(params, param)
+			param = strings.TrimSuffix(param, ":")
+			core.InputFile[param] = true
+			params[param] = value
+		}
+	}
+}
 
 func searchMode(cmds []string) {
 	core.CookConfig()
@@ -92,13 +93,13 @@ func searchMode(cmds []string) {
 			if strings.Contains(k, search) {
 				fmt.Println()
 				if cat == "files" {
-					fmt.Println(k)
+					fmt.Println(strings.ReplaceAll(k, search, core.Green+search+core.Reset))
 					for _, file := range v {
-						fmt.Printf("\t%s\n", file)
+						fmt.Printf("\t%s\n", strings.ReplaceAll(file, search, core.Green+search+core.Reset))
 					}
 
 				} else {
-					fmt.Printf("%s %v\n", k, v)
+					fmt.Printf("%s \n\t%v\n", k, v)
 				}
 				found = true
 			}
@@ -143,11 +144,10 @@ func parseInput() (map[string]string, []string) {
 		finalFunc = encode
 	}
 
-	core.ConfigPath = configPath
 	core.Verbose = verbose
 
 	params = parse.UserDefinedFlags()
-	// analyseParams(params)
+	analyseParams(params)
 
 	pattern := parse.Args
 	noOfColumns := len(pattern)
@@ -155,6 +155,8 @@ func parseInput() (map[string]string, []string) {
 	if noOfColumns > 0 {
 		if pattern[0] == "search" {
 			searchMode(pattern[1:])
+		} else if pattern[0] == "help" {
+			core.HelpMode(pattern[1:])
 		} else if pattern[0] == "add" {
 			addMode(pattern[1:])
 		} else if pattern[0] == "update" {
@@ -206,6 +208,8 @@ func parseInput() (map[string]string, []string) {
 		fmt.Fprintln(os.Stderr)
 		os.Exit(0)
 	}
+
+	core.VPrint(fmt.Sprintf("Pattern: %v \n", pattern))
 
 	return params, pattern
 }
@@ -272,11 +276,11 @@ func encode(inputdata string) {
 	chain := pencode.NewChain()
 	err := chain.Initialize(encodeString)
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 	output, err := chain.Encode([]byte(inputdata))
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 	fmt.Println(string(output))
 }
@@ -316,6 +320,23 @@ func printIt(fn func(string) string) {
 	}
 }
 
+func checkParamAndYaml(p string, array *[]string) {
+	if val, exists := params[p]; exists {
+		core.ParseValue(p, val, array)
+		return
+	}
+
+	if core.CheckYaml(p, array) {
+		return
+	}
+
+	*array = append(*array, p)
+}
+
+func init() {
+	log.SetFlags(0)
+}
+
 func main() {
 	// fmt.Fprintln(os.Stderr, banner)
 
@@ -326,51 +347,12 @@ func main() {
 	for columnNum, param := range pattern {
 
 		columnValues := []string{}
-		var success = false
 
 		for _, p := range strings.Split(param, ",") {
+			core.VPrint(fmt.Sprintf("Param: %s \n", p))
 
-			success = core.ParseRanges(p, &columnValues)
-			if success {
+			if core.ParseRanges(p, &columnValues) {
 				continue
-			}
-
-			if val, exists := params[p]; exists {
-				core.ParseValue(val, &columnValues)
-				continue
-			}
-
-			// Checking for url
-			if strings.Count(p, ".") > 0 {
-				u := strings.Split(p, ".")[0]
-				if val, exists := params[u]; exists {
-					get := strings.Split(p, ".")[1:]
-					tmp := []string{}
-					vallll := []string{}
-					success = core.ParseFile(val, &vallll)
-
-					if success {
-						if get[0] == "json" {
-							core.GetJsonField(vallll, get[1:], &tmp)
-							columnValues = append(columnValues, tmp...)
-						} else {
-							for _, g := range get {
-								if g == "wordplay" {
-									core.WordPlay(vallll, "*", useless, &tmp)
-								} else if g == "filepath" || g == "fp" || g == "fb" || g == "filebase" {
-									core.FilePath(vallll, &tmp)
-								} else {
-									core.AnalyzeURLs(vallll, g, &tmp)
-								}
-								vallll = tmp
-								tmp = nil
-							}
-							columnValues = append(columnValues, vallll...)
-						}
-					}
-
-					continue
-				}
 			}
 
 			// Raw String using `
@@ -380,12 +362,46 @@ func main() {
 				continue
 			}
 
-			success = core.CheckYaml(p, &columnValues)
-			if success {
-				continue
+			// Checking for url func/encoding/json
+			if strings.Count(p, ".") > 0 {
+				splitS := strings.Split(p, ".")
+				u := splitS[0]
+				if _, exists := params[u]; exists {
+
+					get := splitS[1:]
+
+					tmp := []string{}
+					vallll := []string{}
+
+					checkParamAndYaml(u, &vallll)
+
+					for _, g := range get {
+						if g == "wordplay" {
+							core.WordPlay(vallll, "*", useless, &tmp)
+						} else if g == "fb" || g == "filebase" || g == "fn" || g == "filename" {
+							core.FileBase(vallll, &tmp)
+						} else if strings.HasPrefix(g, "json") {
+							_, values := parse.ReadSqBr(g)
+							core.GetJsonField(vallll, values, &tmp)
+						} else if strings.HasPrefix(g, "case") {
+							_, values := parse.ReadSqBr(g)
+							core.Cases(vallll, values, &tmp)
+						} else if strings.HasPrefix(g, "encode") {
+							_, values := parse.ReadSqBr(g)
+							core.Encode(vallll, values, &tmp)
+						} else {
+							core.AnalyzeURLs(vallll, g, &tmp)
+						}
+						vallll = tmp
+						tmp = nil
+					}
+					columnValues = append(columnValues, vallll...)
+
+					continue
+				}
 			}
 
-			columnValues = append(columnValues, p)
+			checkParamAndYaml(p, &columnValues)
 		}
 
 		if !appendMode[columnNum] || columnNum == 0 {

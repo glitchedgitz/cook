@@ -81,6 +81,22 @@ func UserDefinedFlags() map[string]string {
 	return userDefined
 }
 
+func ReadSqBr(cmd string) (string, []string) {
+	c := strings.SplitN(cmd, "[", 2)
+
+	name := c[0]
+	values := strings.Split(c[1][:len(c[1])-1], ":")
+	fmt.Println(values)
+	return name, values
+}
+
+func ReadCrBr(cmd string) (string, []string) {
+	c := strings.SplitN(cmd, "(", 2)
+	name := c[0]
+	values := strings.Split(c[1][:len(c[1])-1], ":")
+	return name, values
+}
+
 func Parse() {
 
 	if len(os.Args) < 2 {
@@ -90,4 +106,8 @@ func Parse() {
 	if showError && len(userDefined) > 0 {
 		panic(fmt.Sprintf("Undefined Flags%v", userDefined))
 	}
+}
+
+func init() {
+	log.SetFlags(0)
 }

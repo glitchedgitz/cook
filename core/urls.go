@@ -1,13 +1,59 @@
 package core
 
 import (
+	"log"
 	"net"
 	"net/url"
 	"path/filepath"
 	"strings"
 
+	"github.com/buger/jsonparser"
+	"github.com/ffuf/pencode/pkg/pencode"
 	"golang.org/x/net/publicsuffix"
 )
+
+func Cases(values []string, cc []string, array *[]string) {
+	var fn func(string) string
+	for _, c := range cc {
+		if c == "U" {
+			fn = strings.ToUpper
+		} else if c == "L" {
+			fn = strings.ToLower
+		} else if c == "T" {
+			fn = strings.Title
+		} else {
+			log.Fatalln("Err: Unknown value for case")
+		}
+
+		for _, v := range values {
+			*array = append(*array, fn(v))
+		}
+	}
+}
+
+func GetJsonField(lines []string, get []string, array *[]string) {
+	for _, line := range lines {
+		data := []byte(line)
+		value, _, _, _ := jsonparser.Get(data, get...)
+		v := string(value)
+		*array = append(*array, v)
+	}
+}
+
+func Encode(lines []string, encodings []string, array *[]string) {
+	chain := pencode.NewChain()
+	for _, line := range lines {
+		err := chain.Initialize(encodings)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		output, err := chain.Encode([]byte(line))
+		if err != nil {
+			log.Fatalln(err)
+		}
+		*array = append(*array, string(output))
+	}
+}
 
 func WordPlay(words []string, joinWith string, fn func(string) string, array *[]string) {
 
@@ -46,7 +92,7 @@ func WordPlay(words []string, joinWith string, fn func(string) string, array *[]
 	}
 }
 
-func FilePath(urls []string, array *[]string) {
+func FileBase(urls []string, array *[]string) {
 	for _, u := range urls {
 		file := filepath.Base(u)
 		*array = append(*array, file)
@@ -71,19 +117,19 @@ func AnalyzeURLs(urls []string, get string, array *[]string) {
 			*array = append(*array, u.User.Username())
 		}
 
-	case "p", "pass", "password":
+	case "p", "pass":
 		fn = func(u *url.URL) {
 			p, _ := u.User.Password()
 			*array = append(*array, p)
 		}
 
-	case "u:p", "user:pass", "username:password":
+	case "u:p", "user:pass":
 		fn = func(u *url.URL) {
 			p, _ := u.User.Password()
 			*array = append(*array, u.User.Username()+":"+p)
 		}
 
-	case "h", "host", "hostname":
+	case "h", "host":
 		fn = func(u *url.URL) {
 			host, _, _ := net.SplitHostPort(u.Host)
 			if strings.Contains(u.Host, ":") {
@@ -93,19 +139,19 @@ func AnalyzeURLs(urls []string, get string, array *[]string) {
 			}
 		}
 
-	case "port", "pr", "pt":
+	case "pr", "port":
 		fn = func(u *url.URL) {
 			_, port, _ := net.SplitHostPort(u.Host)
 			*array = append(*array, port)
 		}
 
-	case "h:p", "host:port":
+	case "h:p", "h:pr", "host:port":
 		fn = func(u *url.URL) {
 			host, port, _ := net.SplitHostPort(u.Host)
 			*array = append(*array, host+":"+port)
 		}
 
-	case "path":
+	case "ph", "path":
 		fn = func(u *url.URL) {
 			*array = append(*array, u.Path)
 		}
@@ -199,4 +245,8 @@ func AnalyzeURLs(urls []string, get string, array *[]string) {
 
 		fn(u)
 	}
+}
+
+func init() {
+	log.SetFlags(0)
 }

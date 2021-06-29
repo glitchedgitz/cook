@@ -42,5 +42,11 @@ func CheckYaml(p string, array *[]string) bool {
 		}
 		return true
 	}
+
+	if val, exists := M["ports"][p]; exists {
+		parsePorts(val, array)
+		return true
+	}
+
 	return false
 }
