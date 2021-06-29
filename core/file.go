@@ -15,7 +15,7 @@ import (
 )
 
 func GetData(url string) []byte {
-	fmt.Fprintf(os.Stderr, "Fetching: %s\n", url)
+	VPrint(fmt.Sprintf("Fetching: %s\n", url))
 
 	res, err := http.Get(url)
 	if err != nil {

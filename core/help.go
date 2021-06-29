@@ -17,11 +17,9 @@ var Banner = `
 ▒▓█    ▄ ▒██░  ██▒▒██░  ██▒▓███▄░                         
  ▒▓███▀ ░░ ████▓▒░░ ████▓▒░▒██▒ █▄
 
-          Gitesh Sharma @giteshnxtlvl
- 
-https://github.com/giteshnxtlvl/cook/
-cook -config
-cook -h `
+             Version ` + Version + `
+    Gitesh Sharma @giteshnxtlvl
+`
 
 func VPrint(msg string) {
 	if Verbose {

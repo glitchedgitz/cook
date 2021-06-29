@@ -7,13 +7,11 @@ import (
 	"strconv"
 	"strings"
 
-	"cook/core"
-	"cook/parse"
+	"github.com/giteshnxtlvl/cook/core"
+	"github.com/giteshnxtlvl/cook/parse"
 
 	"github.com/ffuf/pencode/pkg/pencode"
 )
-
-// var version = "1.6"
 
 var total = 0
 
@@ -25,16 +23,16 @@ var columnCases = make(map[int]map[string]bool)
 var final = []string{""}
 
 var (
-	help             = parse.B("-h")
-	verbose          = parse.B("-v")
-	showCol          = parse.B("-col")
-	Min              = parse.I("-m")
-	appendColumns    = parse.S("-a")
-	showConfig       = parse.B("-conf")
-	caseValue        = parse.S("-c")
-	encodeValue      = parse.S("-e")
-	updateCacheFiles = parse.B("-u")
-	l337             = parse.I("-l")
+	help          = parse.B("-h")
+	verbose       = parse.B("-v")
+	showCol       = parse.B("-col")
+	Min           = parse.I("-m")
+	appendColumns = parse.S("-a")
+	showConfig    = parse.B("-conf")
+	caseValue     = parse.S("-c")
+	encodeValue   = parse.S("-e")
+	update        = parse.S("-u")
+	l337          = parse.I("-l")
 )
 
 // var (
@@ -133,9 +131,12 @@ func parseInput() (map[string]string, []string) {
 		core.ShowConfig()
 	}
 
-	if updateCacheFiles {
-		core.CookConfig()
-		core.UpdateCache()
+	if update != "" {
+		if update == "cook" {
+			core.UpdateCook()
+		}
+		// core.CookConfig()
+		// core.UpdateCache()
 		os.Exit(0)
 	}
 

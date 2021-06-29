@@ -9,7 +9,7 @@ import (
 	"sort"
 	"strings"
 
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 var content []byte
@@ -28,19 +28,28 @@ func CookConfig() {
 
 	files, err := ioutil.ReadDir(configFolder)
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
+
 	wholeTotal := 0
 	totalFiles := 0
 
-	for _, file := range files {
+	var local = make(map[string][]string)
+	getLocalFile(local)
 
+	for _, file := range files {
 		var m = make(map[string]map[string][]string)
 
 		filename := file.Name()
-
 		if !strings.HasSuffix(filename, ".yaml") {
 			continue
+		}
+
+		prefix := ""
+		if val, exists := local[filename]; exists {
+			if val[1] != "" {
+				prefix = val[1] + "-"
+			}
 		}
 
 		content, err = ioutil.ReadFile(path.Join(configFolder, filename))
@@ -60,7 +69,7 @@ func CookConfig() {
 			}
 
 			for kk, vv := range v {
-				M[k][filename[:3]+"-"+kk] = vv
+				M[k][prefix+kk] = vv
 				total++
 			}
 			// M[k] = v
@@ -73,49 +82,6 @@ func CookConfig() {
 	configInfo += fmt.Sprintf("\n    %-25s : %d\n", "TOTAL FILES", totalFiles)
 	configInfo += fmt.Sprintf("    %-25s : %d\n", "TOTAL WORDLISTS SET", wholeTotal)
 }
-
-// func CookConfig() {
-
-// 	VPrint(fmt.Sprintf("Config File  %s", configFile))
-
-// 	if _, err := os.Stat(configFile); err == nil {
-
-// 		content, err = ioutil.ReadFile(configFile)
-// 		if err != nil {
-// 			log.Fatalln("Err: Reading Config File ", err)
-// 		}
-
-// 		if len(content) == 0 {
-// 			fmt.Println("Downloading/Updating cook.yaml...")
-
-// 			config := GetData("https://raw.githubusercontent.com/giteshnxtlvl/cook/main/cook.yaml")
-// 			ioutil.WriteFile(configFile, []byte(config), 0644)
-// 			content = []byte(config)
-// 		}
-
-// 	} else {
-
-// 		err := os.MkdirAll(path.Join(home, ".config", "cook"), os.ModePerm)
-// 		if err != nil {
-// 			log.Fatalln("Err: Making .config folder in HOME/USERPROFILE ", err)
-// 		}
-
-// 		fmt.Println("Downloading/Updating cook.yaml...")
-
-// 		config := GetData("https://raw.githubusercontent.com/giteshnxtlvl/cook/main/cook.yaml")
-// 		err = ioutil.WriteFile(configFile, []byte(config), 0644)
-// 		if err != nil {
-// 			log.Fatalln("Err: Writing Config File", err)
-// 		}
-// 		content = []byte(config)
-// 	}
-
-// 	err := yaml.Unmarshal([]byte(content), &M)
-
-// 	if err != nil {
-// 		log.Fatalln("Err: Parsing YAML", err)
-// 	}
-// }
 
 func ShowMap(set string) {
 	fmt.Println("\n" + Green + strings.ToUpper(set) + Reset)
