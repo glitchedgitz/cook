@@ -12,9 +12,9 @@ var Args = os.Args[1:]
 var showError = false
 var Help = ""
 
-func B(flag string) bool {
+func B(flag, flagL string) bool {
 	for i, cmd := range Args {
-		if cmd == flag {
+		if cmd == flag || cmd == flagL {
 			Args = append(Args[:i], Args[i+1:]...)
 			return true
 		}
@@ -22,10 +22,10 @@ func B(flag string) bool {
 	return false
 }
 
-func S(flag string) string {
+func S(flag, flagL string) string {
 	l := len(Args)
 	for i, cmd := range Args {
-		if cmd == flag {
+		if cmd == flag || cmd == flagL {
 			if i+1 == l {
 				fmt.Printf("Err: Flag '%s' doesn't have any value", cmd)
 				os.Exit(0)
@@ -39,12 +39,12 @@ func S(flag string) string {
 	return ""
 }
 
-func I(flag string) int {
+func I(flag, flagL string) int {
 	intValue := 0
 	l := len(Args)
 
 	for i, cmd := range Args {
-		if cmd == flag {
+		if cmd == flag || cmd == flagL {
 			if i+1 == l || Args[i+1] == "" {
 				fmt.Printf("Err: Flag '%s' doesn't have any value", cmd)
 				os.Exit(0)
@@ -72,7 +72,7 @@ func UserDefinedFlags() map[string]string {
 
 	for _, cmd := range tmp {
 		if len(cmd) > 1 && strings.HasPrefix(cmd, "-") {
-			value := S(cmd)
+			value := S(cmd, cmd)
 			cmd = strings.Replace(cmd, "-", "", 1)
 			userDefined[cmd] = value
 		}
@@ -86,7 +86,7 @@ func ReadSqBr(cmd string) (string, []string) {
 
 	name := c[0]
 	values := strings.Split(c[1][:len(c[1])-1], ":")
-	fmt.Println(values)
+	// fmt.Println(values)
 	return name, values
 }
 

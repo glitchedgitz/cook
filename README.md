@@ -1,4 +1,4 @@
-<img src="./images/test2.png"> 
+<img src="./images/banner.png"> 
 
 # What is COOK?
 Next level wordlist and password generator.
@@ -10,7 +10,7 @@ Next level wordlist and password generator.
 - We all have custom wordlists.
 
 # Features
-<div style="display:grid;grid-template-columns: auto auto auto auto;" >
+<div>
   <div>✔ <a href="#installation">Pre-defined Sets </a></div>
   <div>✔ <a href="#installation">Wordlist URL</a></div>
   <div>✔ <a href="#installation">Charsets like crunch </a></div>
@@ -25,7 +25,7 @@ Next level wordlist and password generator.
   <div>✔ <a href="#installation">Customizable</a></div>
 </div>
 
-# Fast Travel
+<!-- # Fast Travel
 - [Installation](#installation)
 - [Customizing tool](#customizing-tool)
 - [Basic Permutation](#basic-permutation)
@@ -44,38 +44,13 @@ Next level wordlist and password generator.
 - [Contribute](#contribute)
 - [Satisfied?](#satisfied)
 - [THE MAIN FILE](#the-main-file)
-- [Final Words](#final-words)
+- [Final Words](#final-words) -->
 
-# Basic Permutation
-
-  <img src="./images/02.png">  
-  
-  **Recipe**
-  ```
-    cook -start admin,root  -sep _,-  -end secret,critical  start sep end
-  ```
-  ```
-    cook admin,root _,- secret,critical
-  ```
-# Advance Permutation
-Understanding concept is important!
-<img src="./images/09.png">
-
-
-# Predefined Sets
-  <img src="./images/03.png">    
-  
-  **Recipe**
-  ```
-   cook -start admin,root  -sep _ -end secret  start:sep:archive
-  ```
-  ```
-   cook admin,root:_:archive
-  ```
 ### Create your own unique sets  
   <img src="./images/06.png">
 
-### Use it like CRUNCH  
+### Character set
+Use it like CRUNCH  
   <img src="./images/08.png">
 
 
@@ -85,79 +60,50 @@ Understanding concept is important!
 
 **Recipe**
 ```
-  cook -name elliot -birth date(17,Sep,1994) name:birth
+  cook -birth date(17,Sep,1994) elliot _,- birth
 ```
 
 # Ranges
 <img width="640" src="./images/13.png"> 
 
 # Files
-  ### Regex Input from File  
-  Use this feature to fuzz [IIS Shortnames](https://www.youtube.com/watch?v=HrJW6Y9kHC4)
+  ### Using Regex From File  
+  Practical example using [IIS Shortnames](https://www.youtube.com/watch?v=HrJW6Y9kHC4)
   <img src="./images/07.png">    
   
   **Recipe**
   ```
-   cook -exp raft-large-extensions.txt:\.asp.*  /:admin:exp
+   cook -exp az-raft-large-extensions.txt:\.asp.*  /:admin:exp
   ```
-  
-  ### Save Wordlists by Unique Names  
-  Now you don't need to make aliases or type those huge filenames. Just one single name.
-<img src="./images/05.png">
-
-  ### File not found  
-  If file mentioned in param not found, then there will be no errors, Instead it will do this.
-  ```
-   cook -file file_not_exists.txt admin,root:_:file
-  ```
-  ```
-    admin_file_not_exists.txt
-    root_file_not_exists.txt
-  ```
-
-# Cases
-<img src="./images/12.png">
-
 
 ### Minimum
 Use `-min <num>` to print minimum no of columns to print.  
-Example this command will print 1,2,3 digit numbers
+Try this command with -min and without minimum
 ```
-cook n:n:n -min 1
+cook n n n -min 1
 ```
 
 ### Pipe input
 Use `-` as param value for pipe input
 ```
-cook -d - d:anything
+cook -pipe - pipe wordlist
 ```
 
 ### Raw String
-Don't parse the value
+Use it RAW, param's value with `
 ```
-cook -word `date(10,12,1999)`
+cook -raw `date(10,12,1999)` raw
 ```
-
-# Flags
-
-| Flags  | Usage |
-| ------------- | ------------- |
-|  -case  | Define Cases |
-| -min  | Minimum no of columns to print  |
-| -config  | Config Information *cook.yaml*  |
-| -config-path  | Specify path for custom yaml file.  |
-| -update-all  | Update all file's cache  |
-| -h  | Help  |
-| -v  | Verbose  |
 
 # Installation
-#### Using Go
-Install/Update using these commands  
-`go get -u github.com/giteshnxtlvl/cook`
-OR
-`GO111MODULE=on go get -u github.com/giteshnxtlvl/cook`
+### Using Go
+**Install/Update**  
+```
+GO111MODULE=on go get -u github.com/giteshnxtlvl/cook
+```
+For windows: set `GO111MODULE` in env var with value auto
 
-#### Download latest builds  
+### Download latest builds  
   https://github.com/giteshnxtlvl/cook/releases/
 
 # Customizing tool
@@ -207,6 +153,7 @@ This tool is already powered by some awesome community members. Drive this power
 -  [ ] Add new assetnote's wordlists in their sets
 -  [ ] Print url + local saved wordlist path, so user can use them
 -  [ ] Specify start and stop of wordlist
+-  [ ] Search for case-insensitive
 
 # Bugs
 -  [ ] Pipe input can't be used multiple times

@@ -10,7 +10,7 @@ import (
 	"github.com/giteshnxtlvl/cook/core"
 	"github.com/giteshnxtlvl/cook/parse"
 
-	"github.com/ffuf/pencode/pkg/pencode"
+	"github.com/giteshnxtlvl/pencode/pkg/pencode"
 )
 
 var total = 0
@@ -23,35 +23,22 @@ var columnCases = make(map[int]map[string]bool)
 var final = []string{""}
 
 var (
-	help          = parse.B("-h")
-	verbose       = parse.B("-v")
-	showCol       = parse.B("-col")
-	Min           = parse.I("-m")
-	appendColumns = parse.S("-a")
-	showConfig    = parse.B("-conf")
-	caseValue     = parse.S("-c")
-	encodeValue   = parse.S("-e")
-	update        = parse.S("-u")
-	l337          = parse.I("-l")
+	help          = parse.B("-h", "-help")
+	verbose       = parse.B("-v", "-verbose")
+	showCol       = parse.B("-c", "-col")
+	Min           = parse.I("-m", "-min")
+	appendColumns = parse.S("-a", "-append")
+	showConfig    = parse.B("-conf", "-config")
+	caseValue     = parse.S("-ca", "-case")
+	encodeValue   = parse.S("-e", "-encode")
+	update        = parse.S("-u", "-update")
+	l337          = parse.I("-l", "-leet")
 )
-
-// var (
-// 	help             = parse.B("h", "help")
-// 	verbose          = parse.B("v", "verbose")
-// 	showCol          = parse.B("c", "col")
-// 	Min              = parse.I("m", "min")
-// 	appendColumns    = parse.S("a", "append")
-// 	showConfig       = parse.B("cf", "config")
-// 	caseValue        = parse.S("ca", "case")
-// 	encodeValue      = parse.S("e", "encode")
-// 	updateCacheFiles = parse.B("u", "update")
-// 	l337             = parse.I("l", "leet")
-// )
 
 var params = make(map[string]string)
 var leetValues = make(map[string][]string)
 var appendMode = make(map[int]bool)
-var encodeString = []string{}
+var encodeString []string
 var finalFunc = func(s string) {
 	fmt.Println(s)
 }
@@ -87,13 +74,14 @@ func searchMode(cmds []string) {
 
 	for cat, vv := range core.M {
 		for k, v := range vv {
+			k = strings.ToLower(k)
 
 			if strings.Contains(k, search) {
 				fmt.Println()
 				if cat == "files" {
-					fmt.Println(strings.ReplaceAll(k, search, core.Green+search+core.Reset))
+					fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+core.Reset))
 					for _, file := range v {
-						fmt.Printf("\t%s\n", strings.ReplaceAll(file, search, core.Green+search+core.Reset))
+						fmt.Printf("    %s\n", strings.ReplaceAll(file, search, core.Green+search+core.Reset))
 					}
 
 				} else {
@@ -377,6 +365,7 @@ func main() {
 					checkParamAndYaml(u, &vallll)
 
 					for _, g := range get {
+
 						if g == "wordplay" {
 							core.WordPlay(vallll, "*", useless, &tmp)
 						} else if g == "fb" || g == "filebase" || g == "fn" || g == "filename" {
@@ -393,11 +382,11 @@ func main() {
 						} else {
 							core.AnalyzeURLs(vallll, g, &tmp)
 						}
+
 						vallll = tmp
 						tmp = nil
 					}
 					columnValues = append(columnValues, vallll...)
-
 					continue
 				}
 			}

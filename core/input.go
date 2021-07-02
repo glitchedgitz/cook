@@ -2,11 +2,12 @@ package core
 
 import (
 	"bufio"
-	"cook/parse"
 	"log"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/giteshnxtlvl/cook/parse"
 )
 
 // var params = make(map[string]string)

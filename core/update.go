@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"path"
-	"sort"
 	"sync"
 
 	"gopkg.in/yaml.v3"
@@ -60,18 +59,6 @@ func updateFile(file string) {
 	err := ioutil.WriteFile(localFile, content, 0644)
 	if err != nil {
 		panic(err)
-	}
-}
-
-func PrintConfig(m map[string][]string) {
-	fmt.Printf("\n%-25s   %s   %s   %s\n\n", "FILE", "VERSION", "PREFIX", "REPO")
-	var keys []string
-	for k := range m {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-	for _, k := range keys {
-		fmt.Printf("%-25s   %-7s   %-6s   %s\n", k, m[k][0], m[k][1], m[k][2])
 	}
 }
 

@@ -46,10 +46,15 @@ func CookConfig() {
 		}
 
 		prefix := ""
+		configRows := ""
 		if val, exists := local[filename]; exists {
-			if val[1] != "" {
-				prefix = val[1] + "-"
+
+			v, p, r := val[0], val[1], val[2]
+			if p != "" {
+				prefix = p + "-"
 			}
+
+			configRows = fmt.Sprintf("%-4s   %-6s   %s", v, p, r)
 		}
 
 		content, err = ioutil.ReadFile(path.Join(configFolder, filename))
@@ -69,18 +74,17 @@ func CookConfig() {
 			}
 
 			for kk, vv := range v {
-				M[k][prefix+kk] = vv
+				M[k][prefix+strings.ToLower(kk)] = vv
 				total++
 			}
-			// M[k] = v
 		}
 		wholeTotal += total
 		totalFiles++
-		configInfo += fmt.Sprintf("    %-25s : %d\n", filename, total)
+		configInfo += fmt.Sprintf("    %-25s   %-8d %s\n", filename, total, configRows)
 	}
 
-	configInfo += fmt.Sprintf("\n    %-25s : %d\n", "TOTAL FILES", totalFiles)
-	configInfo += fmt.Sprintf("    %-25s : %d\n", "TOTAL WORDLISTS SET", wholeTotal)
+	configInfo += fmt.Sprintf("\n    %-25s   %d\n", "TOTAL FILES", totalFiles)
+	configInfo += fmt.Sprintf("    %-25s   %d\n", "TOTAL WORDLISTS SET", wholeTotal)
 }
 
 func ShowMap(set string) {
@@ -97,35 +101,10 @@ func ShowMap(set string) {
 }
 
 func ShowConfig() {
-
-	fmt.Println("\nCONFIG")
+	fmt.Println(Green + "\n    CONFIG" + Reset)
 	fmt.Printf("    Location: %v\n", configFolder)
-	fmt.Println("\nFILES")
+	fmt.Printf(Green+"\n    %-25s   %s     %s   %s   %s\n"+Reset, "FILE", "SETS", "VERN", "PREFIX", "REPO")
 	fmt.Println(configInfo)
-
-	// ShowMap("charSet")
-	// ShowMap("lists")
-	// ShowMap("patterns")
-	// ShowMap("extensions")
-
-	// fmt.Println("\n" + Green + strings.ToUpper("files") + Reset)
-
-	// keys := []string{}
-	// for k := range M["files"] {
-	// 	keys = append(keys, k)
-	// }
-	// sort.Strings(keys)
-	// for _, k := range keys {
-	// 	files := M["files"][k]
-	// 	fmt.Printf(Green+"  %-12s \n"+White, k)
-	// 	for _, file := range files {
-
-	// 		filebase := filepath.Base(file)
-	// 		fmt.Println("\t" + strings.Replace(file, filebase, Green+filebase+Reset, 1))
-	// 	}
-	// 	fmt.Println()
-
-	// }
 
 	os.Exit(0)
 }

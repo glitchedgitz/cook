@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/buger/jsonparser"
-	"github.com/ffuf/pencode/pkg/pencode"
+	"github.com/giteshnxtlvl/pencode/pkg/pencode"
 	"golang.org/x/net/publicsuffix"
 )
 
