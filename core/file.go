@@ -11,21 +11,26 @@ import (
 	"strings"
 )
 
-func FileValues(file string, array *[]string) {
-
-	readFile, err := os.Open(file)
-
+func FileValues(pattern string, array *[]string) {
+	files, err := filepath.Glob(pattern)
 	if err != nil {
-		log.Fatalln("Err: Opening File ", file)
+		log.Fatalln("Err: In pattern ", err)
 	}
+	for _, file := range files {
+		readFile, err := os.Open(file)
 
-	defer readFile.Close()
+		if err != nil {
+			log.Fatalln("Err: Opening File ", file)
+		}
 
-	fileScanner := bufio.NewScanner(readFile)
+		defer readFile.Close()
 
-	for fileScanner.Scan() {
-		line := strings.TrimRight(fileScanner.Text(), "\r")
-		*array = append(*array, line)
+		fileScanner := bufio.NewScanner(readFile)
+
+		for fileScanner.Scan() {
+			line := strings.TrimRight(fileScanner.Text(), "\r")
+			*array = append(*array, line)
+		}
 	}
 }
 
