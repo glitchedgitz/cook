@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/giteshnxtlvl/cook/core"
 	"github.com/giteshnxtlvl/cook/parse"
@@ -12,8 +13,6 @@ import (
 )
 
 var total = 0
-
-// var home, _ = os.UserHomeDir()
 var otherCases = false
 var columnCases = make(map[int]map[string]bool)
 
@@ -33,24 +32,12 @@ var (
 	l337          = parse.I("-l", "-leet")
 )
 
-var params = make(map[string]string)
-var leetValues = make(map[string][]string)
 var appendMode = make(map[int]bool)
 var encodeString []string
 
 var finalFunc = func(s string) {
 	fmt.Println(s)
 }
-
-var justAppend = func(array *[]string, s string) {
-	*array = append(*array, s)
-}
-
-var justPrint = func(array *[]string, s string) {
-	fmt.Println(s)
-}
-
-var justEnd = justAppend
 
 func useless(s string) string {
 	return s
@@ -158,27 +145,73 @@ func printIt(fn func(string) string) {
 	}
 }
 
-func checkParamAndYaml(p string, array *[]string) {
+func checkParam(p string, array *[]string) bool {
 	if val, exists := params[p]; exists {
-		core.ParseValue(p, val, array)
-		return
-	}
+		if core.PipeInput(val, array) || core.RawInput(val, array) || core.ParseFunc(val, array) || core.ParseFile(p, val, array) || checkMethods(val, array) {
+			return true
+		}
 
-	if core.CheckYaml(p, array) {
-		return
+		*array = append(*array, strings.Split(val, ",")...)
+		return true
 	}
-
-	*array = append(*array, p)
+	return false
 }
 
 func init() {
 	log.SetFlags(0)
 }
 
+func checkMethods(p string, array *[]string) bool {
+	if strings.Count(p, ".") > 0 {
+		splitS := strings.Split(p, ".")
+		u := splitS[0]
+		if _, exists := params[u]; exists {
+
+			get := splitS[1:]
+
+			tmp := []string{}
+			vallll := []string{}
+
+			if !checkParam(u, &vallll) && !core.CheckYaml(u, &vallll) {
+				return false
+			}
+
+			vallll = append(vallll, p)
+
+			for _, g := range get {
+				if g == "wordplay" {
+					core.WordPlay(vallll, "*", useless, &tmp)
+				} else if g == "fb" || g == "filebase" || g == "fn" || g == "filename" {
+					core.FileBase(vallll, &tmp)
+				} else if strings.HasPrefix(g, "json") {
+					_, values := parse.ReadSqBr(g)
+					core.GetJsonField(vallll, values, &tmp)
+				} else if strings.HasPrefix(g, "case") {
+					_, values := parse.ReadSqBr(g)
+					core.Cases(vallll, values, &tmp)
+				} else if strings.HasPrefix(g, "encode") {
+					_, values := parse.ReadSqBr(g)
+					core.Encode(vallll, values, &tmp)
+				} else {
+					core.AnalyzeURLs(vallll, g, &tmp)
+				}
+
+				vallll = tmp
+				tmp = nil
+			}
+			*array = append(*array, vallll...)
+			return true
+		}
+	}
+	return false
+}
+
+var params map[string]string
+var pattern []string
+
 func main() {
-	// start := time.Now()
-	// fmt.Fprintln(os.Stderr, banner)
-	params, pattern := parseInput()
+	start := time.Now()
+	params, pattern = parseInput()
 
 	core.CookConfig()
 
@@ -189,58 +222,10 @@ func main() {
 		for _, p := range strings.Split(param, ",") {
 			core.VPrint(fmt.Sprintf("Param: %s \n", p))
 
-			if core.ParseRanges(p, &columnValues) {
+			if core.RawInput(p, &columnValues) || core.ParseRanges(p, &columnValues) || core.ParseFunc(p, &columnValues) || checkMethods(p, &columnValues) || checkParam(p, &columnValues) || core.CheckYaml(p, &columnValues) {
 				continue
 			}
-
-			// Raw String using `
-			if strings.HasPrefix(p, "`") && strings.HasSuffix(p, "`") {
-				lv := len(p)
-				columnValues = append(columnValues, []string{p[1 : lv-1]}...)
-				continue
-			}
-
-			// Checking for url func/encoding/json
-			if strings.Count(p, ".") > 0 {
-				splitS := strings.Split(p, ".")
-				u := splitS[0]
-				if _, exists := params[u]; exists {
-
-					get := splitS[1:]
-
-					tmp := []string{}
-					vallll := []string{}
-
-					checkParamAndYaml(u, &vallll)
-
-					for _, g := range get {
-
-						if g == "wordplay" {
-							core.WordPlay(vallll, "*", useless, &tmp)
-						} else if g == "fb" || g == "filebase" || g == "fn" || g == "filename" {
-							core.FileBase(vallll, &tmp)
-						} else if strings.HasPrefix(g, "json") {
-							_, values := parse.ReadSqBr(g)
-							core.GetJsonField(vallll, values, &tmp)
-						} else if strings.HasPrefix(g, "case") {
-							_, values := parse.ReadSqBr(g)
-							core.Cases(vallll, values, &tmp)
-						} else if strings.HasPrefix(g, "encode") {
-							_, values := parse.ReadSqBr(g)
-							core.Encode(vallll, values, &tmp)
-						} else {
-							core.AnalyzeURLs(vallll, g, &tmp)
-						}
-
-						vallll = tmp
-						tmp = nil
-					}
-					columnValues = append(columnValues, vallll...)
-					continue
-				}
-			}
-
-			checkParamAndYaml(p, &columnValues)
+			columnValues = append(columnValues, p)
 		}
 
 		if !appendMode[columnNum] || columnNum == 0 {
@@ -262,8 +247,6 @@ func main() {
 		}
 	}
 
-	// elapsed := time.Since(start)
-	// fmt.Fprintf(os.Stderr, "Binomial took %s", elapsed)
-
+	core.VPrint(fmt.Sprintf("Elapsed Time: %s", time.Since(start)))
 	core.VPrint(fmt.Sprintf("Total words generated: %d", total))
 }

@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func FileValues(pattern string, array *[]string) {
+func FileValues(pattern string, allLines map[string]bool) {
 	files, err := filepath.Glob(pattern)
 	if err != nil {
 		log.Fatalln("Err: In pattern ", err)
@@ -29,13 +29,16 @@ func FileValues(pattern string, array *[]string) {
 
 		for fileScanner.Scan() {
 			line := strings.TrimRight(fileScanner.Text(), "\r")
-			*array = append(*array, line)
+			if allLines[line] {
+				continue
+			}
+			allLines[line] = true
 		}
 	}
+
 }
 
 func FindRegex(files []string, expresssion string, array *[]string) {
-
 	for _, file := range files {
 		if strings.HasPrefix(file, "http://") || strings.HasPrefix(file, "https://") {
 			CheckFileCache(file)

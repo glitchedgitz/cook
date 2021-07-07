@@ -11,6 +11,8 @@ import (
 	"github.com/giteshnxtlvl/cook/parse"
 )
 
+var leetValues = make(map[string][]string)
+
 func leetBegin() {
 	leetValues["0"] = []string{"o", "O"}
 	leetValues["1"] = []string{"i", "I", "l", "L"}
@@ -72,9 +74,19 @@ func updateMode(cmds []string) {
 }
 func deleteMode(cmds []string) {
 }
+func cleanMode(cmds []string) {
+}
+
+var cmdFunctions = map[string]func([]string){
+	"search": searchMode,
+	"help":   core.HelpMode,
+	"add":    addMode,
+	"clean":  cleanMode,
+	"update": updateMode,
+	"delete": deleteMode,
+}
 
 func parseInput() (map[string]string, []string) {
-
 	parse.Help = core.Banner
 	parse.Parse()
 
@@ -110,21 +122,12 @@ func parseInput() (map[string]string, []string) {
 	noOfColumns := len(pattern)
 
 	if noOfColumns > 0 {
-		if pattern[0] == "search" {
-			searchMode(pattern[1:])
-		} else if pattern[0] == "help" {
-			core.HelpMode(pattern[1:])
-		} else if pattern[0] == "add" {
-			addMode(pattern[1:])
-		} else if pattern[0] == "update" {
-			updateMode(pattern[1:])
-		} else if pattern[0] == "delete" {
-			deleteMode(pattern[1:])
+		if fn, exists := cmdFunctions[pattern[0]]; exists {
+			fn(pattern[1:])
 		}
 	}
 
 	if Min < 0 {
-
 		Min = noOfColumns - 1
 	} else {
 		if Min > noOfColumns {

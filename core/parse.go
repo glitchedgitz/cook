@@ -2,6 +2,7 @@ package core
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -93,6 +94,8 @@ func ParseFunc(value string, array *[]string) bool {
 	// fmt.Println(funcName)
 	// fmt.Println(funcValues)
 
+	fmt.Print("")
+
 	if funcPatterns, exists := M["patterns"][funcName]; exists {
 
 		funcArgs := strings.Split(funcValues[0], ",")
@@ -121,13 +124,17 @@ var InputFile = make(map[string]bool)
 
 func ParseFile(param string, value string, array *[]string) bool {
 
-	if checkFileInYaml(value, array) {
+	// Checking for file
+	if InputFile[param] && !strings.Contains(value, ":") {
+		tmp := make(map[string]bool)
+		FileValues(value, tmp)
+		for k := range tmp {
+			*array = append(*array, k)
+		}
 		return true
 	}
 
-	// Checking for file
-	if InputFile[param] && !strings.Contains(value, ":") {
-		FileValues(value, array)
+	if checkFileInYaml(value, array) {
 		return true
 	}
 
@@ -151,7 +158,11 @@ func ParseFile(param string, value string, array *[]string) bool {
 
 		if strings.Count(value, ":") == 1 {
 			if _, err := os.Stat(value); err == nil {
-				FileValues(value, array)
+				tmp := make(map[string]bool)
+				FileValues(value, tmp)
+				for k := range tmp {
+					*array = append(*array, k)
+				}
 				return true
 			}
 			t := strings.SplitN(value, ":", 2)
@@ -171,9 +182,7 @@ func ParseFile(param string, value string, array *[]string) bool {
 
 var pipe []string
 
-func ParseValue(param string, value string, array *[]string) {
-
-	// Pipe input
+func PipeInput(value string, array *[]string) bool {
 	if value == "-" {
 		sc := bufio.NewScanner(os.Stdin)
 		if len(pipe) > 0 {
@@ -183,26 +192,18 @@ func ParseValue(param string, value string, array *[]string) {
 			*array = append(*array, sc.Text())
 			pipe = append(pipe, sc.Text())
 		}
-		return
+		return true
 	}
+	return false
+}
 
+func RawInput(value string, array *[]string) bool {
 	if strings.HasPrefix(value, "`") && strings.HasSuffix(value, "`") {
 		lv := len(value)
 		*array = append(*array, []string{value[1 : lv-1]}...)
-		return
+		return true
 	}
-
-	success := ParseFunc(value, array)
-	if success {
-		return
-	}
-
-	success = ParseFile(param, value, array)
-	if success {
-		return
-	}
-
-	*array = append(*array, strings.Split(value, ",")...)
+	return false
 }
 
 func ParseRanges(p string, array *[]string) bool {
@@ -245,7 +246,7 @@ func ParseRanges(p string, array *[]string) bool {
 	return success
 }
 
-func parsePorts(ports []string, array *[]string) {
+func ParsePorts(ports []string, array *[]string) {
 
 	for _, p := range ports {
 
