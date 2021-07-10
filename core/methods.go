@@ -12,6 +12,40 @@ import (
 	"golang.org/x/net/publicsuffix"
 )
 
+var leetValues = map[string][]string{
+	"0": {"o", "O"},
+	"1": {"i", "I", "l", "L"},
+	"3": {"e", "E"},
+	"4": {"a", "A"},
+	"5": {"s", "S"},
+	"6": {"b"},
+	"7": {"t", "T"},
+	"8": {"B"},
+}
+
+func Leet(values []string, mode int, array *[]string) {
+	for _, v := range values {
+		v2 := v
+		for l, ch := range leetValues {
+			for _, c := range ch {
+				if strings.Contains(v, c) {
+					t := strings.ReplaceAll(v, c, l)
+					v2 = strings.ReplaceAll(v2, c, l)
+					if mode == 1 {
+						*array = append(*array, t)
+						if t != v2 {
+							*array = append(*array, v2)
+						}
+					}
+				}
+			}
+		}
+		if mode == 0 {
+			*array = append(*array, v2)
+		}
+	}
+}
+
 func Cases(values []string, cc []string, array *[]string) {
 	var fn func(string) string
 	for _, c := range cc {
@@ -56,9 +90,7 @@ func Encode(lines []string, encodings []string, array *[]string) {
 }
 
 func WordPlay(words []string, joinWith string, fn func(string) string, array *[]string) {
-
 	for _, word := range words {
-
 		str := []string{}
 		w := ""
 
@@ -108,14 +140,10 @@ func AnalyzeURLs(urls []string, get string, array *[]string) {
 	switch get {
 
 	case "s", "scheme":
-		fn = func(u *url.URL) {
-			*array = append(*array, u.Scheme)
-		}
+		fn = func(u *url.URL) { *array = append(*array, u.Scheme) }
 
 	case "u", "user", "username":
-		fn = func(u *url.URL) {
-			*array = append(*array, u.User.Username())
-		}
+		fn = func(u *url.URL) { *array = append(*array, u.User.Username()) }
 
 	case "p", "pass":
 		fn = func(u *url.URL) {
@@ -152,20 +180,14 @@ func AnalyzeURLs(urls []string, get string, array *[]string) {
 		}
 
 	case "ph", "path":
-		fn = func(u *url.URL) {
-			*array = append(*array, u.Path)
-		}
+		fn = func(u *url.URL) { *array = append(*array, u.Path) }
 
 	case "f", "fragment":
-		fn = func(u *url.URL) {
-			*array = append(*array, u.Fragment)
-		}
+		fn = func(u *url.URL) { *array = append(*array, u.Fragment) }
 
 	case "q", "query":
-		fn = func(u *url.URL) {
+		fn = func(u *url.URL) { *array = append(*array, u.RawQuery) }
 
-			*array = append(*array, u.RawQuery)
-		}
 	case "k", "key", "keys":
 		fn = func(u *url.URL) {
 			for k := range u.Query() {
@@ -189,9 +211,7 @@ func AnalyzeURLs(urls []string, get string, array *[]string) {
 		}
 
 	case "d", "domain":
-		fn = func(u *url.URL) {
-			*array = append(*array, u.Scheme+"://"+u.Host)
-		}
+		fn = func(u *url.URL) { *array = append(*array, u.Scheme+"://"+u.Host) }
 
 	case "tld":
 		fn = func(u *url.URL) {
@@ -227,9 +247,7 @@ func AnalyzeURLs(urls []string, get string, array *[]string) {
 		}
 
 	case "alldir":
-		fn = func(u *url.URL) {
-			*array = append(*array, strings.Split(u.Path, "/")...)
-		}
+		fn = func(u *url.URL) { *array = append(*array, strings.Split(u.Path, "/")...) }
 
 	default:
 		return

@@ -1,5 +1,6 @@
 package core
 
+// These are messed up, something is something else
 const (
 	Blue    = "\u001b[38;5;42m"
 	Green   = "\u001b[38;5;45m"

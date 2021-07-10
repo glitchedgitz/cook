@@ -51,6 +51,7 @@ func getConfigFiles(m map[string]bool) {
 
 var wg sync.WaitGroup
 
+// Updating yaml file
 func updateFile(file string) {
 	// fmt.Println("Updating : ", file)
 	defer wg.Done()
@@ -62,6 +63,7 @@ func updateFile(file string) {
 	}
 }
 
+// Updating cook's database
 func UpdateCook() {
 	var local = make(map[string][]string)
 	var repo = make(map[string][]string)

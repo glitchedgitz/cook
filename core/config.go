@@ -26,7 +26,9 @@ func CookConfig() {
 
 	VPrint(fmt.Sprintf("Config Folder  %s", configFolder))
 
-	files, err := ioutil.ReadDir(configFolder)
+	filesFolders := path.Join(configFolder, "yaml")
+
+	files, err := ioutil.ReadDir(filesFolders)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -41,9 +43,6 @@ func CookConfig() {
 		var m = make(map[string]map[string][]string)
 
 		filename := file.Name()
-		if !strings.HasSuffix(filename, ".yaml") {
-			continue
-		}
 
 		prefix := ""
 		configRows := ""
@@ -57,7 +56,7 @@ func CookConfig() {
 			configRows = fmt.Sprintf("%-4s   %-6s   %s", v, p, r)
 		}
 
-		content, err = ioutil.ReadFile(path.Join(configFolder, filename))
+		content, err = ioutil.ReadFile(path.Join(filesFolders, filename))
 		if err != nil {
 			log.Fatalln("Err: Reading Config File ", err)
 		}

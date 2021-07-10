@@ -1,6 +1,7 @@
 package core
 
 import (
+	"bufio"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -12,8 +13,9 @@ import (
 	"sync"
 )
 
+// Return data from url
 func GetData(url string) []byte {
-	VPrint(fmt.Sprintf("Fetching: %s\n", url))
+	VPrint(fmt.Sprintf("GetData(): Fetching %s\n", url))
 
 	res, err := http.Get(url)
 	if err != nil {
@@ -26,29 +28,69 @@ func GetData(url string) []byte {
 	return data
 }
 
-func CheckFileCache(url string) {
-	filename := filepath.Base(url)
-
+func makeCacheFolder() {
 	err := os.MkdirAll(path.Join(home, ".cache", "cook"), os.ModePerm)
 	if err != nil {
 		log.Fatalln("Err: Making .cache folder in HOME/USERPROFILE ", err)
 	}
+}
 
-	if _, err := os.Stat(path.Join(home, ".cache", "cook", filename)); err != nil {
-		AppendToFile(path.Join(home, ".cache", "cook", filename), GetData(url))
+// Checking if file's cache alreay present
+func CheckFileCache(filename string, files []string) {
+
+	makeCacheFolder()
+	filepath := path.Join(home, ".cache", "cook", filename)
+
+	if _, err := os.Stat(filepath); err != nil {
+		var tmp = make(map[string]bool)
+		f, err := os.OpenFile(filepath, os.O_CREATE, 0644)
+		if err != nil {
+			panic(err)
+		}
+
+		defer f.Close()
+
+		for _, file := range files {
+			VPrint(fmt.Sprintf("GetData(): Fetching %s\n", file))
+
+			res, err := http.Get(file)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			defer res.Body.Close()
+
+			fileScanner := bufio.NewScanner(res.Body)
+
+			for fileScanner.Scan() {
+				line := fileScanner.Text()
+				if tmp[line] {
+					continue
+				}
+				tmp[line] = true
+				if _, err = f.WriteString(fileScanner.Text() + "\n"); err != nil {
+					log.Fatal(err)
+				}
+			}
+
+			if err := fileScanner.Err(); err != nil {
+				log.Fatal(err)
+			}
+		}
+
 	}
 }
 
 func AppendToFile(filepath string, data []byte) {
 	f, err := os.OpenFile(filepath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	defer f.Close()
 
 	if _, err = f.Write(data); err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 }
 

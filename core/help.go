@@ -38,17 +38,17 @@ func HelpMode(h []string) {
 	help := strings.ToLower(h[0])
 
 	if help == "case" {
-		fmt.Println(CaseHelp)
+		fmt.Fprintln(os.Stderr, CaseHelp)
 	} else if help == "encode" {
-		fmt.Println(EncodeHelp)
+		fmt.Fprintln(os.Stderr, EncodeHelp)
 	} else if help == "function" {
-		fmt.Println(FuncHelp)
+		fmt.Fprintln(os.Stderr, FuncHelp)
 	} else if help == "pattern" {
-		fmt.Println("Pattern!! under construction, better not learn about them")
+		fmt.Fprintln(os.Stderr, "Pattern!! under construction, better not learn about them")
 	} else if help == "usage" {
-		fmt.Println(UsageHelp)
+		fmt.Fprintln(os.Stderr, UsageHelp)
 	} else {
-		fmt.Println("Ask for these... case, encode, file, function, patterns or usage")
+		fmt.Fprintln(os.Stderr, "Ask for these... case, encode, file, function, patterns or usage")
 	}
 	os.Exit(0)
 }
@@ -205,13 +205,13 @@ USING -min
 `
 
 func ShowHelp() {
-	fmt.Println(Banner)
+	fmt.Fprintln(os.Stderr, Banner)
 
-	fmt.Println("\nGITHUB")
-	fmt.Println("    https://github.com/giteshnxtlvl/cook")
+	fmt.Fprintln(os.Stderr, "\nGITHUB")
+	fmt.Fprintln(os.Stderr, "    https://github.com/giteshnxtlvl/cook")
 
-	fmt.Println(FlagsHelp)
+	fmt.Fprintln(os.Stderr, FlagsHelp)
 
-	fmt.Println(Reset)
+	fmt.Fprintln(os.Stderr, Reset)
 	os.Exit(0)
 }

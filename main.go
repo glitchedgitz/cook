@@ -3,13 +3,12 @@ package main
 import (
 	"fmt"
 	"log"
+	"strconv"
 	"strings"
 	"time"
 
 	"github.com/giteshnxtlvl/cook/core"
 	"github.com/giteshnxtlvl/cook/parse"
-
-	"github.com/giteshnxtlvl/pencode/pkg/pencode"
 )
 
 var total = 0
@@ -35,14 +34,6 @@ var (
 var appendMode = make(map[int]bool)
 var encodeString []string
 
-var finalFunc = func(s string) {
-	fmt.Println(s)
-}
-
-func useless(s string) string {
-	return s
-}
-
 func prefixSufixMode(values []string, array *[]string, fn func(string) string) {
 	till := len(final)
 	if len(final) > len(values) {
@@ -62,88 +53,49 @@ func applyCase(values []string, array *[]string, fn func(string) string) {
 }
 
 func applyColumnCases(columnValues []string, columnNum int, applyFunc func([]string, *[]string, func(string) string)) {
-	temp := []string{}
+	tmp := []string{}
 
-	// Using cases for columnValues
 	if len(columnCases[columnNum]) > 0 {
 		otherCases = true
-		//All cases
+		allcases := false
+
 		if columnCases[columnNum]["A"] {
+			allcases = true
+		}
 
-			applyFunc(columnValues, &temp, strings.ToUpper)
-			applyFunc(columnValues, &temp, strings.ToLower)
-			applyFunc(columnValues, &temp, strings.Title)
+		if allcases || (!core.UpperCase && columnCases[columnNum]["U"]) {
+			applyFunc(columnValues, &tmp, strings.ToUpper)
+		}
 
-		} else {
+		if allcases || columnCases[columnNum]["L"] {
+			applyFunc(columnValues, &tmp, strings.ToLower)
+		}
 
-			if !core.UpperCase && columnCases[columnNum]["U"] {
-				applyFunc(columnValues, &temp, strings.ToUpper)
-			}
-
-			if columnCases[columnNum]["L"] {
-				applyFunc(columnValues, &temp, strings.ToLower)
-			}
-
-			if columnCases[columnNum]["T"] {
-				applyFunc(columnValues, &temp, strings.Title)
-			}
-
+		if allcases || columnCases[columnNum]["T"] {
+			applyFunc(columnValues, &tmp, strings.Title)
 		}
 
 	} else {
-		applyFunc(columnValues, &temp, useless)
+		applyFunc(columnValues, &tmp, useless)
 	}
 
-	final = temp
+	final = tmp
 }
 
-func encode(inputdata string) {
-	chain := pencode.NewChain()
-	err := chain.Initialize(encodeString)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	output, err := chain.Encode([]byte(inputdata))
-	if err != nil {
-		log.Fatalln(err)
-	}
-	fmt.Println(string(output))
-}
-
-func printIt(fn func(string) string) {
-	if l337 > -1 {
-		for _, v := range final {
-			v = fn(v)
-			finalFunc(v)
-			v2 := v
-			for l, ch := range leetValues {
-				for _, c := range ch {
-					if strings.Contains(v, c) {
-						total++
-						t := strings.ReplaceAll(v, c, l)
-						v2 = strings.ReplaceAll(v2, c, l)
-						if l337 == 1 {
-							finalFunc(t)
-							if t != v2 {
-								finalFunc(v2)
-							}
-						}
-					}
-				}
-			}
-			if l337 == 0 {
-				finalFunc(v2)
-			}
-		}
-	} else {
-		// otherCases = true
-		for _, v := range final {
-			v = fn(v)
-			total++
-			finalFunc(v)
-		}
-	}
-}
+// func printIt(fn func(string) string) {
+// 	if l337 > -1 {
+// 		for _, v := range final {
+// 			leetIt(fn(v))
+// 		}
+// 	} else {
+// 		// otherCases = true
+// 		core.VPrint(fmt.Sprintf("%-40s: %s", "Time before for loop", time.Since(start)))
+// 		for _, v := range final {
+// 			total++
+// 			finalFunc(fn(v))
+// 		}
+// 	}
+// }
 
 func checkParam(p string, array *[]string) bool {
 	if val, exists := params[p]; exists {
@@ -155,10 +107,6 @@ func checkParam(p string, array *[]string) bool {
 		return true
 	}
 	return false
-}
-
-func init() {
-	log.SetFlags(0)
 }
 
 func checkMethods(p string, array *[]string) bool {
@@ -189,6 +137,13 @@ func checkMethods(p string, array *[]string) bool {
 				} else if strings.HasPrefix(g, "case") {
 					_, values := parse.ReadSqBr(g)
 					core.Cases(vallll, values, &tmp)
+				} else if strings.HasPrefix(g, "leet") {
+					_, value := parse.ReadSqBr(g)
+					mode, err := strconv.Atoi(value[0])
+					if err != nil {
+						log.Fatalf("Err: Leet can be 0 or 1")
+					}
+					core.Leet(vallll, mode, &tmp)
 				} else if strings.HasPrefix(g, "encode") {
 					_, values := parse.ReadSqBr(g)
 					core.Encode(vallll, values, &tmp)
@@ -209,8 +164,9 @@ func checkMethods(p string, array *[]string) bool {
 var params map[string]string
 var pattern []string
 
+var start = time.Now()
+
 func main() {
-	start := time.Now()
 	params, pattern = parseInput()
 
 	core.CookConfig()
@@ -221,12 +177,14 @@ func main() {
 
 		for _, p := range strings.Split(param, ",") {
 			core.VPrint(fmt.Sprintf("Param: %s \n", p))
-
 			if core.RawInput(p, &columnValues) || core.ParseRanges(p, &columnValues) || core.ParseFunc(p, &columnValues) || checkMethods(p, &columnValues) || checkParam(p, &columnValues) || core.CheckYaml(p, &columnValues) {
 				continue
 			}
 			columnValues = append(columnValues, p)
+
 		}
+
+		core.VPrint(fmt.Sprintf("%-40s: %s", "Time after getting values", time.Since(start)))
 
 		if !appendMode[columnNum] || columnNum == 0 {
 			applyColumnCases(columnValues, columnNum, applyCase)
@@ -234,19 +192,17 @@ func main() {
 			applyColumnCases(columnValues, columnNum, prefixSufixMode)
 		}
 
+		core.VPrint(fmt.Sprintf("%-40s: %s", "Time ApplyColumnCases", time.Since(start)))
+
 		if columnNum >= Min {
-			if core.UpperCase {
-				printIt(strings.ToUpper)
-			}
-			if core.LowerCase {
-				printIt(strings.ToLower)
-			}
-			if (!core.LowerCase && !core.UpperCase) || otherCases {
-				printIt(useless)
-			}
+			print()
 		}
 	}
 
-	core.VPrint(fmt.Sprintf("Elapsed Time: %s", time.Since(start)))
-	core.VPrint(fmt.Sprintf("Total words generated: %d", total))
+	core.VPrint(fmt.Sprintf("%-40s: %s", "Elapsed Time", time.Since(start)))
+	core.VPrint(fmt.Sprintf("%-40s: %d", "Total words generated", total))
+}
+
+func init() {
+	log.SetFlags(0)
 }

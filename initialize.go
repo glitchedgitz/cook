@@ -4,25 +4,13 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path"
 	"strconv"
 	"strings"
 
 	"github.com/giteshnxtlvl/cook/core"
 	"github.com/giteshnxtlvl/cook/parse"
 )
-
-var leetValues = make(map[string][]string)
-
-func leetBegin() {
-	leetValues["0"] = []string{"o", "O"}
-	leetValues["1"] = []string{"i", "I", "l", "L"}
-	leetValues["3"] = []string{"e", "E"}
-	leetValues["4"] = []string{"a", "A"}
-	leetValues["5"] = []string{"s", "S"}
-	leetValues["6"] = []string{"b"}
-	leetValues["7"] = []string{"t", "T"}
-	leetValues["8"] = []string{"B"}
-}
 
 func analyseParams(params map[string]string) {
 	for param, value := range params {
@@ -53,9 +41,21 @@ func searchMode(cmds []string) {
 					for _, file := range v {
 						fmt.Printf("    %s\n", strings.ReplaceAll(file, search, core.Green+search+core.Reset))
 					}
-
+				} else if cat == "raw-files" {
+					fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+core.Reset))
+					for _, file := range v {
+						fmt.Printf("    %s\n", strings.ReplaceAll(file, search, core.Green+search+core.Reset))
+					}
+				} else if cat == "patterns" {
+					fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+core.Reset))
+					fmt.Printf("    %s%s{\n", k, strings.ReplaceAll(v[0], search, core.Green+search+core.Reset))
+					for _, file := range v[1:] {
+						fmt.Printf("\t%s\n", strings.ReplaceAll(file, search, core.Green+search+core.Reset))
+					}
+					fmt.Println("    }")
 				} else {
-					fmt.Printf("%s \n\t%v\n", k, v)
+					fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+core.Reset))
+					fmt.Println(strings.ReplaceAll(fmt.Sprintf("    %v\n", v), search, core.Green+search+core.Reset))
 				}
 				found = true
 			}
@@ -70,11 +70,23 @@ func searchMode(cmds []string) {
 
 func addMode(cmds []string) {
 }
+
+var home, _ = os.UserHomeDir()
+
 func updateMode(cmds []string) {
+	filename := cmds[0]
+	filepath := path.Join(home, ".cache", "cook", filename)
+	if files, exists := core.M["files"][filename]; exists {
+		os.Remove(filepath)
+		core.CheckFileCache(filename, files)
+	}
 }
+
 func deleteMode(cmds []string) {
 }
 func cleanMode(cmds []string) {
+}
+func infoMode(cmds []string) {
 }
 
 var cmdFunctions = map[string]func([]string){
@@ -82,6 +94,7 @@ var cmdFunctions = map[string]func([]string){
 	"help":   core.HelpMode,
 	"add":    addMode,
 	"clean":  cleanMode,
+	"info":   infoMode,
 	"update": updateMode,
 	"delete": deleteMode,
 }
@@ -110,7 +123,7 @@ func parseInput() (map[string]string, []string) {
 
 	if len(encodeValue) > 0 {
 		encodeString = strings.Split(encodeValue, ",")
-		finalFunc = encode
+		doEncode = true
 	}
 
 	core.Verbose = verbose
@@ -142,11 +155,11 @@ func parseInput() (map[string]string, []string) {
 	}
 
 	if l337 > -1 {
+		doLeet = true
 		if l337 > 1 {
 			fmt.Println("Err: -1337 can be 0 or 1, 0 - Calm Mode & 1 - Angry Mode", l337)
 			os.Exit(0)
 		}
-		leetBegin()
 	}
 
 	if len(appendColumns) > 0 {

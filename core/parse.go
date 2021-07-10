@@ -11,18 +11,12 @@ import (
 	"github.com/giteshnxtlvl/cook/parse"
 )
 
-// var params = make(map[string]string)
-
 var (
-	Help    = false
-	Verbose = false
-	// Min     = 0
-	// showConfig       = false
+	Help       = false
+	Verbose    = false
 	ConfigPath = ""
-	// caseValue        = ""
-	// updateCacheFiles = false
-	UpperCase = false
-	LowerCase = false
+	UpperCase  = false
+	LowerCase  = false
 )
 
 var columnCases = make(map[int]map[string]bool)
@@ -126,11 +120,7 @@ func ParseFile(param string, value string, array *[]string) bool {
 
 	// Checking for file
 	if InputFile[param] && !strings.Contains(value, ":") {
-		tmp := make(map[string]bool)
-		FileValues(value, tmp)
-		for k := range tmp {
-			*array = append(*array, k)
-		}
+		AddFilesToArray(value, array)
 		return true
 	}
 
@@ -148,34 +138,30 @@ func ParseFile(param string, value string, array *[]string) bool {
 			test1, test2 := one+":"+two, two+":"+three
 
 			if _, err := os.Stat(test1); err == nil {
-				FindRegex([]string{test1}, three, array)
+				FileRegex(test1, three, array)
 				return true
 			} else if _, err := os.Stat(test2); err == nil {
-				FindRegex([]string{one}, test2, array)
+				FileRegex(one, test2, array)
 				return true
 			}
 		}
 
-		if strings.Count(value, ":") == 1 {
-			if _, err := os.Stat(value); err == nil {
-				tmp := make(map[string]bool)
-				FileValues(value, tmp)
-				for k := range tmp {
-					*array = append(*array, k)
-				}
-				return true
-			}
-			t := strings.SplitN(value, ":", 2)
-			file, reg := t[0], t[1]
+		// if strings.Count(value, ":") == 1 {
+		// 	if _, err := os.Stat(value); err == nil {
+		// 		AddFilesToArray(value, array)
+		// 		return true
+		// 	}
+		// 	t := strings.SplitN(value, ":", 2)
+		// 	file, reg := t[0], t[1]
 
-			if strings.HasSuffix(file, ".txt") {
-				FindRegex([]string{file}, reg, array)
-				return true
-			} else if files, exists := M["files"][file]; exists {
-				FindRegex(files, reg, array)
-				return true
-			}
-		}
+		// 	if strings.HasSuffix(file, ".txt") {
+		// 		FileRegex([]string{file}, reg, array)
+		// 		return true
+		// 	} else if files, exists := M["files"][file]; exists {
+		// 		FileRegex(files, reg, array)
+		// 		return true
+		// 	}
+		// }
 	}
 	return false
 }

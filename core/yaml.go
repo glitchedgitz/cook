@@ -7,21 +7,30 @@ import (
 )
 
 func checkFileInYaml(p string, array *[]string) bool {
-	tmp := make(map[string]bool)
 	if files, exists := M["files"][p]; exists {
+
+		CheckFileCache(p, files)
+		FileValues(path.Join(home, ".cache", "cook", p), array)
+		return true
+
+	} else if files, exists := M["raw-files"][p]; exists {
+
+		tmp := make(map[string]bool)
 		for _, file := range files {
 			if strings.HasPrefix(file, "http://") || strings.HasPrefix(file, "https://") {
-				CheckFileCache(file)
-				FileValues(path.Join(home, ".cache", "cook", filepath.Base(file)), tmp)
+				RawFileValues(path.Join(home, ".cache", "cook", filepath.Base(file)), tmp)
 			} else {
-				FileValues(file, tmp)
+				RawFileValues(file, tmp)
 			}
 		}
+
 		for k := range tmp {
 			*array = append(*array, k)
 		}
 		return true
+
 	}
+
 	return false
 }
 
