@@ -182,7 +182,7 @@ If you like the tool, support the development of tool, this will speed up develo
 
 # Contributors
 - @giteshnxtlvl - Core
-- @noraj - Added ffuf command in [Using COOK with other tools](#using-cook-with-other-tools) and suggested nice appraoch for config file.
+- @noraj - Added ffuf command in [Using COOK with other tools](./Resources.md#using-cook-with-other-tools) and suggested nice appraoch for config file.
 
 # Upcoming Features
 - Endpoints Analyser
