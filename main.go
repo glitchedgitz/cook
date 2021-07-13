@@ -82,21 +82,6 @@ func applyColumnCases(columnValues []string, columnNum int, applyFunc func([]str
 	final = tmp
 }
 
-// func printIt(fn func(string) string) {
-// 	if l337 > -1 {
-// 		for _, v := range final {
-// 			leetIt(fn(v))
-// 		}
-// 	} else {
-// 		// otherCases = true
-// 		core.VPrint(fmt.Sprintf("%-40s: %s", "Time before for loop", time.Since(start)))
-// 		for _, v := range final {
-// 			total++
-// 			finalFunc(fn(v))
-// 		}
-// 	}
-// }
-
 func checkParam(p string, array *[]string) bool {
 	if val, exists := params[p]; exists {
 		if core.PipeInput(val, array) || core.RawInput(val, array) || core.ParseFunc(val, array) || core.ParseFile(p, val, array) || checkMethods(val, array) {
@@ -128,27 +113,40 @@ func checkMethods(p string, array *[]string) bool {
 
 			for _, g := range get {
 				if g == "wordplay" {
+
 					core.WordPlay(vallll, "*", useless, &tmp)
+
 				} else if g == "fb" || g == "filebase" || g == "fn" || g == "filename" {
 					core.FileBase(vallll, &tmp)
+
 				} else if strings.HasPrefix(g, "json") {
-					_, values := parse.ReadSqBr(g)
+
+					_, values := parse.ReadSqBrSepBy(g, ":")
 					core.GetJsonField(vallll, values, &tmp)
+
 				} else if strings.HasPrefix(g, "case") {
-					_, values := parse.ReadSqBr(g)
+
+					_, values := parse.ReadSqBrSepBy(g, ":")
 					core.Cases(vallll, values, &tmp)
+
 				} else if strings.HasPrefix(g, "leet") {
+
 					_, value := parse.ReadSqBr(g)
-					mode, err := strconv.Atoi(value[0])
+					mode, err := strconv.Atoi(value)
 					if err != nil {
-						log.Fatalf("Err: Leet can be 0 or 1")
+						log.Fatalln("Err: Leet can be 0 or 1")
 					}
 					core.Leet(vallll, mode, &tmp)
+
 				} else if strings.HasPrefix(g, "encode") {
-					_, values := parse.ReadSqBr(g)
+
+					_, values := parse.ReadSqBrSepBy(g, ":")
 					core.Encode(vallll, values, &tmp)
+
 				} else {
+
 					core.AnalyzeURLs(vallll, g, &tmp)
+
 				}
 
 				vallll = tmp
@@ -177,7 +175,7 @@ func main() {
 
 		for _, p := range strings.Split(param, ",") {
 			core.VPrint(fmt.Sprintf("Param: %s \n", p))
-			if core.RawInput(p, &columnValues) || core.ParseRanges(p, &columnValues) || core.ParseFunc(p, &columnValues) || checkMethods(p, &columnValues) || checkParam(p, &columnValues) || core.CheckYaml(p, &columnValues) {
+			if core.RawInput(p, &columnValues) || core.ParseRanges(p, &columnValues) || checkMethods(p, &columnValues) || checkParam(p, &columnValues) || core.CheckYaml(p, &columnValues) {
 				continue
 			}
 			columnValues = append(columnValues, p)

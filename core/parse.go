@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/giteshnxtlvl/cook/parse"
+	"github.com/giteshnxtlvl/cook2/core"
 )
 
 var (
@@ -77,6 +78,15 @@ func UpdateCases(caseValue string, noOfColumns int) map[int]map[string]bool {
 	return columnCases
 }
 
+func PrintPattern(k string, v []string, search string) {
+	fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+core.Reset))
+	fmt.Printf("    %s%s{\n", k, strings.ReplaceAll(v[0], search, core.Blue+search+core.Reset))
+	for _, file := range v[1:] {
+		fmt.Printf("\t%s\n", strings.ReplaceAll(file, search, core.Blue+search+core.Reset))
+	}
+	fmt.Println("    }")
+}
+
 //Checking for patterns/functions
 func ParseFunc(value string, array *[]string) bool {
 
@@ -84,7 +94,7 @@ func ParseFunc(value string, array *[]string) bool {
 		return false
 	}
 
-	funcName, funcValues := parse.ReadCrBr(value)
+	funcName, funcArgs := parse.ReadCrBrSepBy(value, ",")
 	// fmt.Println(funcName)
 	// fmt.Println(funcValues)
 
@@ -92,14 +102,14 @@ func ParseFunc(value string, array *[]string) bool {
 
 	if funcPatterns, exists := M["patterns"][funcName]; exists {
 
-		funcArgs := strings.Split(funcValues[0], ",")
 		funcDef := strings.Split(funcPatterns[0][1:len(funcPatterns[0])-1], ",")
 
 		// fmt.Printf("Func Arg: %v", funcArgs)
 		// fmt.Printf("\tFunc Def: %v", funcDef)
 
 		if len(funcDef) != len(funcArgs) {
-			log.Fatalf("\nErr: No of Arguments are different for %s\n", funcPatterns)
+			log.Fatalln("\nErr: No of Arguments are different for")
+			PrintPattern(funcName, funcPatterns, funcName)
 		}
 
 		for _, p := range funcPatterns[1:] {
@@ -120,7 +130,8 @@ func ParseFile(param string, value string, array *[]string) bool {
 
 	// Checking for file
 	if InputFile[param] && !strings.Contains(value, ":") {
-		AddFilesToArray(value, array)
+		// AddFilesToArray(value, array)
+		FileValues(value, array)
 		return true
 	}
 
@@ -197,9 +208,8 @@ func ParseRanges(p string, array *[]string) bool {
 	success := false
 	chars := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
-	if strings.HasPrefix(p, "[") && strings.HasSuffix(p, "]") && strings.Contains(p, "-") {
+	if strings.Count(p, "-") == 1 {
 
-		p = strings.ReplaceAll(strings.ReplaceAll(p, "[", ""), "]", "")
 		numRange := strings.SplitN(p, "-", 2)
 		from := numRange[0]
 		to := numRange[1]
@@ -235,26 +245,13 @@ func ParseRanges(p string, array *[]string) bool {
 func ParsePorts(ports []string, array *[]string) {
 
 	for _, p := range ports {
-
-		if strings.Contains(p, "-") {
-			pRange := strings.Split(p, "-")
-
-			from, err1 := strconv.Atoi(pRange[0])
-			till, err2 := strconv.Atoi(pRange[1])
-
-			if err1 != nil || err2 != nil || from > till {
-				log.Printf("Err: Wrong Range :/ %d-%d", from, till)
-			}
-
-			for i := from; i <= till; i++ {
-				*array = append(*array, strconv.Itoa(i))
-			}
-		} else {
-			port, err := strconv.Atoi(p)
-			if err != nil {
-				log.Printf("Err: Is this port number -_-?? '%s'", p)
-			}
-			*array = append(*array, strconv.Itoa(port))
+		if ParseRanges(p, array) {
+			continue
 		}
+		port, err := strconv.Atoi(p)
+		if err != nil {
+			log.Printf("Err: Is this port number -_-?? '%s'", p)
+		}
+		*array = append(*array, strconv.Itoa(port))
 	}
 }

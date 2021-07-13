@@ -8,8 +8,6 @@ import (
 	"net/http"
 	"os"
 	"path"
-	"path/filepath"
-	"strings"
 	"sync"
 )
 
@@ -35,7 +33,7 @@ func makeCacheFolder() {
 	}
 }
 
-// Checking if file's cache alreay present
+// Checking if file's cache present
 func CheckFileCache(filename string, files []string) {
 
 	makeCacheFolder()
@@ -77,7 +75,25 @@ func CheckFileCache(filename string, files []string) {
 				log.Fatal(err)
 			}
 		}
+		checkM[filename] = files
+		writeYaml(path.Join(configFolder, "check.yaml"), checkM)
 
+	} else {
+		chkfiles := checkM[filename]
+		if len(files) != len(chkfiles) {
+			os.Remove(filepath)
+			CheckFileCache(filename, files)
+			writeYaml(path.Join(configFolder, "check.yaml"), checkM)
+			return
+		}
+		for i, v := range chkfiles {
+			if v != files[i] {
+				os.Remove(filepath)
+				CheckFileCache(filename, files)
+				writeYaml(path.Join(configFolder, "check.yaml"), checkM)
+				break
+			}
+		}
 	}
 }
 
@@ -94,36 +110,29 @@ func AppendToFile(filepath string, data []byte) {
 	}
 }
 
-func UpdateCache() {
+func UpdateCachedFiles() {
 	fmt.Println(Banner)
 
-	goaddresses := make(chan string)
+	type filedata struct {
+		filepath string
+		files    []string
+	}
+
+	goaddresses := make(chan filedata)
 	var wg sync.WaitGroup
 
-	for i := 0; i < 20; i++ {
+	for i := 0; i < 10; i++ {
 		go func() {
-			for file := range goaddresses {
-				func(file string) {
-					defer wg.Done()
-					fmt.Println("Updating ", file)
-					filename := filepath.Base(file)
-					filepath := path.Join(home, ".cache", "cook", filename)
-					os.Remove(filepath)
-					AppendToFile(filepath, GetData(file))
-				}(file)
+			for f := range goaddresses {
+				CheckFileCache(f.filepath, f.files)
+				wg.Done()
 			}
 		}()
 	}
 
-	for _, files := range M["files"] {
-		// fmt.Println("\n" + Blue + key + Reset)
-
-		for _, file := range files {
-			if strings.HasPrefix(file, "http://") || strings.HasPrefix(file, "https://") {
-				wg.Add(1)
-				goaddresses <- file
-			}
-		}
+	for k, files := range checkM {
+		wg.Add(1)
+		goaddresses <- filedata{path.Join(home, ".cache", "cook", k), files}
 	}
 
 	wg.Wait()

@@ -72,7 +72,6 @@ func RawFileValues(pattern string, allLines map[string]bool) {
 }
 
 func FindRegex(data []byte, expresssion string, array *[]string) {
-
 	r, err := regexp.Compile(expresssion)
 	if err != nil {
 		log.Fatalln(err)

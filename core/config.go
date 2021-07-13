@@ -18,6 +18,46 @@ var configFolder = `E:\tools\base\cook`
 var configInfo string
 var M = make(map[string]map[string][]string)
 
+var checkM = make(map[string][]string)
+
+func readCheckYaml() {
+	filepath := path.Join(configFolder, "check.yaml")
+	content, err := ioutil.ReadFile(filepath)
+	if err != nil {
+		log.Fatalln("Err: Reading File ", filepath, err)
+	}
+
+	err = yaml.Unmarshal([]byte(content), &checkM)
+	if err != nil {
+		log.Fatalf("Err: Parsing YAML %s %v", filepath, err)
+	}
+}
+
+func readYaml(filepath string, m map[string]map[string][]string) {
+	content, err := ioutil.ReadFile(filepath)
+	if err != nil {
+		log.Fatalln("Err: Reading File ", filepath, err)
+	}
+
+	err = yaml.Unmarshal([]byte(content), &m)
+	if err != nil {
+		log.Fatalf("Err: Parsing YAML %s %v", filepath, err)
+	}
+}
+
+func writeYaml(filepath string, m map[string][]string) {
+	data, err := yaml.Marshal(&m)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = ioutil.WriteFile(filepath, data, 0)
+	if err != nil {
+		log.Fatalln("Err: Writing File ", filepath, err)
+	}
+}
+
 func CookConfig() {
 
 	if len(os.Getenv("COOK")) > 0 {
@@ -56,15 +96,7 @@ func CookConfig() {
 			configRows = fmt.Sprintf("%-4s   %-6s   %s", v, p, r)
 		}
 
-		content, err = ioutil.ReadFile(path.Join(filesFolders, filename))
-		if err != nil {
-			log.Fatalln("Err: Reading Config File ", err)
-		}
-
-		err := yaml.Unmarshal([]byte(content), &m)
-		if err != nil {
-			log.Fatalf("Err: Parsing YAML %s %v", filename, err)
-		}
+		readYaml(path.Join(filesFolders, filename), m)
 
 		total := 0
 		for k, v := range m {
@@ -84,10 +116,12 @@ func CookConfig() {
 
 	configInfo += fmt.Sprintf("\n    %-25s   %d\n", "TOTAL FILES", totalFiles)
 	configInfo += fmt.Sprintf("    %-25s   %d\n", "TOTAL WORDLISTS SET", wholeTotal)
+
+	readCheckYaml()
 }
 
 func ShowMap(set string) {
-	fmt.Println("\n" + Green + strings.ToUpper(set) + Reset)
+	fmt.Println("\n" + Blue + strings.ToUpper(set) + Reset)
 
 	keys := []string{}
 	for k := range M[set] {
@@ -100,9 +134,9 @@ func ShowMap(set string) {
 }
 
 func ShowConfig() {
-	fmt.Println(Green + "\n    CONFIG" + Reset)
+	fmt.Println(Blue + "\n    CONFIG" + Reset)
 	fmt.Printf("    Location: %v\n", configFolder)
-	fmt.Printf(Green+"\n    %-25s   %s     %s   %s   %s\n"+Reset, "FILE", "SETS", "VERN", "PREFIX", "REPO")
+	fmt.Printf(Blue+"\n    %-25s   %s     %s   %s   %s\n"+Reset, "FILE", "SETS", "VERN", "PREFIX", "REPO")
 	fmt.Println(configInfo)
 
 	os.Exit(0)

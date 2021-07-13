@@ -81,16 +81,33 @@ func UserDefinedFlags() map[string]string {
 	return userDefined
 }
 
-func ReadSqBr(cmd string) (string, []string) {
+// Read square brackets
+func ReadSqBr(cmd string) (string, string) {
 	c := strings.SplitN(cmd, "[", 2)
-
 	name := c[0]
-	values := strings.Split(c[1][:len(c[1])-1], ":")
-	// fmt.Println(values)
+	values := c[1][:len(c[1])-1]
 	return name, values
 }
 
-func ReadCrBr(cmd string) (string, []string) {
+// Read square brackets and separate values by a string/char
+func ReadSqBrSepBy(cmd string, sep string) (string, []string) {
+	c := strings.SplitN(cmd, "[", 2)
+
+	name := c[0]
+	values := strings.Split(c[1][:len(c[1])-1], sep)
+	return name, values
+}
+
+// Read circular brackets
+func ReadCrBr(cmd string) (string, string) {
+	c := strings.SplitN(cmd, "(", 2)
+	name := c[0]
+	values := c[1][:len(c[1])-1]
+	return name, values
+}
+
+// Read circular brackets and separate values by a string/char
+func ReadCrBrSepBy(cmd string, sep string) (string, []string) {
 	c := strings.SplitN(cmd, "(", 2)
 	name := c[0]
 	values := strings.Split(c[1][:len(c[1])-1], ":")

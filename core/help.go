@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-var Banner = `                            
+var Banner = fmt.Sprintf(`                            
 
   ░    ░  ░   ░ ░      ░ ░  ░  ░
   ░ ░   ░    ░ ░ ░ ▒  ░ ░  ▒  ░
@@ -20,9 +20,9 @@ var Banner = `
 
       THE WORDLIST'S FRAMEWORK
 
-            Version ` + Version + `
+            Version %s
     Gitesh Sharma @giteshnxtlvl
-`
+`, Version)
 
 func VPrint(msg string) {
 	if Verbose {
@@ -54,23 +54,26 @@ func HelpMode(h []string) {
 }
 
 var FlagsHelp = `
-USAGE
+` + Blue + `GITHUB` + Reset + `
+    https://github.com/giteshnxtlvl/cook
+
+` + Blue + `USAGE` + Reset + `
     cook [params and values] [pattern]
     cook -param1 value -file: filename -param3 value param3,admin_set param1 file,[1-300]
 
-SEARCH
+` + Blue + `SEARCH` + Reset + `
     cook search [word] 
 
-HELP
+` + Blue + `HELP` + Reset + `
     cook help [word] (case, encode, file, functions, patterns, usage)
 
-UPDATE
+` + Blue + `UPDATE` + Reset + `
     cook update [filename]
     This will update the file's cache.
         - Use "all" to update everything you have previously fetched
         - Use "cook" to update cooks-wordlists-database
 
-FLAGS
+` + Blue + `FLAGS` + Reset + `
     -l           : a->4, b->8, e->3 ...
                       It has two modes [0 Calm][1 Aggressive - Print every combinations]
     -a           : Append to the previous lines, instead of permutations
@@ -84,19 +87,19 @@ FLAGS
 `
 
 var CaseHelp = `
-FOR FINAL OUTPUT
+` + Blue + `FOR FINAL OUTPUT` + Reset + `
     -case A for ALL 
     -case U for Uppercase
     -case L for Lowercase
     -case T for Titlecase
     -case C for Camelcase
 
-FOR PARTICULAR COLUMN, (no camel)
+` + Blue + `FOR PARTICULAR COLUMN, (no camel)` + Reset + `
     -case 0:U,2:T
         Col 0 - Uppercase
         Col 2 - Titlecase
 
-MULTIPLE CASES
+` + Blue + `MULTIPLE CASES` + Reset + `
     -case 0:UT,2:A (column wise)
     -case TC (final output)
 `
@@ -104,7 +107,7 @@ MULTIPLE CASES
 var EncodeHelp = `
 WRAP YOUR PAYLOADS USING THIS
 
-ENCODERS
+` + Blue + `ENCODERS` + Reset + `
     b64encode         - Base64 encoder
     hexencode         - Hex string encoder
     jsonescape        - JSON escape
@@ -115,7 +118,7 @@ ENCODERS
     utf16be           - UTF-16 encoder (Big Endian)
     xmlescape         - XML escape
 
-DECODERS
+` + Blue + `DECODERS` + Reset + `
     b64decode         - Base64 decoder
     hexdecode         - Hex string decoder
     jsonunescape      - JSON unescape
@@ -123,7 +126,7 @@ DECODERS
     urldecode         - URL decode
     xmlunescape       - XML unescape
 
-HASHES
+` + Blue + `HASHES` + Reset + `
     md5               - MD5 sum
     sha1              - SHA1 checksum
     sha224            - SHA224 checksum
@@ -133,7 +136,7 @@ HASHES
 `
 
 var FuncHelp = `
-FUNCTIONS
+` + Blue + `METHODS` + Reset + `
 
     leet                    - a->4, b->8, e->3 ...
     case                    - Apply cases
@@ -170,48 +173,43 @@ FUNCTIONS
     `
 
 var UsageHelp = `
-BASIC USAGE
+` + Blue + `BASIC USAGE` + Reset + `
     $ cook -start admin,root  -sep _,-  -end secret,critical  /:start:sep:end
     $ cook /:admin,root:_,-:secret,critical
 
-FILE WITH REGEX
+` + Blue + `FILE WITH REGEX` + Reset + `
     $ cook -s company -ext raft-large-extensions:\.asp.*  /:s:exp
 
-FUNCTIONS
+` + Blue + `FUNCTIONS` + Reset + `
     Use functions such as date for different variations of values
     $ cook -name elliot -birth date(17,Sep,1994) name:birth
 
-RANGES
+` + Blue + `RANGES` + Reset + `
     Use ranges like [1-100], [A-Z], [a-z] or [A-z] in pattern of command
     $ cook -name elliot -birth date(17,Sep,1994) name:birth
 
-USING CASES
+` + Blue + `USING CASES` + Reset + `
     Uppercase, lowercase, titlecase, camelcase or ALL
     For use case check FLGAS above
     $ cook camel:[1-10]:case -case C
 
-RAW STRINGS
+` + Blue + `RAW STRINGS` + Reset + `
     Print value without any parsing/modification.
     Use to take ",", ":", "` + "`" + `" or any pre-defined sets or functions as raw strings.
     $ cook -date ` + "`" + `date(17,Sep,1994)` + "`" + ` raw:date
 
-PIPE INPUT
+` + Blue + `PIPE INPUT` + Reset + `
     Use - as param value for pipe input
     $ cook -d - d:/:test
 
-USING -min
+` + Blue + `USING -min` + Reset + `
     Print value without any parsing/modification
     $ cook n:n:n -min 1
 `
 
 func ShowHelp() {
 	fmt.Fprintln(os.Stderr, Banner)
-
-	fmt.Fprintln(os.Stderr, "\nGITHUB")
-	fmt.Fprintln(os.Stderr, "    https://github.com/giteshnxtlvl/cook")
-
 	fmt.Fprintln(os.Stderr, FlagsHelp)
-
 	fmt.Fprintln(os.Stderr, Reset)
 	os.Exit(0)
 }

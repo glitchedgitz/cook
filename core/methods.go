@@ -25,23 +25,24 @@ var leetValues = map[string][]string{
 
 func Leet(values []string, mode int, array *[]string) {
 	for _, v := range values {
+		var tmp []string
 		v2 := v
 		for l, ch := range leetValues {
 			for _, c := range ch {
 				if strings.Contains(v, c) {
 					t := strings.ReplaceAll(v, c, l)
 					v2 = strings.ReplaceAll(v2, c, l)
-					if mode == 1 {
-						*array = append(*array, t)
-						if t != v2 {
-							*array = append(*array, v2)
-						}
+					tmp = append(tmp, t)
+					if t != v2 {
+						tmp = append(tmp, v2)
 					}
 				}
 			}
 		}
-		if mode == 0 {
-			*array = append(*array, v2)
+		if mode == 1 {
+			*array = append(*array, tmp...)
+		} else if mode == 0 {
+			*array = append(*array, tmp[len(tmp)-1])
 		}
 	}
 }
@@ -49,6 +50,7 @@ func Leet(values []string, mode int, array *[]string) {
 func Cases(values []string, cc []string, array *[]string) {
 	var fn func(string) string
 	for _, c := range cc {
+		c = strings.ToUpper(c)
 		if c == "U" {
 			fn = strings.ToUpper
 		} else if c == "L" {
@@ -63,6 +65,14 @@ func Cases(values []string, cc []string, array *[]string) {
 			*array = append(*array, fn(v))
 		}
 	}
+}
+
+func Regex(values []string, regex string, array *[]string) {
+	data := []byte{}
+	for _, v := range values {
+		data = append(data, []byte(v+"\n")...)
+	}
+	FindRegex(data, regex, array)
 }
 
 func GetJsonField(lines []string, get []string, array *[]string) {

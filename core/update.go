@@ -16,10 +16,9 @@ func getLocalFile(m map[string][]string) {
 		configFolder = os.Getenv("COOK")
 	}
 
-	localfile := path.Join(configFolder, "info")
+	localfile := path.Join(configFolder, "info.yaml")
 
 	content, err := ioutil.ReadFile(localfile)
-
 	if err != nil {
 		log.Fatalf("Err: Reading File %s \n%v", localfile, err)
 	}
@@ -31,11 +30,11 @@ func getLocalFile(m map[string][]string) {
 }
 
 func getRepoFile(m map[string][]string) {
-	content := GetData("https://raw.githubusercontent.com/giteshnxtlvl/cooks-wordlists-database/main/info")
+	content := GetData("https://raw.githubusercontent.com/giteshnxtlvl/cooks-wordlists-database/main/info.yaml")
 
 	err := yaml.Unmarshal([]byte(content), &m)
 	if err != nil {
-		log.Fatalf("Err: Parsing YAML %s %v", "https://raw.githubusercontent.com/giteshnxtlvl/cooks-wordlists-database/main/info", err)
+		log.Fatalf("Err: Parsing YAML %s %v", "https://raw.githubusercontent.com/giteshnxtlvl/cooks-wordlists-database/main/info.yaml", err)
 	}
 }
 
@@ -95,7 +94,7 @@ func UpdateCook() {
 
 	if updatedFiles > 0 {
 		wg.Add(1)
-		go updateFile("info")
+		go updateFile("info.yaml")
 	} else {
 		fmt.Println("\nEverything is updated :)")
 	}

@@ -36,26 +36,16 @@ func searchMode(cmds []string) {
 
 			if strings.Contains(k, search) {
 				fmt.Println()
-				if cat == "files" {
+				if cat == "files" || cat == "raw-files" {
 					fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+core.Reset))
 					for _, file := range v {
-						fmt.Printf("    %s\n", strings.ReplaceAll(file, search, core.Green+search+core.Reset))
-					}
-				} else if cat == "raw-files" {
-					fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+core.Reset))
-					for _, file := range v {
-						fmt.Printf("    %s\n", strings.ReplaceAll(file, search, core.Green+search+core.Reset))
+						fmt.Printf("    %s\n", strings.ReplaceAll(file, search, core.Blue+search+core.Reset))
 					}
 				} else if cat == "patterns" {
-					fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+core.Reset))
-					fmt.Printf("    %s%s{\n", k, strings.ReplaceAll(v[0], search, core.Green+search+core.Reset))
-					for _, file := range v[1:] {
-						fmt.Printf("\t%s\n", strings.ReplaceAll(file, search, core.Green+search+core.Reset))
-					}
-					fmt.Println("    }")
+					core.PrintPattern(k, v, search)
 				} else {
 					fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+core.Reset))
-					fmt.Println(strings.ReplaceAll(fmt.Sprintf("    %v\n", v), search, core.Green+search+core.Reset))
+					fmt.Println(strings.ReplaceAll(fmt.Sprintf("    %v\n", v), search, core.Blue+search+core.Reset))
 				}
 				found = true
 			}
