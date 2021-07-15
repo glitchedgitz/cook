@@ -72,6 +72,7 @@ func RawFileValues(pattern string, allLines map[string]bool) {
 }
 
 func FindRegex(data []byte, expresssion string, array *[]string) {
+
 	r, err := regexp.Compile(expresssion)
 	if err != nil {
 		log.Fatalln(err)
@@ -80,7 +81,7 @@ func FindRegex(data []byte, expresssion string, array *[]string) {
 	e := make(map[string]bool)
 
 	// replacing \r (carriage return) as it puts cursor on beginning of line
-	for _, found := range r.FindAllString(strings.ReplaceAll(string(content), "\r", ""), -1) {
+	for _, found := range r.FindAllString(strings.ReplaceAll(string(data), "\r", ""), -1) {
 		if e[found] {
 			continue
 		}

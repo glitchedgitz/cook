@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"path"
-	"sort"
 	"strings"
 
 	"gopkg.in/yaml.v3"
@@ -14,14 +13,14 @@ import (
 
 var content []byte
 var home, _ = os.UserHomeDir()
-var configFolder = `E:\tools\base\cook`
+var ConfigFolder = `E:\tools\base\cook`
 var configInfo string
 var M = make(map[string]map[string][]string)
 
 var checkM = make(map[string][]string)
 
 func readCheckYaml() {
-	filepath := path.Join(configFolder, "check.yaml")
+	filepath := path.Join(ConfigFolder, "check.yaml")
 	content, err := ioutil.ReadFile(filepath)
 	if err != nil {
 		log.Fatalln("Err: Reading File ", filepath, err)
@@ -33,7 +32,7 @@ func readCheckYaml() {
 	}
 }
 
-func readYaml(filepath string, m map[string]map[string][]string) {
+func ReadYaml(filepath string, m map[string]map[string][]string) {
 	content, err := ioutil.ReadFile(filepath)
 	if err != nil {
 		log.Fatalln("Err: Reading File ", filepath, err)
@@ -61,12 +60,12 @@ func writeYaml(filepath string, m map[string][]string) {
 func CookConfig() {
 
 	if len(os.Getenv("COOK")) > 0 {
-		configFolder = os.Getenv("COOK")
+		ConfigFolder = os.Getenv("COOK")
 	}
 
-	VPrint(fmt.Sprintf("Config Folder  %s", configFolder))
+	VPrint(fmt.Sprintf("Config Folder  %s", ConfigFolder))
 
-	filesFolders := path.Join(configFolder, "yaml")
+	filesFolders := path.Join(ConfigFolder, "yaml")
 
 	files, err := ioutil.ReadDir(filesFolders)
 	if err != nil {
@@ -96,7 +95,7 @@ func CookConfig() {
 			configRows = fmt.Sprintf("%-4s   %-6s   %s", v, p, r)
 		}
 
-		readYaml(path.Join(filesFolders, filename), m)
+		ReadYaml(path.Join(filesFolders, filename), m)
 
 		total := 0
 		for k, v := range m {
@@ -120,22 +119,9 @@ func CookConfig() {
 	readCheckYaml()
 }
 
-func ShowMap(set string) {
-	fmt.Println("\n" + Blue + strings.ToUpper(set) + Reset)
-
-	keys := []string{}
-	for k := range M[set] {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-	for _, k := range keys {
-		fmt.Printf(Blue+"  %-12s "+White+"%v\n", k, M[set][k])
-	}
-}
-
 func ShowConfig() {
 	fmt.Println(Blue + "\n    CONFIG" + Reset)
-	fmt.Printf("    Location: %v\n", configFolder)
+	fmt.Printf("    Location: %v\n", ConfigFolder)
 	fmt.Printf(Blue+"\n    %-25s   %s     %s   %s   %s\n"+Reset, "FILE", "SETS", "VERN", "PREFIX", "REPO")
 	fmt.Println(configInfo)
 

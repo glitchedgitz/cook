@@ -13,10 +13,10 @@ import (
 
 func getLocalFile(m map[string][]string) {
 	if len(os.Getenv("COOK")) > 0 {
-		configFolder = os.Getenv("COOK")
+		ConfigFolder = os.Getenv("COOK")
 	}
 
-	localfile := path.Join(configFolder, "info.yaml")
+	localfile := path.Join(ConfigFolder, "info.yaml")
 
 	content, err := ioutil.ReadFile(localfile)
 	if err != nil {
@@ -39,7 +39,7 @@ func getRepoFile(m map[string][]string) {
 }
 
 func getConfigFiles(m map[string]bool) {
-	files, err := ioutil.ReadDir(configFolder)
+	files, err := ioutil.ReadDir(ConfigFolder)
 	if err != nil {
 		panic(err)
 	}
@@ -55,7 +55,7 @@ func updateFile(file string) {
 	// fmt.Println("Updating : ", file)
 	defer wg.Done()
 	content := GetData("https://raw.githubusercontent.com/giteshnxtlvl/cooks-wordlists-database/main/" + file)
-	localFile := path.Join(configFolder, file)
+	localFile := path.Join(ConfigFolder, file)
 	err := ioutil.WriteFile(localFile, content, 0644)
 	if err != nil {
 		panic(err)

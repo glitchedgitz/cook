@@ -18,6 +18,7 @@ var columnCases = make(map[int]map[string]bool)
 //Initializing with empty string, so loops will run for 1st column
 var final = []string{""}
 
+// -save [keyword] to save the generated permutations
 var (
 	help          = parse.B("-h", "-help")
 	verbose       = parse.B("-v", "-verbose")
@@ -94,9 +95,35 @@ func checkParam(p string, array *[]string) bool {
 	return false
 }
 
+func splitMethods(p string) []string {
+	chars := strings.Split(p, "")
+	s := []string{}
+	tmp := ""
+	insidebrackets := false
+	for _, c := range chars {
+
+		if c == "." {
+			if !insidebrackets {
+				s = append(s, tmp)
+				tmp = ""
+				continue
+			}
+		}
+		if c == "[" {
+			insidebrackets = true
+		}
+		if c == "]" {
+			insidebrackets = false
+		}
+		tmp += c
+	}
+	s = append(s, tmp)
+	return s
+}
+
 func checkMethods(p string, array *[]string) bool {
 	if strings.Count(p, ".") > 0 {
-		splitS := strings.Split(p, ".")
+		splitS := splitMethods(p)
 		u := splitS[0]
 		if _, exists := params[u]; exists {
 
@@ -109,7 +136,7 @@ func checkMethods(p string, array *[]string) bool {
 				return false
 			}
 
-			vallll = append(vallll, p)
+			// vallll = append(vallll, p)
 
 			for _, g := range get {
 				if g == "wordplay" {
@@ -118,6 +145,10 @@ func checkMethods(p string, array *[]string) bool {
 
 				} else if g == "fb" || g == "filebase" || g == "fn" || g == "filename" {
 					core.FileBase(vallll, &tmp)
+
+				} else if strings.HasPrefix(g, "regex") {
+					_, value := parse.ReadSqBr(g)
+					core.Regex(vallll, value, &tmp)
 
 				} else if strings.HasPrefix(g, "json") {
 
@@ -164,6 +195,35 @@ var pattern []string
 
 var start = time.Now()
 
+func splitValues(p string) []string {
+	chars := strings.Split(p, "")
+	s := []string{}
+	tmp := ""
+	insideraw := false
+
+	for _, c := range chars {
+
+		if c == "," {
+			if !insideraw {
+				s = append(s, tmp)
+				tmp = ""
+				continue
+			}
+		}
+		if c == "`" {
+			if insideraw {
+				insideraw = false
+			} else {
+				insideraw = true
+			}
+		}
+
+		tmp += c
+	}
+	s = append(s, tmp)
+	return s
+}
+
 func main() {
 	params, pattern = parseInput()
 
@@ -173,7 +233,7 @@ func main() {
 
 		columnValues := []string{}
 
-		for _, p := range strings.Split(param, ",") {
+		for _, p := range splitValues(param) {
 			core.VPrint(fmt.Sprintf("Param: %s \n", p))
 			if core.RawInput(p, &columnValues) || core.ParseRanges(p, &columnValues) || checkMethods(p, &columnValues) || checkParam(p, &columnValues) || core.CheckYaml(p, &columnValues) {
 				continue

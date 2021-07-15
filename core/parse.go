@@ -79,12 +79,12 @@ func UpdateCases(caseValue string, noOfColumns int) map[int]map[string]bool {
 }
 
 func PrintPattern(k string, v []string, search string) {
-	fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+core.Reset))
-	fmt.Printf("    %s%s{\n", k, strings.ReplaceAll(v[0], search, core.Blue+search+core.Reset))
+	// fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+core.Reset))
+	fmt.Printf("%s%s{\n", core.Blue+k+core.Reset, strings.ReplaceAll(v[0], search, core.Blue+search+core.Reset))
 	for _, file := range v[1:] {
-		fmt.Printf("\t%s\n", strings.ReplaceAll(file, search, core.Blue+search+core.Reset))
+		fmt.Printf("    %s\n", strings.ReplaceAll(file, search, core.Blue+search+core.Reset))
 	}
-	fmt.Println("    }")
+	fmt.Print("}\n\n")
 }
 
 //Checking for patterns/functions
@@ -195,6 +195,9 @@ func PipeInput(value string, array *[]string) bool {
 }
 
 func RawInput(value string, array *[]string) bool {
+	if value == "`" {
+		return true
+	}
 	if strings.HasPrefix(value, "`") && strings.HasSuffix(value, "`") {
 		lv := len(value)
 		*array = append(*array, []string{value[1 : lv-1]}...)

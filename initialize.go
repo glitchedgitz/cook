@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"path"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -25,7 +27,6 @@ func analyseParams(params map[string]string) {
 }
 
 func searchMode(cmds []string) {
-	core.CookConfig()
 
 	search := cmds[0]
 	found := false
@@ -55,7 +56,7 @@ func searchMode(cmds []string) {
 	if !found {
 		fmt.Println("Not Found: ", search)
 	}
-	os.Exit(0)
+
 }
 
 func addMode(cmds []string) {
@@ -77,16 +78,65 @@ func deleteMode(cmds []string) {
 func cleanMode(cmds []string) {
 }
 func infoMode(cmds []string) {
+	set := cmds[0]
+
+	filepath := path.Join(core.ConfigFolder, "yaml", set)
+
+	m := make(map[string]map[string][]string)
+	if strings.HasSuffix(set, ".yaml") || strings.HasPrefix(set, ".yml") {
+		core.ReadYaml(filepath, m)
+	}
+
+	fmt.Println("\n" + core.Blue + set + core.Reset)
+	fmt.Println("Path    : ", filepath)
+	fmt.Println("Sets    : ", len(m))
+	fmt.Println("Version : ", len(m))
+}
+
+func showMode(cmds []string) {
+	set := cmds[0]
+
+	if strings.HasSuffix(set, ".yaml") || strings.HasPrefix(set, ".yml") {
+		data, err := ioutil.ReadFile(path.Join(core.ConfigFolder, "yaml", set))
+		fmt.Println()
+		fmt.Println(string(data))
+		if err == nil {
+			return
+		}
+	}
+
+	if vals, exists := core.M[set]; exists {
+		fmt.Printf("\n" + core.Blue + strings.ToUpper(set) + core.Reset + "\n\n")
+
+		keys := []string{}
+		for k := range vals {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		if set != "patterns" {
+			for _, k := range keys {
+				fmt.Printf("  %-12s "+"%v\n", k, vals[k])
+			}
+		} else {
+			for _, k := range keys {
+				core.PrintPattern(k, vals[k], "")
+			}
+		}
+	} else {
+		fmt.Println("\nNot Found " + set + "\nTry charset, extensions, patterns, files, raw-files, ports or [file.yaml")
+	}
 }
 
 var cmdFunctions = map[string]func([]string){
 	"search": searchMode,
+	"show":   showMode,
 	"help":   core.HelpMode,
 	"add":    addMode,
 	"clean":  cleanMode,
 	"info":   infoMode,
 	"update": updateMode,
 	"delete": deleteMode,
+	"size":   core.TerminalSize,
 }
 
 func parseInput() (map[string]string, []string) {
@@ -126,7 +176,9 @@ func parseInput() (map[string]string, []string) {
 
 	if noOfColumns > 0 {
 		if fn, exists := cmdFunctions[pattern[0]]; exists {
+			core.CookConfig()
 			fn(pattern[1:])
+			os.Exit(0)
 		}
 	}
 
