@@ -12,26 +12,14 @@ import (
 )
 
 var total = 0
-var otherCases = false
+
+// var otherCases = false
 var columnCases = make(map[int]map[string]bool)
 
 //Initializing with empty string, so loops will run for 1st column
 var final = []string{""}
 
 // -save [keyword] to save the generated permutations
-var (
-	help          = parse.B("-h", "-help")
-	verbose       = parse.B("-v", "-verbose")
-	showCol       = parse.B("-c", "-col")
-	Min           = parse.I("-m", "-min")
-	appendColumns = parse.S("-a", "-append")
-	showConfig    = parse.B("-conf", "-config")
-	caseValue     = parse.S("-ca", "-case")
-	encodeValue   = parse.S("-e", "-encode")
-	update        = parse.S("-u", "-update")
-	l337          = parse.I("-l", "-leet")
-)
-
 var appendMode = make(map[int]bool)
 var encodeString []string
 
@@ -57,7 +45,7 @@ func applyColumnCases(columnValues []string, columnNum int, applyFunc func([]str
 	tmp := []string{}
 
 	if len(columnCases[columnNum]) > 0 {
-		otherCases = true
+		// otherCases = true
 		allcases := false
 
 		if columnCases[columnNum]["A"] {
@@ -225,9 +213,8 @@ func splitValues(p string) []string {
 }
 
 func main() {
-	params, pattern = parseInput()
 
-	cook.CookConfig()
+	params, pattern = parseInput()
 
 	for columnNum, param := range pattern {
 
@@ -252,7 +239,7 @@ func main() {
 
 		cook.VPrint(fmt.Sprintf("%-40s: %s", "Time ApplyColumnCases", time.Since(start)))
 
-		if columnNum >= Min {
+		if columnNum >= min {
 			print()
 		}
 	}

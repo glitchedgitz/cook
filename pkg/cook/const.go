@@ -1,5 +1,10 @@
 package cook
 
+import (
+	"fmt"
+	"os"
+)
+
 // These are messed up, something is something else
 const (
 	Blue    = "\u001b[38;5;45m"
@@ -8,5 +13,10 @@ const (
 	White   = "\u001b[38;5;255m"
 	Reset   = "\u001b[0m"
 	Reverse = "\u001b[7m"
-	Version = "2.0"
 )
+
+func VPrint(msg string) {
+	if Verbose {
+		fmt.Fprintln(os.Stderr, msg)
+	}
+}

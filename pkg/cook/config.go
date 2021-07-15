@@ -14,10 +14,34 @@ import (
 // var content []byte
 var home, _ = os.UserHomeDir()
 var ConfigFolder = `E:\tools\base\cook`
-var configInfo string
+var ConfigInfo string
 var M = make(map[string]map[string][]string)
-
 var checkM = make(map[string][]string)
+
+func ReadYaml(filepath string, m map[string]map[string][]string) {
+	content, err := ioutil.ReadFile(filepath)
+	if err != nil {
+		log.Fatalln("Err: Reading File ", filepath, err)
+	}
+
+	err = yaml.Unmarshal([]byte(content), &m)
+	if err != nil {
+		log.Fatalf("Err: Parsing YAML %s %v", filepath, err)
+	}
+}
+
+func WriteYaml(filepath string, m map[string]map[string][]string) {
+	data, err := yaml.Marshal(&m)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = ioutil.WriteFile(filepath, data, 0)
+	if err != nil {
+		log.Fatalln("Err: Writing File ", filepath, err)
+	}
+}
 
 func readCheckYaml() {
 	filepath := path.Join(ConfigFolder, "check.yaml")
@@ -32,19 +56,7 @@ func readCheckYaml() {
 	}
 }
 
-func ReadYaml(filepath string, m map[string]map[string][]string) {
-	content, err := ioutil.ReadFile(filepath)
-	if err != nil {
-		log.Fatalln("Err: Reading File ", filepath, err)
-	}
-
-	err = yaml.Unmarshal([]byte(content), &m)
-	if err != nil {
-		log.Fatalf("Err: Parsing YAML %s %v", filepath, err)
-	}
-}
-
-func writeYaml(filepath string, m map[string][]string) {
+func writeCheckYaml(filepath string, m map[string][]string) {
 	data, err := yaml.Marshal(&m)
 
 	if err != nil {
@@ -110,20 +122,11 @@ func CookConfig() {
 		}
 		wholeTotal += total
 		totalFiles++
-		configInfo += fmt.Sprintf("    %-25s   %-8d %s\n", filename, total, configRows)
+		ConfigInfo += fmt.Sprintf("    %-25s   %-8d %s\n", filename, total, configRows)
 	}
 
-	configInfo += fmt.Sprintf("\n    %-25s   %d\n", "TOTAL FILES", totalFiles)
-	configInfo += fmt.Sprintf("    %-25s   %d\n", "TOTAL WORDLISTS SET", wholeTotal)
+	ConfigInfo += fmt.Sprintf("\n    %-25s   %d\n", "TOTAL FILES", totalFiles)
+	ConfigInfo += fmt.Sprintf("    %-25s   %d\n", "TOTAL WORDLISTS SET", wholeTotal)
 
 	readCheckYaml()
-}
-
-func ShowConfig() {
-	fmt.Println(Blue + "\n    CONFIG" + Reset)
-	fmt.Printf("    Location: %v\n", ConfigFolder)
-	fmt.Printf(Blue+"\n    %-25s   %s     %s   %s   %s\n"+Reset, "FILE", "SETS", "VERN", "PREFIX", "REPO")
-	fmt.Println(configInfo)
-
-	os.Exit(0)
 }

@@ -76,21 +76,21 @@ func CheckFileCache(filename string, files []string) {
 			}
 		}
 		checkM[filename] = files
-		writeYaml(path.Join(ConfigFolder, "check.yaml"), checkM)
+		writeCheckYaml(path.Join(ConfigFolder, "check.yaml"), checkM)
 
 	} else {
 		chkfiles := checkM[filename]
 		if len(files) != len(chkfiles) {
 			os.Remove(filepath)
 			CheckFileCache(filename, files)
-			writeYaml(path.Join(ConfigFolder, "check.yaml"), checkM)
+			writeCheckYaml(path.Join(ConfigFolder, "check.yaml"), checkM)
 			return
 		}
 		for i, v := range chkfiles {
 			if v != files[i] {
 				os.Remove(filepath)
 				CheckFileCache(filename, files)
-				writeYaml(path.Join(ConfigFolder, "check.yaml"), checkM)
+				writeCheckYaml(path.Join(ConfigFolder, "check.yaml"), checkM)
 				break
 			}
 		}
@@ -111,7 +111,6 @@ func AppendToFile(filepath string, data []byte) {
 }
 
 func UpdateCachedFiles() {
-	fmt.Println(Banner)
 
 	type filedata struct {
 		filepath string
