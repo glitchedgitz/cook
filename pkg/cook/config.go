@@ -1,4 +1,4 @@
-package core
+package cook
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-var content []byte
+// var content []byte
 var home, _ = os.UserHomeDir()
 var ConfigFolder = `E:\tools\base\cook`
 var configInfo string

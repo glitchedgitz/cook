@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/giteshnxtlvl/cook/core"
-	"github.com/giteshnxtlvl/cook/parse"
+	"github.com/giteshnxtlvl/cook/pkg/cook"
+	"github.com/giteshnxtlvl/cook/pkg/parse"
 )
 
 var total = 0
@@ -64,7 +64,7 @@ func applyColumnCases(columnValues []string, columnNum int, applyFunc func([]str
 			allcases = true
 		}
 
-		if allcases || (!core.UpperCase && columnCases[columnNum]["U"]) {
+		if allcases || (!cook.UpperCase && columnCases[columnNum]["U"]) {
 			applyFunc(columnValues, &tmp, strings.ToUpper)
 		}
 
@@ -85,11 +85,11 @@ func applyColumnCases(columnValues []string, columnNum int, applyFunc func([]str
 
 func checkParam(p string, array *[]string) bool {
 	if val, exists := params[p]; exists {
-		if core.PipeInput(val, array) || core.RawInput(val, array) || core.ParseFunc(val, array) || core.ParseFile(p, val, array) || checkMethods(val, array) {
+		if cook.PipeInput(val, array) || cook.RawInput(val, array) || cook.ParseFunc(val, array) || cook.ParseFile(p, val, array) || checkMethods(val, array) {
 			return true
 		}
 
-		*array = append(*array, strings.Split(val, ",")...)
+		*array = append(*array, splitValues(val)...)
 		return true
 	}
 	return false
@@ -132,7 +132,7 @@ func checkMethods(p string, array *[]string) bool {
 			tmp := []string{}
 			vallll := []string{}
 
-			if !checkParam(u, &vallll) && !core.CheckYaml(u, &vallll) {
+			if !checkParam(u, &vallll) && !cook.CheckYaml(u, &vallll) {
 				return false
 			}
 
@@ -141,24 +141,24 @@ func checkMethods(p string, array *[]string) bool {
 			for _, g := range get {
 				if g == "wordplay" {
 
-					core.WordPlay(vallll, "*", useless, &tmp)
+					cook.WordPlay(vallll, "*", useless, &tmp)
 
 				} else if g == "fb" || g == "filebase" || g == "fn" || g == "filename" {
-					core.FileBase(vallll, &tmp)
+					cook.FileBase(vallll, &tmp)
 
 				} else if strings.HasPrefix(g, "regex") {
 					_, value := parse.ReadSqBr(g)
-					core.Regex(vallll, value, &tmp)
+					cook.Regex(vallll, value, &tmp)
 
 				} else if strings.HasPrefix(g, "json") {
 
 					_, values := parse.ReadSqBrSepBy(g, ":")
-					core.GetJsonField(vallll, values, &tmp)
+					cook.GetJsonField(vallll, values, &tmp)
 
 				} else if strings.HasPrefix(g, "case") {
 
 					_, values := parse.ReadSqBrSepBy(g, ":")
-					core.Cases(vallll, values, &tmp)
+					cook.Cases(vallll, values, &tmp)
 
 				} else if strings.HasPrefix(g, "leet") {
 
@@ -167,16 +167,16 @@ func checkMethods(p string, array *[]string) bool {
 					if err != nil {
 						log.Fatalln("Err: Leet can be 0 or 1")
 					}
-					core.Leet(vallll, mode, &tmp)
+					cook.Leet(vallll, mode, &tmp)
 
 				} else if strings.HasPrefix(g, "encode") {
 
 					_, values := parse.ReadSqBrSepBy(g, ":")
-					core.Encode(vallll, values, &tmp)
+					cook.Encode(vallll, values, &tmp)
 
 				} else {
 
-					core.AnalyzeURLs(vallll, g, &tmp)
+					cook.AnalyzeURLs(vallll, g, &tmp)
 
 				}
 
@@ -227,22 +227,22 @@ func splitValues(p string) []string {
 func main() {
 	params, pattern = parseInput()
 
-	core.CookConfig()
+	cook.CookConfig()
 
 	for columnNum, param := range pattern {
 
 		columnValues := []string{}
 
 		for _, p := range splitValues(param) {
-			core.VPrint(fmt.Sprintf("Param: %s \n", p))
-			if core.RawInput(p, &columnValues) || core.ParseRanges(p, &columnValues) || checkMethods(p, &columnValues) || checkParam(p, &columnValues) || core.CheckYaml(p, &columnValues) {
+			cook.VPrint(fmt.Sprintf("Param: %s \n", p))
+			if cook.RawInput(p, &columnValues) || cook.ParseRanges(p, &columnValues) || checkMethods(p, &columnValues) || checkParam(p, &columnValues) || cook.CheckYaml(p, &columnValues) {
 				continue
 			}
 			columnValues = append(columnValues, p)
 
 		}
 
-		core.VPrint(fmt.Sprintf("%-40s: %s", "Time after getting values", time.Since(start)))
+		cook.VPrint(fmt.Sprintf("%-40s: %s", "Time after getting values", time.Since(start)))
 
 		if !appendMode[columnNum] || columnNum == 0 {
 			applyColumnCases(columnValues, columnNum, applyCase)
@@ -250,15 +250,15 @@ func main() {
 			applyColumnCases(columnValues, columnNum, prefixSufixMode)
 		}
 
-		core.VPrint(fmt.Sprintf("%-40s: %s", "Time ApplyColumnCases", time.Since(start)))
+		cook.VPrint(fmt.Sprintf("%-40s: %s", "Time ApplyColumnCases", time.Since(start)))
 
 		if columnNum >= Min {
 			print()
 		}
 	}
 
-	core.VPrint(fmt.Sprintf("%-40s: %s", "Elapsed Time", time.Since(start)))
-	core.VPrint(fmt.Sprintf("%-40s: %d", "Total words generated", total))
+	cook.VPrint(fmt.Sprintf("%-40s: %s", "Elapsed Time", time.Since(start)))
+	cook.VPrint(fmt.Sprintf("%-40s: %d", "Total words generated", total))
 }
 
 func init() {

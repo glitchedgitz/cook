@@ -10,8 +10,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/giteshnxtlvl/cook/core"
-	"github.com/giteshnxtlvl/cook/parse"
+	"github.com/giteshnxtlvl/cook/pkg/cook"
+	"github.com/giteshnxtlvl/cook/pkg/parse"
 )
 
 func analyseParams(params map[string]string) {
@@ -20,7 +20,7 @@ func analyseParams(params map[string]string) {
 		if strings.HasSuffix(param, ":") {
 			delete(params, param)
 			param = strings.TrimSuffix(param, ":")
-			core.InputFile[param] = true
+			cook.InputFile[param] = true
 			params[param] = value
 		}
 	}
@@ -31,22 +31,22 @@ func searchMode(cmds []string) {
 	search := cmds[0]
 	found := false
 
-	for cat, vv := range core.M {
+	for cat, vv := range cook.M {
 		for k, v := range vv {
 			k = strings.ToLower(k)
 
 			if strings.Contains(k, search) {
 				fmt.Println()
 				if cat == "files" || cat == "raw-files" {
-					fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+core.Reset))
+					fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+cook.Reset))
 					for _, file := range v {
-						fmt.Printf("    %s\n", strings.ReplaceAll(file, search, core.Blue+search+core.Reset))
+						fmt.Printf("    %s\n", strings.ReplaceAll(file, search, cook.Blue+search+cook.Reset))
 					}
 				} else if cat == "patterns" {
-					core.PrintPattern(k, v, search)
+					cook.PrintPattern(k, v, search)
 				} else {
-					fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+core.Reset))
-					fmt.Println(strings.ReplaceAll(fmt.Sprintf("    %v\n", v), search, core.Blue+search+core.Reset))
+					fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+cook.Reset))
+					fmt.Println(strings.ReplaceAll(fmt.Sprintf("    %v\n", v), search, cook.Blue+search+cook.Reset))
 				}
 				found = true
 			}
@@ -67,9 +67,9 @@ var home, _ = os.UserHomeDir()
 func updateMode(cmds []string) {
 	filename := cmds[0]
 	filepath := path.Join(home, ".cache", "cook", filename)
-	if files, exists := core.M["files"][filename]; exists {
+	if files, exists := cook.M["files"][filename]; exists {
 		os.Remove(filepath)
-		core.CheckFileCache(filename, files)
+		cook.CheckFileCache(filename, files)
 	}
 }
 
@@ -80,14 +80,14 @@ func cleanMode(cmds []string) {
 func infoMode(cmds []string) {
 	set := cmds[0]
 
-	filepath := path.Join(core.ConfigFolder, "yaml", set)
+	filepath := path.Join(cook.ConfigFolder, "yaml", set)
 
 	m := make(map[string]map[string][]string)
 	if strings.HasSuffix(set, ".yaml") || strings.HasPrefix(set, ".yml") {
-		core.ReadYaml(filepath, m)
+		cook.ReadYaml(filepath, m)
 	}
 
-	fmt.Println("\n" + core.Blue + set + core.Reset)
+	fmt.Println("\n" + cook.Blue + set + cook.Reset)
 	fmt.Println("Path    : ", filepath)
 	fmt.Println("Sets    : ", len(m))
 	fmt.Println("Version : ", len(m))
@@ -97,7 +97,7 @@ func showMode(cmds []string) {
 	set := cmds[0]
 
 	if strings.HasSuffix(set, ".yaml") || strings.HasPrefix(set, ".yml") {
-		data, err := ioutil.ReadFile(path.Join(core.ConfigFolder, "yaml", set))
+		data, err := ioutil.ReadFile(path.Join(cook.ConfigFolder, "yaml", set))
 		fmt.Println()
 		fmt.Println(string(data))
 		if err == nil {
@@ -105,8 +105,8 @@ func showMode(cmds []string) {
 		}
 	}
 
-	if vals, exists := core.M[set]; exists {
-		fmt.Printf("\n" + core.Blue + strings.ToUpper(set) + core.Reset + "\n\n")
+	if vals, exists := cook.M[set]; exists {
+		fmt.Printf("\n" + cook.Blue + strings.ToUpper(set) + cook.Reset + "\n\n")
 
 		keys := []string{}
 		for k := range vals {
@@ -119,7 +119,7 @@ func showMode(cmds []string) {
 			}
 		} else {
 			for _, k := range keys {
-				core.PrintPattern(k, vals[k], "")
+				cook.PrintPattern(k, vals[k], "")
 			}
 		}
 	} else {
@@ -130,34 +130,34 @@ func showMode(cmds []string) {
 var cmdFunctions = map[string]func([]string){
 	"search": searchMode,
 	"show":   showMode,
-	"help":   core.HelpMode,
+	"help":   cook.HelpMode,
 	"add":    addMode,
 	"clean":  cleanMode,
 	"info":   infoMode,
 	"update": updateMode,
 	"delete": deleteMode,
-	"size":   core.TerminalSize,
+	"size":   cook.TerminalSize,
 }
 
 func parseInput() (map[string]string, []string) {
-	parse.Help = core.Banner
+	parse.Help = cook.Banner
 	parse.Parse()
 
 	if help {
-		core.ShowHelp()
+		cook.ShowHelp()
 	}
 
 	if showConfig {
-		core.CookConfig()
-		core.ShowConfig()
+		cook.CookConfig()
+		cook.ShowConfig()
 	}
 
 	if update != "" {
 		if update == "cook" {
-			core.UpdateCook()
+			cook.UpdateCook()
 		}
-		// core.CookConfig()
-		// core.UpdateCache()
+		// cook.CookConfig()
+		// cook.UpdateCache()
 		os.Exit(0)
 	}
 
@@ -166,7 +166,7 @@ func parseInput() (map[string]string, []string) {
 		doEncode = true
 	}
 
-	core.Verbose = verbose
+	cook.Verbose = verbose
 
 	params = parse.UserDefinedFlags()
 	analyseParams(params)
@@ -176,7 +176,7 @@ func parseInput() (map[string]string, []string) {
 
 	if noOfColumns > 0 {
 		if fn, exists := cmdFunctions[pattern[0]]; exists {
-			core.CookConfig()
+			cook.CookConfig()
 			fn(pattern[1:])
 			os.Exit(0)
 		}
@@ -193,7 +193,7 @@ func parseInput() (map[string]string, []string) {
 	}
 
 	if caseValue != "" {
-		columnCases = core.UpdateCases(caseValue, noOfColumns)
+		columnCases = cook.UpdateCases(caseValue, noOfColumns)
 	}
 
 	if l337 > -1 {
@@ -224,7 +224,7 @@ func parseInput() (map[string]string, []string) {
 		os.Exit(0)
 	}
 
-	core.VPrint(fmt.Sprintf("Pattern: %v \n", pattern))
+	cook.VPrint(fmt.Sprintf("Pattern: %v \n", pattern))
 
 	return params, pattern
 }

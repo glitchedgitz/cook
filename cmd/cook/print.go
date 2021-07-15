@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/giteshnxtlvl/cook/core"
+	"github.com/giteshnxtlvl/cook/pkg/cook"
 )
 
 func useless(s string) string {
@@ -16,29 +16,29 @@ var doEncode = false
 func print() {
 	tmp := []string{}
 	finalClone := final
-	if core.UpperCase {
-		core.Cases(finalClone, []string{"U"}, &tmp)
+	if cook.UpperCase {
+		cook.Cases(finalClone, []string{"U"}, &tmp)
 		finalClone = tmp
 		tmp = nil
 	}
-	if core.LowerCase {
-		core.Cases(finalClone, []string{"L"}, &tmp)
+	if cook.LowerCase {
+		cook.Cases(finalClone, []string{"L"}, &tmp)
 		finalClone = tmp
 		tmp = nil
 	}
-	// if core.LowerCase {
+	// if cook.LowerCase {
 	// 	printIt(strings.ToLower)
 	// }
-	// if (!core.LowerCase && !core.UpperCase) || otherCases {
+	// if (!cook.LowerCase && !cook.UpperCase) || otherCases {
 	// 	printIt(useless)
 	// }
 	if doLeet {
-		core.Leet(finalClone, l337, &tmp)
+		cook.Leet(finalClone, l337, &tmp)
 		finalClone = tmp
 		tmp = nil
 	}
 	if doEncode {
-		core.Encode(finalClone, encodeString, &tmp)
+		cook.Encode(finalClone, encodeString, &tmp)
 		finalClone = tmp
 		tmp = nil
 	}

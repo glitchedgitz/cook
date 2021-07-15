@@ -1,4 +1,4 @@
-package core
+package cook
 
 import (
 	"bufio"
@@ -8,8 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/giteshnxtlvl/cook/parse"
-	"github.com/giteshnxtlvl/cook2/core"
+	"github.com/giteshnxtlvl/cook/pkg/parse"
 )
 
 var (
@@ -79,10 +78,10 @@ func UpdateCases(caseValue string, noOfColumns int) map[int]map[string]bool {
 }
 
 func PrintPattern(k string, v []string, search string) {
-	// fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+core.Reset))
-	fmt.Printf("%s%s{\n", core.Blue+k+core.Reset, strings.ReplaceAll(v[0], search, core.Blue+search+core.Reset))
+	// fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+Reset))
+	fmt.Printf("%s%s{\n", Blue+k+Reset, strings.ReplaceAll(v[0], search, Blue+search+Reset))
 	for _, file := range v[1:] {
-		fmt.Printf("    %s\n", strings.ReplaceAll(file, search, core.Blue+search+core.Reset))
+		fmt.Printf("    %s\n", strings.ReplaceAll(file, search, Blue+search+Reset))
 	}
 	fmt.Print("}\n\n")
 }

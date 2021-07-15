@@ -1,4 +1,4 @@
-package core
+package cook
 
 // These are messed up, something is something else
 const (
