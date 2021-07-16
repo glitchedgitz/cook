@@ -113,6 +113,7 @@ func parseInput() {
 
 	if l337 > -1 {
 		doLeet = true
+		cook.LeetBegin()
 		if l337 > 1 {
 			fmt.Println("Err: -1337 can be 0 or 1, 0 - Calm Mode & 1 - Angry Mode", l337)
 			os.Exit(0)

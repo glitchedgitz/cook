@@ -1,12 +1,61 @@
 package cook
 
 import (
+	"io/ioutil"
+	"log"
 	"path"
 	"path/filepath"
 	"strings"
+
+	"gopkg.in/yaml.v3"
 )
 
-func checkFileInYaml(p string, array *[]string) bool {
+func ReadFile(filepath string) []byte {
+	content, err := ioutil.ReadFile(filepath)
+	if err != nil {
+		log.Fatalln("Err: Reading File ", filepath, err)
+	}
+	return content
+}
+
+func WriteFile(filepath string, data []byte) {
+	err := ioutil.WriteFile(filepath, data, 0644)
+	if err != nil {
+		log.Fatalln("Err: Writing File ", filepath, err)
+	}
+}
+
+func ReadYaml(filename string, m map[string]map[string][]string) {
+	filepath := path.Join(ConfigFolder, "yaml", filename)
+
+	content := ReadFile(filepath)
+
+	err := yaml.Unmarshal([]byte(content), &m)
+	if err != nil {
+		log.Fatalf("Err: Parsing YAML %s %v", filepath, err)
+	}
+}
+
+func WriteYaml(filepath string, m interface{}) {
+	data, err := yaml.Marshal(&m)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	WriteFile(filepath, data)
+}
+
+func readInfoYaml(filepath string, m map[string][]string) {
+	content := ReadFile(filepath)
+
+	err := yaml.Unmarshal([]byte(content), &m)
+	if err != nil {
+		log.Fatalf("Err: Parsing YAML %s %v", filepath, err)
+	}
+}
+
+func checkFileSet(p string, array *[]string) bool {
 	if files, exists := M["files"][p]; exists {
 
 		CheckFileCache(p, files)
@@ -36,7 +85,7 @@ func checkFileInYaml(p string, array *[]string) bool {
 
 func CheckYaml(p string, array *[]string) bool {
 
-	if val, exists := M["charSet"][p]; exists {
+	if val, exists := M["chars"][p]; exists {
 		*array = append(*array, strings.Split(val[0], "")...)
 		return true
 	}
@@ -46,7 +95,7 @@ func CheckYaml(p string, array *[]string) bool {
 		return true
 	}
 
-	if val, exists := M["extensions"][p]; exists {
+	if val, exists := M["exts"][p]; exists {
 		for _, ext := range val {
 			*array = append(*array, "."+ext)
 		}
@@ -58,7 +107,7 @@ func CheckYaml(p string, array *[]string) bool {
 		return true
 	}
 
-	if checkFileInYaml(p, array) {
+	if checkFileSet(p, array) {
 		return true
 	}
 

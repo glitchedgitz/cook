@@ -17,21 +17,15 @@ func getLocalFile(m map[string][]string) {
 	}
 
 	localfile := path.Join(ConfigFolder, "info.yaml")
-
-	content := ReadFile(localfile)
-
-	err := yaml.Unmarshal([]byte(content), &m)
-	if err != nil {
-		log.Fatalf("Err: Parsing YAML %s %v", localfile, err)
-	}
+	readInfoYaml(localfile, m)
 }
 
 func getRepoFile(m map[string][]string) {
-	content := GetData("https://raw.githubusercontent.com/giteshnxtlvl/cooks-wordlists-database/main/info.yaml")
+	content := GetData("https://raw.githubusercontent.com/giteshnxtlvl/cook-ingredients/main/info.yaml")
 
 	err := yaml.Unmarshal([]byte(content), &m)
 	if err != nil {
-		log.Fatalf("Err: Parsing YAML %s %v", "https://raw.githubusercontent.com/giteshnxtlvl/cooks-wordlists-database/main/info.yaml", err)
+		log.Fatalf("Err: Parsing YAML %s %v", "https://raw.githubusercontent.com/giteshnxtlvl/cook-ingredients/main/info.yaml", err)
 	}
 }
 
@@ -51,7 +45,7 @@ var wg sync.WaitGroup
 func updateFile(file string) {
 	// fmt.Println("Updating : ", file)
 	defer wg.Done()
-	content := GetData("https://raw.githubusercontent.com/giteshnxtlvl/cooks-wordlists-database/main/" + file)
+	content := GetData("https://raw.githubusercontent.com/giteshnxtlvl/cook-ingredients/main/" + file)
 	localFile := path.Join(ConfigFolder, file)
 	WriteFile(localFile, content)
 }
@@ -82,7 +76,6 @@ func UpdateCook() {
 			fmt.Println("\nAdding new file :)")
 			go updateFile(file)
 			updatedFiles++
-
 		}
 	}
 

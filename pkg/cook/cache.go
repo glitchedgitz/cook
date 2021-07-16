@@ -76,21 +76,21 @@ func CheckFileCache(filename string, files []string) {
 			}
 		}
 		checkM[filename] = files
-		writeCheckYaml(path.Join(ConfigFolder, "check.yaml"), checkM)
+		WriteYaml(path.Join(ConfigFolder, "check.yaml"), checkM)
 
 	} else {
 		chkfiles := checkM[filename]
 		if len(files) != len(chkfiles) {
 			os.Remove(filepath)
 			CheckFileCache(filename, files)
-			writeCheckYaml(path.Join(ConfigFolder, "check.yaml"), checkM)
+			WriteYaml(path.Join(ConfigFolder, "check.yaml"), checkM)
 			return
 		}
 		for i, v := range chkfiles {
 			if v != files[i] {
 				os.Remove(filepath)
 				CheckFileCache(filename, files)
-				writeCheckYaml(path.Join(ConfigFolder, "check.yaml"), checkM)
+				WriteYaml(path.Join(ConfigFolder, "check.yaml"), checkM)
 				break
 			}
 		}

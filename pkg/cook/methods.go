@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 	"net/url"
+	"path"
 	"path/filepath"
 	"strings"
 
@@ -12,15 +13,10 @@ import (
 	"golang.org/x/net/publicsuffix"
 )
 
-var leetValues = map[string][]string{
-	"0": {"o", "O"},
-	"1": {"i", "I", "l", "L"},
-	"3": {"e", "E"},
-	"4": {"a", "A"},
-	"5": {"s", "S"},
-	"6": {"b"},
-	"7": {"t", "T"},
-	"8": {"B"},
+var leetValues = make(map[string][]string)
+
+func LeetBegin() {
+	readInfoYaml(path.Join(ConfigFolder, "leet.yaml"), leetValues)
 }
 
 func Leet(values []string, mode int, array *[]string) {
@@ -75,6 +71,21 @@ func Regex(values []string, regex string, array *[]string) {
 	FindRegex(data, regex, array)
 }
 
+func Split(values []string, split string, array *[]string) {
+	for _, v := range values {
+		*array = append(*array, strings.Split(v, split)...)
+	}
+}
+
+func SplitIndex(values []string, split string, index int, array *[]string) {
+	for _, v := range values {
+		vv := strings.Split(v, split)
+		if len(vv) >= index+1 {
+			*array = append(*array, vv[index])
+		}
+	}
+}
+
 func GetJsonField(lines []string, get []string, array *[]string) {
 	for _, line := range lines {
 		data := []byte(line)
@@ -99,10 +110,9 @@ func Encode(lines []string, encodings []string, array *[]string) {
 	}
 }
 
-func WordPlay(words []string, joinWith string, fn func(string) string, array *[]string) {
+func SmartWords(words []string, fn func(string) string, array *[]string) {
 	for _, word := range words {
 		str := []string{}
-		w := ""
 
 		if strings.Contains(word, "_") {
 			str = strings.Split(word, "_")
@@ -122,15 +132,36 @@ func WordPlay(words []string, joinWith string, fn func(string) string, array *[]
 			str = append(str, word[j:])
 		}
 
-		last := len(str) - 1
-		if len(str) > 1 {
-			for _, s := range str[:last] {
-				w += fn(s) + joinWith
-			}
-		}
-		w += fn(str[last])
+		*array = append(*array, str...)
+	}
+}
 
-		*array = append(*array, w)
+func SmartWordsJoin(words []string, joinWith []string, fn func(string) string, array *[]string) {
+	for _, word := range words {
+		str := []string{}
+
+		if strings.Contains(word, "_") {
+			str = strings.Split(word, "_")
+
+		} else if strings.Contains(word, "-") {
+			str = strings.Split(word, "-")
+
+		} else {
+
+			j := 0
+			for i, letter := range word {
+				if letter > 'A' && letter < 'Z' {
+					str = append(str, word[j:i])
+					j = i
+				}
+			}
+			str = append(str, word[j:])
+		}
+
+		for _, join := range joinWith {
+			*array = append(*array, strings.Join(str, join))
+		}
+
 	}
 }
 

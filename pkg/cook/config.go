@@ -13,72 +13,62 @@ import (
 
 // var content []byte
 var home, _ = os.UserHomeDir()
-var ConfigFolder = `E:\tools\base\cook`
+var ConfigFolder string
 var ConfigInfo string
 var M = make(map[string]map[string][]string)
 var checkM = make(map[string][]string)
 
-func ReadFile(filepath string) []byte {
-	content, err := ioutil.ReadFile(filepath)
-	if err != nil {
-		log.Fatalln("Err: Reading File ", filepath, err)
+func exists(path string) bool {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true
 	}
-	return content
+	if os.IsNotExist(err) {
+		return false
+	}
+	log.Fatalln(path)
+	return false
 }
 
-func WriteFile(filepath string, data []byte) {
-	err := ioutil.WriteFile(filepath, data, 0644)
+func firstRun() {
+
+	fmt.Fprintln(os.Stderr, "First Run")
+	fmt.Fprintln(os.Stderr, "Creating and Downloading Cook's Ingredients...\n\n ")
+
+	err := os.MkdirAll(path.Join(ConfigFolder, "yaml"), os.ModePerm)
 	if err != nil {
-		log.Fatalln("Err: Writing File ", filepath, err)
-	}
-}
-
-func ReadYaml(filename string, m map[string]map[string][]string) {
-	filepath := path.Join(ConfigFolder, "yaml", filename)
-
-	content := ReadFile(filepath)
-
-	err := yaml.Unmarshal([]byte(content), &m)
-	if err != nil {
-		log.Fatalf("Err: Parsing YAML %s %v", filepath, err)
-	}
-}
-
-func WriteYaml(filename string, m map[string]map[string][]string) {
-	filepath := path.Join(ConfigFolder, "yaml", filename)
-	data, err := yaml.Marshal(&m)
-
-	if err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
 
-	WriteFile(filepath, data)
-}
-
-func readCheckYaml() {
-	filepath := path.Join(ConfigFolder, "check.yaml")
-	content := ReadFile(filepath)
-
-	err := yaml.Unmarshal([]byte(content), &checkM)
+	structure := make(map[string][]string)
+	err = yaml.Unmarshal([]byte(GetData("https://raw.githubusercontent.com/giteshnxtlvl/cook-ingredients/main/structure")), &structure)
 	if err != nil {
-		log.Fatalf("Err: Parsing YAML %s %v", filepath, err)
-	}
-}
-
-func writeCheckYaml(filepath string, m map[string][]string) {
-	data, err := yaml.Marshal(&m)
-
-	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Err: Parsing YAML %v", err)
 	}
 
-	WriteFile(filepath, data)
+	for _, v := range structure["infofiles"] {
+		filename := path.Base(v)
+		fmt.Fprint(os.Stderr, "\rDownloading                             \r", filename)
+		WriteFile(path.Join(ConfigFolder, filename), GetData(v))
+	}
+	for _, v := range structure["yamlfiles"] {
+		filename := path.Base(v)
+		fmt.Fprint(os.Stderr, "\rDownloading                             \r", filename)
+		WriteFile(path.Join(ConfigFolder, "yaml", filename), GetData(v))
+	}
+	fmt.Fprint(os.Stderr, "\rDone                             \r")
+
 }
 
 func CookConfig() {
-
 	if len(os.Getenv("COOK")) > 0 {
 		ConfigFolder = os.Getenv("COOK")
+	} else {
+		ConfigFolder = path.Join(home, "cook-ingredients")
+	}
+
+	if !exists(ConfigFolder) {
+		firstRun()
 	}
 
 	VPrint(fmt.Sprintf("Config Folder  %s", ConfigFolder))
@@ -132,5 +122,5 @@ func CookConfig() {
 	ConfigInfo += fmt.Sprintf("\n    %-25s   %d\n", "TOTAL FILES", totalFiles)
 	ConfigInfo += fmt.Sprintf("    %-25s   %d\n", "TOTAL WORDLISTS SET", wholeTotal)
 
-	readCheckYaml()
+	readInfoYaml(path.Join(ConfigFolder, "check.yaml"), checkM)
 }

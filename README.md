@@ -25,35 +25,6 @@ Next level wordlist and password generator.
   <div>✔ <a href="#installation">Customizable</a></div>
 </div>
 
-<!-- # Fast Travel
-- [Installation](#installation)
-- [Customizing tool](#customizing-tool)
-- [Basic Permutation](#basic-permutation)
-- [Advance Permutation](#advance-permutation)
-- [Predefined Sets](#predefined-sets)
-- [Patterns/Functions](#patternsfunctions)
-- [Ranges](#ranges)
-- [Files](#files)
-    - [Regex Input from File](#regex-input-from-file)
-    - [Save Wordlists by Unique Names](#save-wordlists-by-unique-names)
-    - [File not found](#file-not-found)
-- [Cases](#cases)
-- [Minimum](#minimum)
-- [Pipe input](#pipe-input)
-- [Raw String](#raw-string)
-- [Contribute](#contribute)
-- [Satisfied?](#satisfied)
-- [THE MAIN FILE](#the-main-file)
-- [Final Words](#final-words) -->
-
-### Create your own unique sets  
-  <img src="./images/06.png">
-
-### Character set
-Use it like CRUNCH  
-  <img src="./images/08.png">
-
-
 # Patterns/Functions
 
 <img src="./images/11.png"> 
@@ -62,19 +33,6 @@ Use it like CRUNCH
 ```
   cook -birth date(17,Sep,1994) elliot _,- birth
 ```
-
-# Ranges
-<img width="640" src="./images/13.png"> 
-
-# Files
-  ### Using Regex From File  
-  Practical example using [IIS Shortnames](https://www.youtube.com/watch?v=HrJW6Y9kHC4)
-  <img src="./images/07.png">    
-  
-  **Recipe**
-  ```
-   cook -exp az-raft-large-extensions.txt:\.asp.*  /:admin:exp
-  ```
 
 ### Minimum
 Use `-min <num>` to print minimum no of columns to print.  
@@ -99,78 +57,16 @@ cook -raw `date(10,12,1999)` raw
 ### Using Go
 **Install/Update**  
 ```
-GO111MODULE=on go get -u github.com/giteshnxtlvl/cook
+go get -u github.com/giteshnxtlvl/cook
 ```
-For windows: set `GO111MODULE` in env var with value auto
 
 ### Download latest builds  
   https://github.com/giteshnxtlvl/cook/releases/
 
 # Customizing tool
-Tool is using a file `cook.yaml`, this file is database for cook.  
-
-**Method 1**  
-Default location in linux `$HOME/.config/cook/cook.yaml`.  
-For windows it will be `%USERPROFILE%/.config/cook/cook.yaml`
-
-**Method 2**
-1. Download [cook.yaml](https://gist.githubusercontent.com/giteshnxtlvl/55048a76a060da849ca8fefde2258da3/raw/eda15049d56d37afb1bb1f8ee07daba2db1b9628/cook.yaml)
-1. Create an environment variable `COOK` =`Path of file`  
-3. Done, Run `cook -config` to confirm.
-
-**Method 3**   
-Use `-config-path` flag to specify location of the config file. This is useful if you want to try different config files.
-
-
-# Community Powered
-This tool is already powered by some awesome community members. Drive this power to next level by comtributing using following.
-
-### Contributors
-- [@Flangvik](https://twitter.com/Flangvik)
-- [@noraj_rawsec](https://twitter.com/noraj_rawsec)
-### Contribute 
-- [cook.yaml](https://gist.github.com/giteshnxtlvl/55048a76a060da849ca8fefde2258da3#file-cook-yaml) is the backbone of the tool.  
-- Share useful lists and patterns.
-  Modify here [cook.yaml](https://gist.github.com/giteshnxtlvl/55048a76a060da849ca8fefde2258da3#file-cook-yaml)
-- Share your awesome recipes.
-- Share Ideas or new Feature Request.
-- Check out [discussions](https://github.com/giteshnxtlvl/cook/discussions).
-
-# Thanks to...
-- [Assetnote](https://assetnote.io/) and [Seclist](https://github.com/danielmiessler/SecLists) for awesome wordlist
-- All the [contributors](#contributors)
-
-# Satisfied? 
-<a href="https://www.buymeacoffee.com/giteshnxtlvl"><img width="300" src="./images/BMEC2X.png"></a>
 
 # Todo
--  [X] Search wordlist `cook search [wordlist]` , that means wordlists needs tag or something
--  [ ] Flag `cook update [wordlist]`, so it will update those wordlists
--  [ ] Flag `cook add [name] [wordlist]`, to add new wordlist, directly from cmd. If `name` already exists, then ask to overwrite or not
--  [ ] Flag `cook delete [name]`, ask to confirm the delete
--  [ ] Get all directories from URL to create a list 
--  [ ] Updating cook.yaml from this repo and keeping user modifications
--  [ ] Add new assetnote's wordlists in their sets
--  [ ] Print url + local saved wordlist path, so user can use them
 -  [ ] Specify start and stop of wordlist
--  [ ] Search for case-insensitive
-
-# Bugs
--  [ ] Pipe input can't be used multiple times
-
-# TODO examples
-
-- Using cook as a encoder, decoder, and hash
-
-cypcat
-  -  [ ] Copying list in burp
-  -  [ ] github dork
-  -  [ ] shodan dork
-
-runcat
-  -  [ ] multithread any tool
-  -  [ ] automate
-
 
 # Final Words 
 > *COOKING IS AN ART, ART NEEDS CREATIVITY*    

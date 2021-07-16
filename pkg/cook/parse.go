@@ -134,45 +134,45 @@ func ParseFile(param string, value string, array *[]string) bool {
 		return true
 	}
 
-	if checkFileInYaml(value, array) {
+	if checkFileSet(value, array) {
 		return true
 	}
 
 	// Checking for File and Regex
-	if strings.Contains(value, ":") {
-		// File may starts from E: C: D: for windows + Regex is supplied
-		if strings.Count(value, ":") == 2 {
-			tmp := strings.SplitN(value, ":", 3)
+	// if strings.Contains(value, ":") {
+	// File may starts from E: C: D: for windows + Regex is supplied
+	// if strings.Count(value, ":") == 2 {
+	// 	tmp := strings.SplitN(value, ":", 3)
 
-			one, two, three := tmp[0], tmp[1], tmp[2]
-			test1, test2 := one+":"+two, two+":"+three
+	// 	one, two, three := tmp[0], tmp[1], tmp[2]
+	// 	test1, test2 := one+":"+two, two+":"+three
 
-			if _, err := os.Stat(test1); err == nil {
-				FileRegex(test1, three, array)
-				return true
-			} else if _, err := os.Stat(test2); err == nil {
-				FileRegex(one, test2, array)
-				return true
-			}
-		}
+	// 	if _, err := os.Stat(test1); err == nil {
+	// 		FileRegex(test1, three, array)
+	// 		return true
+	// 	} else if _, err := os.Stat(test2); err == nil {
+	// 		FileRegex(one, test2, array)
+	// 		return true
+	// 	}
+	// }
 
-		// if strings.Count(value, ":") == 1 {
-		// 	if _, err := os.Stat(value); err == nil {
-		// 		AddFilesToArray(value, array)
-		// 		return true
-		// 	}
-		// 	t := strings.SplitN(value, ":", 2)
-		// 	file, reg := t[0], t[1]
+	// if strings.Count(value, ":") == 1 {
+	// 	if _, err := os.Stat(value); err == nil {
+	// 		AddFilesToArray(value, array)
+	// 		return true
+	// 	}
+	// 	t := strings.SplitN(value, ":", 2)
+	// 	file, reg := t[0], t[1]
 
-		// 	if strings.HasSuffix(file, ".txt") {
-		// 		FileRegex([]string{file}, reg, array)
-		// 		return true
-		// 	} else if files, exists := M["files"][file]; exists {
-		// 		FileRegex(files, reg, array)
-		// 		return true
-		// 	}
-		// }
-	}
+	// 	if strings.HasSuffix(file, ".txt") {
+	// 		FileRegex([]string{file}, reg, array)
+	// 		return true
+	// 	} else if files, exists := M["files"][file]; exists {
+	// 		FileRegex(files, reg, array)
+	// 		return true
+	// 	}
+	// }
+	// }
 	return false
 }
 

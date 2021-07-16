@@ -127,9 +127,12 @@ func checkMethods(p string, array *[]string) bool {
 			// vallll = append(vallll, p)
 
 			for _, g := range get {
-				if g == "wordplay" {
+				if g == "smart" {
+					cook.SmartWords(vallll, useless, &tmp)
 
-					cook.WordPlay(vallll, "*", useless, &tmp)
+				} else if strings.HasPrefix(g, "smartjoin") {
+					_, values := parse.ReadSqBrSepBy(g, ":")
+					cook.SmartWordsJoin(vallll, values, useless, &tmp)
 
 				} else if g == "fb" || g == "filebase" || g == "fn" || g == "filename" {
 					cook.FileBase(vallll, &tmp)
@@ -137,6 +140,20 @@ func checkMethods(p string, array *[]string) bool {
 				} else if strings.HasPrefix(g, "regex") {
 					_, value := parse.ReadSqBr(g)
 					cook.Regex(vallll, value, &tmp)
+
+				} else if strings.HasPrefix(g, "split") {
+					_, value := parse.ReadSqBr(g)
+					cook.Split(vallll, value, &tmp)
+
+				} else if strings.HasPrefix(g, "splitindex") {
+					_, values := parse.ReadSqBrSepBy(g, ":")
+					index, err := strconv.Atoi(values[1])
+
+					if err != nil {
+						log.Fatalln("Not Integer Value: "+values[1], err)
+					}
+
+					cook.SplitIndex(vallll, values[0], index, &tmp)
 
 				} else if strings.HasPrefix(g, "json") {
 
