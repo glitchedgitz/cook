@@ -18,12 +18,9 @@ func getLocalFile(m map[string][]string) {
 
 	localfile := path.Join(ConfigFolder, "info.yaml")
 
-	content, err := ioutil.ReadFile(localfile)
-	if err != nil {
-		log.Fatalf("Err: Reading File %s \n%v", localfile, err)
-	}
+	content := ReadFile(localfile)
 
-	err = yaml.Unmarshal([]byte(content), &m)
+	err := yaml.Unmarshal([]byte(content), &m)
 	if err != nil {
 		log.Fatalf("Err: Parsing YAML %s %v", localfile, err)
 	}
@@ -56,10 +53,7 @@ func updateFile(file string) {
 	defer wg.Done()
 	content := GetData("https://raw.githubusercontent.com/giteshnxtlvl/cooks-wordlists-database/main/" + file)
 	localFile := path.Join(ConfigFolder, file)
-	err := ioutil.WriteFile(localFile, content, 0644)
-	if err != nil {
-		panic(err)
-	}
+	WriteFile(localFile, content)
 }
 
 // Updating cook's database

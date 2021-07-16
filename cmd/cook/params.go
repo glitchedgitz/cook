@@ -76,7 +76,7 @@ func cmdsMode() {
 	}
 }
 
-func parseInput() (map[string]string, []string) {
+func parseInput() {
 	parse.Help = banner
 	cook.Verbose = verbose
 
@@ -98,7 +98,7 @@ func parseInput() (map[string]string, []string) {
 	}
 
 	params = parse.UserDefinedFlags()
-	pattern := parse.Args
+	pattern = parse.Args
 
 	totalCols = len(pattern)
 
@@ -136,5 +136,4 @@ func parseInput() (map[string]string, []string) {
 
 	cook.VPrint(fmt.Sprintf("Pattern: %v \n", pattern))
 
-	return params, pattern
 }

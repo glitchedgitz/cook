@@ -214,7 +214,7 @@ func splitValues(p string) []string {
 
 func main() {
 
-	params, pattern = parseInput()
+	parseInput()
 
 	for columnNum, param := range pattern {
 

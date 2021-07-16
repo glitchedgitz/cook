@@ -18,39 +18,48 @@ var ConfigInfo string
 var M = make(map[string]map[string][]string)
 var checkM = make(map[string][]string)
 
-func ReadYaml(filepath string, m map[string]map[string][]string) {
+func ReadFile(filepath string) []byte {
 	content, err := ioutil.ReadFile(filepath)
 	if err != nil {
 		log.Fatalln("Err: Reading File ", filepath, err)
 	}
+	return content
+}
 
-	err = yaml.Unmarshal([]byte(content), &m)
+func WriteFile(filepath string, data []byte) {
+	err := ioutil.WriteFile(filepath, data, 0644)
+	if err != nil {
+		log.Fatalln("Err: Writing File ", filepath, err)
+	}
+}
+
+func ReadYaml(filename string, m map[string]map[string][]string) {
+	filepath := path.Join(ConfigFolder, "yaml", filename)
+
+	content := ReadFile(filepath)
+
+	err := yaml.Unmarshal([]byte(content), &m)
 	if err != nil {
 		log.Fatalf("Err: Parsing YAML %s %v", filepath, err)
 	}
 }
 
-func WriteYaml(filepath string, m map[string]map[string][]string) {
+func WriteYaml(filename string, m map[string]map[string][]string) {
+	filepath := path.Join(ConfigFolder, "yaml", filename)
 	data, err := yaml.Marshal(&m)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = ioutil.WriteFile(filepath, data, 0)
-	if err != nil {
-		log.Fatalln("Err: Writing File ", filepath, err)
-	}
+	WriteFile(filepath, data)
 }
 
 func readCheckYaml() {
 	filepath := path.Join(ConfigFolder, "check.yaml")
-	content, err := ioutil.ReadFile(filepath)
-	if err != nil {
-		log.Fatalln("Err: Reading File ", filepath, err)
-	}
+	content := ReadFile(filepath)
 
-	err = yaml.Unmarshal([]byte(content), &checkM)
+	err := yaml.Unmarshal([]byte(content), &checkM)
 	if err != nil {
 		log.Fatalf("Err: Parsing YAML %s %v", filepath, err)
 	}
@@ -63,10 +72,7 @@ func writeCheckYaml(filepath string, m map[string][]string) {
 		log.Fatal(err)
 	}
 
-	err = ioutil.WriteFile(filepath, data, 0)
-	if err != nil {
-		log.Fatalln("Err: Writing File ", filepath, err)
-	}
+	WriteFile(filepath, data)
 }
 
 func CookConfig() {
@@ -77,9 +83,7 @@ func CookConfig() {
 
 	VPrint(fmt.Sprintf("Config Folder  %s", ConfigFolder))
 
-	filesFolders := path.Join(ConfigFolder, "yaml")
-
-	files, err := ioutil.ReadDir(filesFolders)
+	files, err := ioutil.ReadDir(path.Join(ConfigFolder, "yaml"))
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -107,7 +111,7 @@ func CookConfig() {
 			configRows = fmt.Sprintf("%-4s   %-6s   %s", v, p, r)
 		}
 
-		ReadYaml(path.Join(filesFolders, filename), m)
+		ReadYaml(filename, m)
 
 		total := 0
 		for k, v := range m {

@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"log"
 	"os"
 	"path"
 	"sort"
 	"strings"
 
 	"github.com/giteshnxtlvl/cook/pkg/cook"
+	"github.com/manifoldco/promptui"
 )
 
 func analyseParams(params map[string]string) {
@@ -53,10 +54,29 @@ func searchMode(cmds []string) {
 	if !found {
 		fmt.Println("Not Found: ", search)
 	}
-
 }
 
+// Add new set in custom.yaml
+// cook add [keyord]=[values separated by comma] in [category]
 func addMode(cmds []string) {
+	if len(cmds) != 3 {
+		log.Println("Usage: cook add [keyword]=[values separated by comma] in [category]")
+	}
+	k := strings.SplitN(cmds[0], "=", 2)
+	keyword := k[0]
+	values := splitValues(k[1])
+	category := cmds[2]
+	m := make(map[string]map[string][]string)
+	cook.ReadYaml("custom.yaml", m)
+
+	if _, exists := m[category]; exists {
+		m[category][keyword] = append(m[category][keyword], values...)
+	} else {
+		m[category][keyword] = values
+	}
+
+	cook.WriteYaml("custom.yaml", m)
+	fmt.Printf("Added \"%s\" in \"%s\" ", keyword, category)
 }
 
 func updateMode(cmds []string) {
@@ -68,22 +88,65 @@ func updateMode(cmds []string) {
 	}
 }
 
+// Delete from custom.yaml
+// cook delete [keyword]
 func deleteMode(cmds []string) {
+	if len(cmds) != 1 {
+		log.Fatalln("Usage: cook delete [keyword]")
+	}
+	keyword := cmds[0]
+
+	m := make(map[string]map[string][]string)
+	cook.ReadYaml("custom.yaml", m)
+	category := ""
+
+	found := false
+	for k, v := range m {
+
+		if _, exists := v[keyword]; exists {
+			category = k
+			prompt := promptui.Select{
+				Label: fmt.Sprintf("Are you sure, you want to delete \"%s\" from \"%s\"?", keyword, k),
+				Items: []string{"No", "Yes"},
+			}
+
+			_, result, err := prompt.Run()
+
+			if err != nil {
+				fmt.Printf("Prompt failed %v\n", err)
+				return
+			}
+
+			if result == "Yes" {
+				found = true
+			} else {
+				log.Fatalln("Not deleted")
+			}
+			break
+		}
+	}
+
+	if found {
+		delete(m[category], keyword)
+		fmt.Printf("Deleted \"%s\" from \"%s\" ", keyword, category)
+		cook.WriteYaml("custom.yaml", m)
+	} else {
+		log.Fatalln("Keyword doesn't exists")
+	}
+
 }
 func cleanMode(cmds []string) {
 }
 func infoMode(cmds []string) {
 	set := cmds[0]
 
-	filepath := path.Join(cook.ConfigFolder, "yaml", set)
-
 	m := make(map[string]map[string][]string)
 	if strings.HasSuffix(set, ".yaml") || strings.HasPrefix(set, ".yml") {
-		cook.ReadYaml(filepath, m)
+		cook.ReadYaml(set, m)
 	}
 
 	fmt.Println("\n" + cook.Blue + set + cook.Reset)
-	fmt.Println("Path    : ", filepath)
+	fmt.Println("Path    : ", path.Join(cook.ConfigFolder, "yaml", set))
 	fmt.Println("Sets    : ", len(m))
 	fmt.Println("Version : ", len(m))
 }
@@ -92,12 +155,8 @@ func showMode(cmds []string) {
 	set := cmds[0]
 
 	if strings.HasSuffix(set, ".yaml") || strings.HasPrefix(set, ".yml") {
-		data, err := ioutil.ReadFile(path.Join(cook.ConfigFolder, "yaml", set))
-		fmt.Println()
-		fmt.Println(string(data))
-		if err == nil {
-			return
-		}
+		fmt.Println(string(cook.ReadFile(path.Join(cook.ConfigFolder, "yaml", set))))
+		return
 	}
 
 	if vals, exists := cook.M[set]; exists {

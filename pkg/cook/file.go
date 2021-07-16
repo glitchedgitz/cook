@@ -2,7 +2,6 @@ package cook
 
 import (
 	"bufio"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -24,15 +23,15 @@ func FileValues(pattern string, array *[]string) {
 		log.Fatalln("Err: In pattern ", err)
 	}
 	for _, file := range files {
-		readFile, err := os.Open(file)
+		ReadFile, err := os.Open(file)
 
 		if err != nil {
 			log.Fatalln("Err: Opening File ", file)
 		}
 
-		defer readFile.Close()
+		defer ReadFile.Close()
 
-		fileScanner := bufio.NewScanner(readFile)
+		fileScanner := bufio.NewScanner(ReadFile)
 
 		for fileScanner.Scan() {
 			line := strings.TrimRight(fileScanner.Text(), "\r")
@@ -51,15 +50,15 @@ func RawFileValues(pattern string, allLines map[string]bool) {
 		log.Fatalln("Err: In pattern ", err)
 	}
 	for _, file := range files {
-		readFile, err := os.Open(file)
+		ReadFile, err := os.Open(file)
 
 		if err != nil {
 			log.Fatalln("Err: Opening File ", file)
 		}
 
-		defer readFile.Close()
+		defer ReadFile.Close()
 
-		fileScanner := bufio.NewScanner(readFile)
+		fileScanner := bufio.NewScanner(ReadFile)
 
 		for fileScanner.Scan() {
 			line := strings.TrimRight(fileScanner.Text(), "\r")
@@ -91,13 +90,7 @@ func FindRegex(data []byte, expresssion string, array *[]string) {
 }
 
 func FileRegex(file string, expresssion string, array *[]string) {
-
-	content, err := ioutil.ReadFile(file)
-	if err != nil {
-		log.Fatalln("Error reading file" + file)
-	}
-
-	FindRegex(content, expresssion, array)
+	FindRegex(ReadFile(file), expresssion, array)
 }
 
 func RawFileRegex(files []string, expresssion string, array *[]string) {
