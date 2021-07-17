@@ -46,7 +46,7 @@ func WriteYaml(filepath string, m interface{}) {
 	WriteFile(filepath, data)
 }
 
-func readInfoYaml(filepath string, m map[string][]string) {
+func ReadInfoYaml(filepath string, m map[string][]string) {
 	content := ReadFile(filepath)
 
 	err := yaml.Unmarshal([]byte(content), &m)

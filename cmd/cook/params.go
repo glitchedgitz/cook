@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/giteshnxtlvl/cook/pkg/cook"
+	"github.com/giteshnxtlvl/cook/pkg/methods"
 	"github.com/giteshnxtlvl/cook/pkg/parse"
 )
 
@@ -19,11 +20,10 @@ var (
 	verbose       = parse.B("-v", "-verbose")
 	showCol       = parse.B("-c", "-col")
 	min           = parse.I("-m", "-min")
-	appendColumns = parse.S("-a", "-append")
+	methodParam   = parse.S("-func", "-method")
+	methodsForAll = parse.S("-funcAll", "-methodAll")
+	appendParam   = parse.S("-a", "-append")
 	showConfig    = parse.B("-conf", "-config")
-	caseValue     = parse.S("-ca", "-case")
-	encodeValue   = parse.S("-e", "-encode")
-	l337          = parse.I("-l", "-leet")
 )
 
 var cmdFunctions = map[string]func([]string){
@@ -76,6 +76,41 @@ func cmdsMode() {
 	}
 }
 
+var appendMap = make(map[int]bool)
+
+func parseAppend() {
+	columns := strings.Split(appendParam, ",")
+	for _, colNum := range columns {
+		intValue, err := strconv.Atoi(colNum)
+		if err != nil {
+			log.Fatalf("Err: Column Value %s in not integer", colNum)
+		}
+		appendMap[intValue] = true
+	}
+}
+
+var methodMap = make(map[int][]string)
+
+func getInt(a string) int {
+	num, err := strconv.Atoi(a)
+	if err != nil {
+		log.Fatalf("Err: \"%s\" is not integer", a)
+	}
+	return num
+}
+
+func parseMethod() {
+	meths := strings.Split(methodParam, ";")
+	for _, m := range meths {
+		s := strings.SplitN(m, ":", 2)
+		i := getInt(s[0])
+		if i >= totalCols {
+			log.Fatalf("Err: No Column %d", i)
+		}
+		methodMap[i] = strings.Split(s[1], ",")
+	}
+}
+
 func parseInput() {
 	parse.Help = banner
 	cook.Verbose = verbose
@@ -92,43 +127,22 @@ func parseInput() {
 		showConf()
 	}
 
-	if len(encodeValue) > 0 {
-		encodeString = strings.Split(encodeValue, ":")
-		doEncode = true
-	}
-
 	params = parse.UserDefinedFlags()
 	pattern = parse.Args
 
 	totalCols = len(pattern)
 
 	analyseParams(params)
-
 	cmdsMode()
 	setMin()
+	methods.LeetBegin()
 
-	if caseValue != "" {
-		columnCases = cook.UpdateCases(caseValue, totalCols)
+	if len(appendParam) > 0 {
+		parseAppend()
 	}
 
-	if l337 > -1 {
-		doLeet = true
-		cook.LeetBegin()
-		if l337 > 1 {
-			fmt.Println("Err: -1337 can be 0 or 1, 0 - Calm Mode & 1 - Angry Mode", l337)
-			os.Exit(0)
-		}
-	}
-
-	if len(appendColumns) > 0 {
-		columns := strings.Split(appendColumns, ",")
-		for _, colNum := range columns {
-			intValue, err := strconv.Atoi(colNum)
-			if err != nil {
-				log.Fatalf("Err: Column Value %s in not integer", colNum)
-			}
-			appendMode[intValue] = true
-		}
+	if len(methodParam) > 0 {
+		parseMethod()
 	}
 
 	if showCol {

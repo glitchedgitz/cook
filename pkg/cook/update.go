@@ -17,7 +17,7 @@ func getLocalFile(m map[string][]string) {
 	}
 
 	localfile := path.Join(ConfigFolder, "info.yaml")
-	readInfoYaml(localfile, m)
+	ReadInfoYaml(localfile, m)
 }
 
 func getRepoFile(m map[string][]string) {

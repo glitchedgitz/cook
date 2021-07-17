@@ -122,5 +122,5 @@ func CookConfig() {
 	ConfigInfo += fmt.Sprintf("\n    %-25s   %d\n", "TOTAL FILES", totalFiles)
 	ConfigInfo += fmt.Sprintf("    %-25s   %d\n", "TOTAL WORDLISTS SET", wholeTotal)
 
-	readInfoYaml(path.Join(ConfigFolder, "check.yaml"), checkM)
+	ReadInfoYaml(path.Join(ConfigFolder, "check.yaml"), checkM)
 }

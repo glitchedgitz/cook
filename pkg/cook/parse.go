@@ -19,64 +19,6 @@ var (
 	LowerCase  = false
 )
 
-var columnCases = make(map[int]map[string]bool)
-
-func UpdateCases(caseValue string, noOfColumns int) map[int]map[string]bool {
-	caseValue = strings.ToUpper(caseValue)
-
-	for i := 0; i < noOfColumns; i++ {
-		columnCases[i] = make(map[string]bool)
-	}
-
-	//Column Wise Cases
-	if strings.Contains(caseValue, ":") {
-		for _, val := range strings.Split(caseValue, ",") {
-			v := strings.SplitN(val, ":", 2)
-			i, err := strconv.Atoi(v[0])
-			if err != nil {
-				log.Fatalf("Err: Invalid column index %s", v[0])
-			}
-			for _, j := range strings.Split(v[1], "") {
-				columnCases[i][j] = true
-			}
-		}
-	} else {
-		//Global Cases
-		all := false
-		if caseValue == "A" {
-			all = true
-			caseValue = ""
-		}
-
-		if all || strings.Contains(caseValue, "C") {
-			columnCases[0]["L"] = true
-			for i := 1; i < noOfColumns; i++ {
-				columnCases[i]["T"] = true
-			}
-			caseValue = strings.ReplaceAll(caseValue, "C", "")
-		}
-
-		if all || strings.Contains(caseValue, "U") {
-			UpperCase = true
-			caseValue = strings.ReplaceAll(caseValue, "U", "")
-		}
-
-		if all || strings.Contains(caseValue, "L") {
-			LowerCase = true
-			caseValue = strings.ReplaceAll(caseValue, "L", "")
-		}
-
-		if all || strings.Contains(caseValue, "T") {
-			for i := 0; i < noOfColumns; i++ {
-				columnCases[i]["T"] = true
-			}
-		}
-
-	}
-
-	return columnCases
-}
-
 func PrintPattern(k string, v []string, search string) {
 	// fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+Reset))
 	fmt.Printf("%s%s{\n", Blue+k+Reset, strings.ReplaceAll(v[0], search, Blue+search+Reset))
