@@ -40,8 +40,8 @@ func searchMode(cmds []string) {
 					for _, file := range v {
 						fmt.Printf("    %s\n", strings.ReplaceAll(file, search, cook.Blue+search+cook.Reset))
 					}
-				} else if cat == "patterns" {
-					cook.PrintPattern(k, v, search)
+				} else if cat == "functions" {
+					cook.PrintFunc(k, v, search)
 				} else {
 					fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+cook.Reset))
 					fmt.Println(strings.ReplaceAll(fmt.Sprintf("    %v\n", v), search, cook.Blue+search+cook.Reset))
@@ -173,7 +173,7 @@ func showMode(cmds []string) {
 			}
 		} else {
 			for _, k := range keys {
-				cook.PrintPattern(k, vals[k], "")
+				cook.PrintFunc(k, vals[k], "")
 			}
 		}
 	} else {

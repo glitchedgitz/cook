@@ -8,25 +8,8 @@ import (
 	"strings"
 
 	"github.com/giteshnxtlvl/cook/pkg/cook"
-	"github.com/giteshnxtlvl/pencode/pkg/pencode"
 	"golang.org/x/net/publicsuffix"
 )
-
-func Encode(lines []string, value string, array *[]string) {
-	encodings := strings.Split(value, ":")
-	chain := pencode.NewChain()
-	for _, line := range lines {
-		err := chain.Initialize(encodings)
-		if err != nil {
-			log.Fatalln(err)
-		}
-		output, err := chain.Encode([]byte(line))
-		if err != nil {
-			log.Fatalln(err)
-		}
-		*array = append(*array, string(output))
-	}
-}
 
 func FileBase(urls []string, useless string, array *[]string) {
 	for _, u := range urls {

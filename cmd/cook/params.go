@@ -19,9 +19,9 @@ var (
 	help          = parse.B("-h", "-help")
 	verbose       = parse.B("-v", "-verbose")
 	showCol       = parse.B("-c", "-col")
-	min           = parse.I("-m", "-min")
-	methodParam   = parse.S("-func", "-method")
-	methodsForAll = parse.S("-funcAll", "-methodAll")
+	min           = parse.I("-min", "-min")
+	methodParam   = parse.S("-mc", "-methodcol")
+	methodsForAll = parse.S("-m", "-method")
 	appendParam   = parse.S("-a", "-append")
 	showConfig    = parse.B("-conf", "-config")
 )
@@ -44,6 +44,15 @@ func showConf() {
 	fmt.Println(cook.ConfigInfo)
 
 	os.Exit(0)
+}
+
+// Todo: replace this func whereevery needed
+func getInt(a string) int {
+	num, err := strconv.Atoi(a)
+	if err != nil {
+		log.Fatalf("Err: \"%s\" is not integer", a)
+	}
+	return num
 }
 
 func setMin() {
@@ -91,23 +100,30 @@ func parseAppend() {
 
 var methodMap = make(map[int][]string)
 
-func getInt(a string) int {
-	num, err := strconv.Atoi(a)
-	if err != nil {
-		log.Fatalf("Err: \"%s\" is not integer", a)
-	}
-	return num
-}
-
 func parseMethod() {
 	meths := strings.Split(methodParam, ";")
+	forAllCols := []string{}
+
+	var modifiedCol = make(map[int]bool)
+
 	for _, m := range meths {
-		s := strings.SplitN(m, ":", 2)
-		i := getInt(s[0])
-		if i >= totalCols {
-			log.Fatalf("Err: No Column %d", i)
+		if strings.Contains(m, ":") {
+			s := strings.SplitN(m, ":", 2)
+			i := getInt(s[0])
+			if i >= totalCols {
+				log.Fatalf("Err: No Column %d", i)
+			}
+			methodMap[i] = strings.Split(s[1], ",")
+			modifiedCol[i] = true
+		} else {
+			forAllCols = append(forAllCols, strings.Split(m, ",")...)
 		}
-		methodMap[i] = strings.Split(s[1], ",")
+	}
+
+	for i := 0; i < totalCols; i++ {
+		if !modifiedCol[i] {
+			methodMap[i] = forAllCols
+		}
 	}
 }
 
@@ -150,5 +166,4 @@ func parseInput() {
 	}
 
 	cook.VPrint(fmt.Sprintf("Pattern: %v \n", pattern))
-
 }

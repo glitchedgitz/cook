@@ -6,7 +6,7 @@ import (
 )
 
 // These are messed up, something is something else
-const (
+var (
 	Blue    = "\u001b[38;5;45m"
 	Grey    = "\u001b[38;5;252m"
 	Red     = "\u001b[38;5;42m"

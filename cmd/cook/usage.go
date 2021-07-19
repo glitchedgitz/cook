@@ -28,17 +28,23 @@ var banner = fmt.Sprintf(`
 `, version)
 
 var helpFunctions = map[string]func(){
-	"case":     caseHelp,
-	"encode":   encodeHelp,
-	"function": funcHelp,
-	"pattern":  patternHelp,
-	"usage":    usageHelp,
-	"flags":    flagsHelp,
+	"methods": methHelp,
+	"usage":   usageHelp,
+	"flags":   flagsHelp,
 }
 
 func helpMode(h []string) {
+
+	helpModeNames := func() string {
+		t := ""
+		for k := range helpFunctions {
+			t += k + " "
+		}
+		return t
+	}()
+
 	if len(h) <= 0 {
-		log.Fatalln("Ask for these... case, encode, file, function, patterns or usage")
+		log.Fatalf("Ask for these... %s", helpModeNames)
 	}
 
 	help := strings.ToLower(h[0])
@@ -46,7 +52,7 @@ func helpMode(h []string) {
 	if fn, exists := helpFunctions[help]; exists {
 		fn()
 	} else {
-		log.Fatalln("Ask for these... case, encode, file, function, patterns or usage")
+		log.Fatalf("Ask for these... %s", helpModeNames)
 	}
 
 	os.Exit(0)
@@ -78,66 +84,90 @@ func flagsHelp() {
 	)
 
 	printHelp(
-		"SEARCH",
-		"cook search [word]",
-	)
-
-	printHelp(
-		"HELP",
-		"cook help [word] (case, encode, file, functions, patterns, usage)",
-	)
-
-	printHelp(
-		"UPDATE",
-		"cook update [filename]",
-		"This will update the file's cache.",
-		"   - Use \"all\" to update everything you have previously fetched",
-		"   - Use \"cook\" to update cooks-wordlists-database",
+		"MODES",
+		"Search                     cook search [word]",
+		"Help                       cook help [word]",
+		"Update                     cook update [filename]",
+		"                           This will update the file's cache.",
+		"                              - Use \"all\" to update everything you have previously fetched",
+		"                              - Use \"cook\" to update cooks-wordlists-database",
+		"Add                        cook add [values, separated by comma] in [category]",
+		"                           (files, raw-files, patterns, lists, exts or chars)",
+		"                           (This will only make changes in custom.yaml)",
+		"Delete                     cook delete [keyword]",
+		"                           (This will only make changes in custom.yaml)",
+		"Show                       cook show [category]",
+		"                           Better not try for \"files\"",
 	)
 
 	printHelp(
 		"FLAGS",
-		"-l           : a->4, b->8, e->3 ...",
-		"                  It has two modes [0 Calm][1 Aggressive - Print every combinations]",
-		"-a           : Append to the previous lines, instead of permutations",
-		"-col         : Print column numbers and there values",
-		"-c           : Define Cases, (U)ppercase, (L)owercase, (T)Titlecase, (C)Camelcase",
-		"-conf        : Config Information",
-		"-e           : Encode the whole output in ",
-		"-m           : Minimum no of columns to print			  ",
-		"-v           : Verbose",
-		"-h           : Help",
+		"-a      -append            Append to the previous lines, instead of permutations",
+		"-c      -col               Print column numbers and there values",
+		"-conf,  -config            Config Information",
+		"-mc,     -methodcol        Apply methods column wise",
+		"                           	-mc 0:md5,b64e; 1:reverse",
+		"                           To all cols separate",
+		"                           	-mc md5,b64e",
+		"-m,     -method            Apply methods to final output",
+		"-h,     -help              Help",
+		"        -min               Minimum no of columns to print",
+		"-v,     -verbose           Verbose",
 	)
 
 }
 
-func caseHelp() {
+func methHelp() {
 	printHelp(
-		"FOR FINAL OUTPUT",
-		"-case A for ALL ",
-		"-case U for Uppercase",
-		"-case L for Lowercase",
-		"-case T for Titlecase",
-		"-case C for Camelcase",
+		"METHODS",
+		"Apply different sets of operations to your wordlists",
 	)
 	printHelp(
-		"FOR PARTICULAR COLUMN, (no camel)",
-		"-case 0:U,2:T",
-		"    Col 0 - Uppercase",
-		"    Col 2 - Titlecase",
+		"STRING/LIST/JSON",
+		"sort                           - Sort them",
+		"sortu                          - Sort them with unique values only",
+		"upper                          - Uppercase",
+		"lower                          - Lowercase",
+		"title                          - Titlecase",
+		"reverse                        - Reverse string",
+		"leet                           - a->4, b->8, e->3 ...",
+		"                                 leet[0] or leet[1]",
+		"json                           - Extract JSON field",
+		"                                 json[key] or json[key:subkey:sub-subkey]",
+		"smart                          - This will split the word from naming convensions",
+		"                                 redirectUri, redirect_uri, redirect-uri  ->  [redirect, uri] (outcome)",
+		"smartjoin                      - This will split the word from naming convensions and join back with your charcter",
+		"                                 param.smartjoin[_]",
+		"                                     redirect-uri  ->  redirect_uri",
+		"                                     redirectUri   ->  redirect_uri",
 	)
 	printHelp(
-		"MULTIPLE CASES",
-		"-case 0:UT,2:A (column wise)",
-		"-case TC (final output)",
+		"CASES",
+		"u          upper               - Uppercase",
+		"l          lower               - Lowercase",
+		"t          title               - Titlecase",
 	)
-}
-
-func encodeHelp() {
-	fmt.Println("\nWRAP YOUR PAYLOADS USING THIS")
-
 	printHelp(
-		"MULTIPLE CASES",
+		"URLS",
+		"fb         filebase            - Extract filename from path or url",
+		"s          scheme              - Extract http, https, gohper, ws, etc. from URL",
+		"           user                - Extract username from url",
+		"           pass                - Extract password from url",
+		"h          host                - Extract host from url",
+		"p          port                - Extract port from url",
+		"ph         path                - Extract path from url",
+		"f          fragment            - Extract fragment from url",
+		"q          query               - Extract whole query from url",
+		"k          keys                - Extract keys from url",
+		"v          values              - Extract values from url",
+		"d          domain              - Extract domain from url",
+		"           tld                 - Extract tld from url",
+		"           alldir              - Extract all dirrectories from url's path",
+		"sub        subdomain           - Extract subdomain from url",
+		"           allsubs             - Extract subdomain from url",
+	)
+	printHelp(
+		"ENCODERS",
 		"b64e,      b64encode           - Base64 encoder",
 		"hexe,      hexencode           - Hex string encoder",
 		"jsone,     jsonescape          - JSON escape",
@@ -148,7 +178,6 @@ func encodeHelp() {
 		"urleall,   urlencodeall        - URL encode all characters",
 		"unicodee,  unicodeencodeall    - Unicode escape string encode (all characters)",
 	)
-
 	printHelp(
 		"DECODERS",
 		"b64d,      b64decode           - Base64 decoder",
@@ -158,7 +187,6 @@ func encodeHelp() {
 		"urld,      urldecode           - URL decode",
 		"xmlu,      xmlunescape         - XML unescape",
 	)
-
 	printHelp(
 		"HASHES",
 		"md5                            - MD5 sum",
@@ -168,46 +196,6 @@ func encodeHelp() {
 		"sha384                         - SHA384 checksum",
 		"sha512                         - SHA512 checksum",
 	)
-
-	fmt.Println()
-}
-
-func funcHelp() {
-	printHelp(
-		"METHODS",
-		"leet                    - a->4, b->8, e->3 ...",
-		"case                    - Apply cases",
-		"                          case[U] (U, L, T) or case[ULT] multiple cases",
-		"",
-		"json                    - Read JSON ",
-		"                          json[key] or json[key:subkey:sub-subkey]",
-		"",
-		"encode                  - Encode Functions ",
-		"                          encode[encoding]",
-		"                                 encode[en1:en2:en3] Apply one after other method",
-		"",
-		"wordplay                - This will split the word from naming convensions",
-		"                          redirectUri, redirect_uri, redirect-uri  ->  [redirect, uri] (outcome)",
-		"",
-		"fb   filebase           - Extract filename from path or url",
-		"s    scheme             - Extract http, https, gohper, ws, etc. from URL",
-		"u    user               - Extract username from url",
-		"p    pass               - Extract password from url",
-		"u:p  user:pass          - Extract username:password from url with colon",
-		"h    host               - Extract host from url",
-		"pr   port               - Extract port from url",
-		"h:p  host:port          - Extract host:port from url with colon",
-		"ph   path               - Extract path from url",
-		"f    fragment           - Extract fragment from url",
-		"q    query              - Extract whole query from url",
-		"k    keys               - Extract keys from url",
-		"v    values             - Extract values from url",
-		"k:v  keys:values        - Extract keys:values from url",
-		"d    domain             - Extract domain from url",
-		"     tld                - Extract tld from url",
-		"     alldir             - Extract all dirrectories from url's path",
-		"sub  subdomain          - Extract subdomain from url",
-	)
 }
 
 func usageHelp() {
@@ -215,10 +203,6 @@ func usageHelp() {
 		"BASIC USAGE",
 		"$ cook -start admin,root  -sep _,-  -end secret,critical  /:start:sep:end",
 		"$ cook /:admin,root:_,-:secret,critical",
-	)
-	printHelp(
-		"FILE WITH REGEX",
-		"$ cook -s company -ext raft-large-extensions:\\.asp.*  /:s:exp",
 	)
 	printHelp(
 		"FUNCTIONS",
@@ -251,8 +235,4 @@ func usageHelp() {
 		"Print value without any parsing/modification",
 		"$ cook n:n:n -min 1",
 	)
-}
-
-func patternHelp() {
-	fmt.Println()
 }

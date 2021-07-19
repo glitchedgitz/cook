@@ -19,7 +19,7 @@ var (
 	LowerCase  = false
 )
 
-func PrintPattern(k string, v []string, search string) {
+func PrintFunc(k string, v []string, search string) {
 	// fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+Reset))
 	fmt.Printf("%s%s{\n", Blue+k+Reset, strings.ReplaceAll(v[0], search, Blue+search+Reset))
 	for _, file := range v[1:] {
@@ -28,7 +28,7 @@ func PrintPattern(k string, v []string, search string) {
 	fmt.Print("}\n\n")
 }
 
-//Checking for patterns/functions
+//Checking for functions
 func ParseFunc(value string, array *[]string) bool {
 
 	if !(strings.Contains(value, "(") && strings.Contains(value, ")")) {
@@ -36,21 +36,21 @@ func ParseFunc(value string, array *[]string) bool {
 	}
 
 	funcName, funcArgs := parse.ReadCrBrSepBy(value, ",")
-	// fmt.Println(funcName)
-	// fmt.Println(funcValues)
+	fmt.Println(funcName)
+	fmt.Println(funcArgs)
 
 	fmt.Print("")
 
-	if funcPatterns, exists := M["patterns"][funcName]; exists {
+	if funcPatterns, exists := M["functions"][funcName]; exists {
 
 		funcDef := strings.Split(funcPatterns[0][1:len(funcPatterns[0])-1], ",")
 
-		// fmt.Printf("Func Arg: %v", funcArgs)
-		// fmt.Printf("\tFunc Def: %v", funcDef)
+		fmt.Printf("Func Arg: %v", funcArgs)
+		fmt.Printf("\tFunc Def: %v", funcDef)
 
 		if len(funcDef) != len(funcArgs) {
 			log.Fatalln("\nErr: No of Arguments are different for")
-			PrintPattern(funcName, funcPatterns, funcName)
+			PrintFunc(funcName, funcPatterns, funcName)
 		}
 
 		for _, p := range funcPatterns[1:] {
@@ -69,9 +69,7 @@ var InputFile = make(map[string]bool)
 
 func ParseFile(param string, value string, array *[]string) bool {
 
-	// Checking for file
-	if InputFile[param] && !strings.Contains(value, ":") {
-		// AddFilesToArray(value, array)
+	if InputFile[param] {
 		FileValues(value, array)
 		return true
 	}
@@ -80,41 +78,6 @@ func ParseFile(param string, value string, array *[]string) bool {
 		return true
 	}
 
-	// Checking for File and Regex
-	// if strings.Contains(value, ":") {
-	// File may starts from E: C: D: for windows + Regex is supplied
-	// if strings.Count(value, ":") == 2 {
-	// 	tmp := strings.SplitN(value, ":", 3)
-
-	// 	one, two, three := tmp[0], tmp[1], tmp[2]
-	// 	test1, test2 := one+":"+two, two+":"+three
-
-	// 	if _, err := os.Stat(test1); err == nil {
-	// 		FileRegex(test1, three, array)
-	// 		return true
-	// 	} else if _, err := os.Stat(test2); err == nil {
-	// 		FileRegex(one, test2, array)
-	// 		return true
-	// 	}
-	// }
-
-	// if strings.Count(value, ":") == 1 {
-	// 	if _, err := os.Stat(value); err == nil {
-	// 		AddFilesToArray(value, array)
-	// 		return true
-	// 	}
-	// 	t := strings.SplitN(value, ":", 2)
-	// 	file, reg := t[0], t[1]
-
-	// 	if strings.HasSuffix(file, ".txt") {
-	// 		FileRegex([]string{file}, reg, array)
-	// 		return true
-	// 	} else if files, exists := M["files"][file]; exists {
-	// 		FileRegex(files, reg, array)
-	// 		return true
-	// 	}
-	// }
-	// }
 	return false
 }
 

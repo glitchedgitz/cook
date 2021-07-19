@@ -12,14 +12,16 @@ import (
 )
 
 var methodFunc = map[string]func([]string, string, *[]string){
+	"u":          methods.Upper,
 	"upper":      methods.Upper,
+	"l":          methods.Lower,
 	"lower":      methods.Lower,
+	"t":          methods.Title,
 	"title":      methods.Title,
 	"filebase":   methods.FileBase,
 	"leet":       methods.Leet,
 	"json":       methods.GetJsonField,
 	"smart":      methods.SmartWords,
-	"encode":     methods.Encode,
 	"smartjoin":  methods.SmartWords,
 	"regex":      methods.Regex,
 	"split":      methods.Split,
@@ -27,55 +29,73 @@ var methodFunc = map[string]func([]string, string, *[]string){
 	"sortu":      methods.SortUnique,
 	"splitindex": methods.SplitIndex,
 	"reverse":    methods.Reverse,
+	"c":          methods.Charcode,
+	"charcode":   methods.Charcode,
 }
 
 var urlFuncitons = map[string]func(*url.URL, *[]string){
-	"keys":   methods.UrlKey,
-	"subs":   methods.UrlSub,
-	"allsub": methods.UrlAllSub,
-	"tld":    methods.UrlTld,
-	"user":   methods.UrlUser,
-	"pass":   methods.UrlPass,
-	"host":   methods.UrlHost,
-	"port":   methods.UrlPort,
-	"path":   methods.UrlPath,
-	"frag":   methods.UrlFrag,
-	"query":  methods.UrlRawQuery,
-	"value":  methods.UrlValue,
-	"scheme": methods.UrlScheme,
-	"domain": methods.UrlDomain,
-	"alldir": methods.UrlAllDir,
+	"k":         methods.UrlKey,
+	"keys":      methods.UrlKey,
+	"sub":       methods.UrlSub,
+	"subdomain": methods.UrlSub,
+	"allsub":    methods.UrlAllSub,
+	"tld":       methods.UrlTld,
+	"user":      methods.UrlUser,
+	"pass":      methods.UrlPass,
+	"h":         methods.UrlHost,
+	"host":      methods.UrlHost,
+	"p":         methods.UrlPort,
+	"port":      methods.UrlPort,
+	"ph":        methods.UrlPath,
+	"path":      methods.UrlPath,
+	"f":         methods.UrlFrag,
+	"fragment":  methods.UrlFrag,
+	"q":         methods.UrlRawQuery,
+	"query":     methods.UrlRawQuery,
+	"v":         methods.UrlValue,
+	"value":     methods.UrlValue,
+	"s":         methods.UrlScheme,
+	"scheme":    methods.UrlScheme,
+	"d":         methods.UrlDomain,
+	"domain":    methods.UrlDomain,
+	"alldir":    methods.UrlAllDir,
 }
 
 var availableEncoders = map[string]pencode.Encoder{
-	"b64encode":        pencode.Base64Encoder{},
 	"b64e":             pencode.Base64Encoder{},
-	"b64decode":        pencode.Base64Decoder{},
+	"b64encode":        pencode.Base64Encoder{},
 	"b64d":             pencode.Base64Decoder{},
+	"b64decode":        pencode.Base64Decoder{},
 	"filename.tmpl":    pencode.Template{},
-	"hexencode":        pencode.HexEncoder{},
 	"hexe":             pencode.HexEncoder{},
-	"hexdecode":        pencode.HexDecoder{},
+	"hexencode":        pencode.HexEncoder{},
 	"hexd":             pencode.HexDecoder{},
+	"hexdecode":        pencode.HexDecoder{},
+	"jsone":            pencode.JSONEscaper{},
 	"jsonescape":       pencode.JSONEscaper{},
+	"jsonu":            pencode.JSONUnescaper{},
 	"jsonunescape":     pencode.JSONUnescaper{},
-	"lower":            pencode.StrToLower{},
 	"md5":              pencode.MD5Hasher{},
 	"sha1":             pencode.SHA1Hasher{},
 	"sha224":           pencode.SHA224Hasher{},
 	"sha256":           pencode.SHA256Hasher{},
 	"sha384":           pencode.SHA384Hasher{},
 	"sha512":           pencode.SHA512Hasher{},
+	"unicoded":         pencode.UnicodeDecode{},
 	"unicodedecode":    pencode.UnicodeDecode{},
+	"unicodee":         pencode.UnicodeEncodeAll{},
 	"unicodeencodeall": pencode.UnicodeEncodeAll{},
-	"upper":            pencode.StrToUpper{},
-	"urlencode":        pencode.URLEncoder{},
 	"urle":             pencode.URLEncoder{},
+	"urlencode":        pencode.URLEncoder{},
 	"urld":             pencode.URLDecoder{},
+	"urldecode":        pencode.URLDecoder{},
+	"urlea":            pencode.URLEncoderAll{},
 	"urlencodeall":     pencode.URLEncoderAll{},
 	"utf16":            pencode.UTF16LEEncode{},
 	"utf16be":          pencode.UTF16BEEncode{},
+	"xmle":             pencode.XMLEscaper{},
 	"xmlescape":        pencode.XMLEscaper{},
+	"xmlu":             pencode.XMLUnescaper{},
 	"xmlunescape":      pencode.XMLUnescaper{},
 }
 
@@ -87,9 +107,9 @@ func applyMethods(vallll []string, meths []string, array *[]string) {
 	for _, g := range meths {
 		if strings.Contains(g, "[") {
 			name, value := parse.ReadSqBr(g)
-			analyseMethods = append(analyseMethods, []string{name, value})
+			analyseMethods = append(analyseMethods, []string{strings.ToLower(name), value})
 		} else {
-			analyseMethods = append(analyseMethods, []string{g, ""})
+			analyseMethods = append(analyseMethods, []string{strings.ToLower(g), ""})
 		}
 	}
 

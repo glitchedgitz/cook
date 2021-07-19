@@ -110,7 +110,7 @@ func ReadCrBr(cmd string) (string, string) {
 func ReadCrBrSepBy(cmd string, sep string) (string, []string) {
 	c := strings.SplitN(cmd, "(", 2)
 	name := c[0]
-	values := strings.Split(c[1][:len(c[1])-1], ":")
+	values := strings.Split(c[1][:len(c[1])-1], sep)
 	return name, values
 }
 
