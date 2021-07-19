@@ -80,11 +80,21 @@ func addMode(cmds []string) {
 }
 
 func updateMode(cmds []string) {
-	filename := cmds[0]
-	filepath := path.Join(home, ".cache", "cook", filename)
-	if files, exists := cook.M["files"][filename]; exists {
+	f := cmds[0]
+
+	if f == "*" {
+		cook.UpdateDb()
+		cook.UpdateCache()
+	} else if f == "db" {
+		cook.UpdateDb()
+	} else if f == "cache" {
+		cook.UpdateCache()
+	} else if files, exists := cook.M["files"][f]; exists {
+		filepath := path.Join(home, ".cache", "cook", f)
 		os.Remove(filepath)
-		cook.CheckFileCache(filename, files)
+		cook.CheckFileCache(f, files)
+	} else {
+		log.Println("No mode or keyword found\nUse \"db\" to update cook-ingredients\nUse \"cache\" to update cached files from soruce\nUse \"*\" to do the both")
 	}
 }
 

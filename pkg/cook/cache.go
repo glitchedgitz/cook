@@ -110,7 +110,7 @@ func AppendToFile(filepath string, data []byte) {
 	}
 }
 
-func UpdateCachedFiles() {
+func UpdateCache() {
 
 	type filedata struct {
 		filepath string

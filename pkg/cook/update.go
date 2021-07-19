@@ -51,7 +51,7 @@ func updateFile(file string) {
 }
 
 // Updating cook's database
-func UpdateCook() {
+func UpdateDb() {
 	var local = make(map[string][]string)
 	var repo = make(map[string][]string)
 	var files = make(map[string]bool)
@@ -70,7 +70,7 @@ func UpdateCook() {
 				updatedFiles++
 			}
 		} else if files[file] {
-			log.Fatalf("\nErr: Please rename the file '%s' because cook-wordlist-database has new file with the same name.\n", file)
+			log.Fatalf("\nErr: Please rename the file '%s' because cook-ingredients has new file with the same name.\n", file)
 		} else {
 			wg.Add(1)
 			fmt.Println("\nAdding new file :)")

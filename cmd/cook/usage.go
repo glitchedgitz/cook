@@ -61,6 +61,7 @@ func helpMode(h []string) {
 func showHelp() {
 	fmt.Fprintln(os.Stderr, banner)
 	fmt.Fprintln(os.Stderr, cook.Reset)
+	flagsHelp()
 	os.Exit(0)
 }
 
@@ -73,7 +74,6 @@ func printHelp(title string, description ...string) {
 }
 
 func flagsHelp() {
-	fmt.Println(banner)
 
 	printHelp("GITHUB", "https://github.com/giteshnxtlvl/cook")
 
@@ -89,10 +89,11 @@ func flagsHelp() {
 		"Help                       cook help [word]",
 		"Update                     cook update [filename]",
 		"                           This will update the file's cache.",
-		"                              - Use \"all\" to update everything you have previously fetched",
-		"                              - Use \"cook\" to update cooks-wordlists-database",
+		"                              - Use \"cache\" to update cached file from source",
+		"                              - Use \"db\" to update cooks-ingredients",
+		"                              - Use \"*\" to do both",
 		"Add                        cook add [values, separated by comma] in [category]",
-		"                           (files, raw-files, patterns, lists, exts or chars)",
+		"                           (files, raw-files, functions, lists, exts or chars)",
 		"                           (This will only make changes in custom.yaml)",
 		"Delete                     cook delete [keyword]",
 		"                           (This will only make changes in custom.yaml)",

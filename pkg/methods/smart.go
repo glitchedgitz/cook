@@ -1,6 +1,8 @@
 package methods
 
-import "strings"
+import (
+	"strings"
+)
 
 func SmartWords(words []string, useless string, array *[]string) {
 	for _, word := range words {
@@ -28,7 +30,24 @@ func SmartWords(words []string, useless string, array *[]string) {
 	}
 }
 
-func SmartWordsJoin(words []string, joinWith []string, array *[]string) {
+func SmartWordsJoin(words []string, values string, array *[]string) {
+
+	vals := strings.SplitN(values, ":", 2)
+	applyCase := vals[0]
+	joinWith := vals[1]
+
+	caseMap := map[string]func(string) string{
+		"l": strings.ToLower,
+		"u": strings.ToUpper,
+		"t": strings.Title,
+		"c": strings.Title,
+	}
+	fn2 := caseMap[applyCase]
+	fn1 := caseMap[applyCase]
+	if applyCase == "c" {
+		fn1 = strings.ToLower
+	}
+
 	for _, word := range words {
 		str := []string{}
 
@@ -50,9 +69,10 @@ func SmartWordsJoin(words []string, joinWith []string, array *[]string) {
 			str = append(str, word[j:])
 		}
 
-		for _, join := range joinWith {
-			*array = append(*array, strings.Join(str, join))
+		str[0] = fn1(str[0])
+		for i, word := range str[1:] {
+			str[i+1] = fn2(word)
 		}
-
+		*array = append(*array, strings.Join(str, joinWith))
 	}
 }
