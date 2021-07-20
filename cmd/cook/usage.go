@@ -29,6 +29,7 @@ var banner = fmt.Sprintf(`
 
 var helpFunctions = map[string]func(){
 	"methods": methHelp,
+	"meths":   methHelp,
 	"usage":   usageHelp,
 	"flags":   flagsHelp,
 }
@@ -38,7 +39,7 @@ func helpMode(h []string) {
 	helpModeNames := func() string {
 		t := ""
 		for k := range helpFunctions {
-			t += k + " "
+			t += k + ", "
 		}
 		return t
 	}()
@@ -113,9 +114,7 @@ func flagsHelp() {
 		"-m,     -method            Apply methods to final output",
 		"-h,     -help              Help",
 		"        -min               Minimum no of columns to print",
-		"-v,     -verbose           Verbose",
 	)
-
 }
 
 func methHelp() {
@@ -127,23 +126,17 @@ func methHelp() {
 		"STRING/LIST/JSON",
 		"sort                           - Sort them",
 		"sortu                          - Sort them with unique values only",
-		"upper                          - Uppercase",
-		"lower                          - Lowercase",
-		"title                          - Titlecase",
 		"reverse                        - Reverse string",
 		"leet                           - a->4, b->8, e->3 ...",
 		"                                 leet[0] or leet[1]",
 		"json                           - Extract JSON field",
 		"                                 json[key] or json[key:subkey:sub-subkey]",
-		"smart                          - This will split the word from naming convensions",
-		"                                 redirectUri, redirect_uri, redirect-uri  ->  [redirect, uri] (outcome)",
-		"smartjoin                      - This will split the word from naming convensions and join back with your charcter",
-		"                                 param.smartjoin[_]",
-		"                                     redirect-uri  ->  redirect_uri",
-		"                                     redirectUri   ->  redirect_uri",
-	)
-	printHelp(
-		"CASES",
+		"smart                          - Separate words with naming convensions",
+		"                                 redirectUri, redirect_uri, redirect-uri  ->  [redirect, uri]",
+		"smartjoin                      - This will split the words from naming convensions &",
+		"                                 param.smartjoin[c,_] (case, join)",
+		"                                 redirect-uri, redirectUri, redirect_uri ->  redirect_Uri",
+		"",
 		"u          upper               - Uppercase",
 		"l          lower               - Lowercase",
 		"t          title               - Titlecase",
@@ -169,24 +162,24 @@ func methHelp() {
 	)
 	printHelp(
 		"ENCODERS",
-		"b64e,      b64encode           - Base64 encoder",
-		"hexe,      hexencode           - Hex string encoder",
-		"jsone,     jsonescape          - JSON escape",
-		"urle,      urlencode           - URL encode reserved characters",
+		"b64e       b64encode           - Base64 encoder",
+		"hexe       hexencode           - Hex string encoder",
+		"jsone      jsonescape          - JSON escape",
+		"urle       urlencode           - URL encode reserved characters",
 		"           utf16               - UTF-16 encoder (Little Endian)",
 		"           utf16be             - UTF-16 encoder (Big Endian)",
-		"xmle,      xmlescape           - XML escape",
-		"urleall,   urlencodeall        - URL encode all characters",
-		"unicodee,  unicodeencodeall    - Unicode escape string encode (all characters)",
+		"xmle       xmlescape           - XML escape",
+		"urleall    urlencodeall        - URL encode all characters",
+		"unicodee   unicodeencodeall    - Unicode escape string encode (all characters)",
 	)
 	printHelp(
 		"DECODERS",
-		"b64d,      b64decode           - Base64 decoder",
-		"hexd,      hexdecode           - Hex string decoder",
-		"jsonu,     jsonunescape        - JSON unescape",
-		"unicoded,  unicodedecode       - Unicode escape string decode",
-		"urld,      urldecode           - URL decode",
-		"xmlu,      xmlunescape         - XML unescape",
+		"b64d       b64decode           - Base64 decoder",
+		"hexd       hexdecode           - Hex string decoder",
+		"jsonu      jsonunescape        - JSON unescape",
+		"unicoded   unicodedecode       - Unicode escape string decode",
+		"urld       urldecode           - URL decode",
+		"xmlu       xmlunescape         - XML unescape",
 	)
 	printHelp(
 		"HASHES",

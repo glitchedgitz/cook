@@ -33,8 +33,13 @@ func SmartWords(words []string, useless string, array *[]string) {
 func SmartWordsJoin(words []string, values string, array *[]string) {
 
 	vals := strings.SplitN(values, ":", 2)
-	applyCase := vals[0]
+	applyCase := strings.ToLower(vals[0])
 	joinWith := vals[1]
+
+	fn1 := func(s string) string {
+		return s
+	}
+	fn2 := fn1
 
 	caseMap := map[string]func(string) string{
 		"l": strings.ToLower,
@@ -42,8 +47,10 @@ func SmartWordsJoin(words []string, values string, array *[]string) {
 		"t": strings.Title,
 		"c": strings.Title,
 	}
-	fn2 := caseMap[applyCase]
-	fn1 := caseMap[applyCase]
+	if _, exists := caseMap[applyCase]; exists {
+		fn2 = caseMap[applyCase]
+		fn1 = caseMap[applyCase]
+	}
 	if applyCase == "c" {
 		fn1 = strings.ToLower
 	}
