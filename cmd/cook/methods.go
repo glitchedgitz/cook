@@ -1,10 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/url"
+	"os"
 	"strings"
 
+	"github.com/adrg/strutil"
+	"github.com/adrg/strutil/metrics"
 	"github.com/ffuf/pencode/pkg/pencode"
 	"github.com/giteshnxtlvl/cook/pkg/cook"
 	"github.com/giteshnxtlvl/cook/pkg/methods"
@@ -130,13 +134,43 @@ func applyMethods(vallll []string, meths []string, array *[]string) {
 				tmp = append(tmp, string(output))
 			}
 		} else {
-			log.Fatalf("Func \"%s\" Doesn't exists", f)
+			fmt.Fprintf(os.Stderr, "\nFunc \"%s\" Doesn't exists\n", f)
+			mistypedCheck(f)
 		}
 		vallll = tmp
 		tmp = nil
 	}
 
 	*array = append(*array, vallll...)
+}
+
+func mistypedCheck(mistyped string) {
+	fmt.Fprintln(os.Stderr)
+
+	if len(mistyped) < 3 {
+		return
+	}
+	fmt.Fprintln(os.Stderr, "Similar Methods")
+
+	check := func(k string) {
+		similarity := strutil.Similarity(mistyped, k, metrics.NewHamming())
+		if similarity >= 0.3 {
+			fmt.Println("-", k)
+		}
+	}
+
+	for k := range methodFunc {
+		check(k)
+	}
+
+	for k := range urlFuncitons {
+		check(k)
+	}
+
+	for k := range availableEncoders {
+		check(k)
+	}
+
 }
 
 func checkMethods(p string, array *[]string) bool {
