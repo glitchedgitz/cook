@@ -136,6 +136,7 @@ func applyMethods(vallll []string, meths []string, array *[]string) {
 		} else {
 			fmt.Fprintf(os.Stderr, "\nFunc \"%s\" Doesn't exists\n", f)
 			mistypedCheck(f)
+			os.Exit(0)
 		}
 		vallll = tmp
 		tmp = nil
@@ -147,15 +148,13 @@ func applyMethods(vallll []string, meths []string, array *[]string) {
 func mistypedCheck(mistyped string) {
 	fmt.Fprintln(os.Stderr)
 
-	if len(mistyped) < 3 {
-		return
-	}
 	fmt.Fprintln(os.Stderr, "Similar Methods")
-
+	found := false
 	check := func(k string) {
 		similarity := strutil.Similarity(mistyped, k, metrics.NewHamming())
 		if similarity >= 0.3 {
 			fmt.Println("-", k)
+			found = true
 		}
 	}
 
@@ -169,6 +168,10 @@ func mistypedCheck(mistyped string) {
 
 	for k := range availableEncoders {
 		check(k)
+	}
+
+	if !found {
+		fmt.Fprintln(os.Stderr, "None")
 	}
 
 }
