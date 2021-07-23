@@ -195,38 +195,35 @@ func methHelp() {
 func usageHelp() {
 	printHelp(
 		"BASIC USAGE",
-		"$ cook -start admin,root  -sep _,-  -end secret,critical  /:start:sep:end",
-		"$ cook /:admin,root:_,-:secret,critical",
+		"$ cook -start admin,root  -sep _,-  -end secret,critical  / start sep end",
+		"$ cook / admin,root _,- secret,critical",
 	)
 	printHelp(
 		"FUNCTIONS",
 		"Use functions such as date for different variations of values",
-		"$ cook -name elliot -birth date(17,Sep,1994) name:birth",
+		"$ cook -dob date(17,Sep,1994) elliot _,- dob",
 	)
 	printHelp(
 		"RANGES",
-		"Use ranges like [1-100], [A-Z], [a-z] or [A-z] in pattern of command",
-		"$ cook -name elliot -birth date(17,Sep,1994) name:birth",
-	)
-	printHelp(
-		"USING CASES",
-		"Uppercase, lowercase, titlecase, camelcase or ALL",
-		"For use case check FLGAS above",
-		"$ cook camel:[1-10]:case -case C",
+		"Use ranges like 1-100, A-Z, a-z or A-z in pattern of command",
+		"$ cook 1-999",
+		"$ cook a-z",
+		"$ cook A-Z",
+		"$ cook X-d",
 	)
 	printHelp(
 		"RAW STRINGS",
 		"Print value without any parsing/modification.",
-		"$ cook -date `date(17,Sep,1994)` raw:date",
+		"$ cook -date `date(17,Sep,1994)` date",
 	)
 	printHelp(
 		"PIPE INPUT",
 		"Use - as param value for pipe input",
-		"$ cook -d - d:/:test",
+		"$ cook -d - d / test",
 	)
 	printHelp(
 		"USING -min",
 		"Print value without any parsing/modification",
-		"$ cook n:n:n -min 1",
+		"$ cook n n n -min 1",
 	)
 }
