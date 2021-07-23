@@ -156,7 +156,7 @@ func infoMode(cmds []string) {
 	}
 
 	fmt.Println("\n" + cook.Blue + set + cook.Reset)
-	fmt.Println("Path    : ", path.Join(cook.ConfigFolder, "yaml", set))
+	fmt.Println("Path    : ", path.Join(cook.ConfigFolder, cook.IngredientsFolder, set))
 	fmt.Println("Sets    : ", len(m))
 	fmt.Println("Version : ", len(m))
 }
@@ -165,7 +165,7 @@ func showMode(cmds []string) {
 	set := cmds[0]
 
 	if strings.HasSuffix(set, ".yaml") || strings.HasPrefix(set, ".yml") {
-		fmt.Println(string(cook.ReadFile(path.Join(cook.ConfigFolder, "yaml", set))))
+		fmt.Println(string(cook.ReadFile(path.Join(cook.ConfigFolder, cook.IngredientsFolder, set))))
 		return
 	}
 

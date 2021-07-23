@@ -14,6 +14,8 @@ import (
 // var content []byte
 var home, _ = os.UserHomeDir()
 var ConfigFolder string
+var IngredientsFolder = "ingredients"
+
 var ConfigInfo string
 var M = make(map[string]map[string][]string)
 var checkM = make(map[string][]string)
@@ -35,7 +37,7 @@ func firstRun() {
 	fmt.Fprintln(os.Stderr, "First Run")
 	fmt.Fprintln(os.Stderr, "Creating and Downloading Cook's Ingredients...\n\n ")
 
-	err := os.MkdirAll(path.Join(ConfigFolder, "yaml"), os.ModePerm)
+	err := os.MkdirAll(path.Join(ConfigFolder, IngredientsFolder), os.ModePerm)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -54,7 +56,7 @@ func firstRun() {
 	for _, v := range structure["yamlfiles"] {
 		filename := path.Base(v)
 		fmt.Fprint(os.Stderr, "\rDownloading                             \r", filename)
-		WriteFile(path.Join(ConfigFolder, "yaml", filename), GetData(v))
+		WriteFile(path.Join(ConfigFolder, IngredientsFolder, filename), GetData(v))
 	}
 	fmt.Fprint(os.Stderr, "\rDone                             \r")
 
@@ -73,7 +75,7 @@ func CookConfig() {
 
 	VPrint(fmt.Sprintf("Config Folder  %s", ConfigFolder))
 
-	files, err := ioutil.ReadDir(path.Join(ConfigFolder, "yaml"))
+	files, err := ioutil.ReadDir(path.Join(ConfigFolder, IngredientsFolder))
 	if err != nil {
 		log.Fatalln(err)
 	}

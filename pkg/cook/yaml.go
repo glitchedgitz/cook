@@ -26,7 +26,7 @@ func WriteFile(filepath string, data []byte) {
 }
 
 func ReadYaml(filename string, m map[string]map[string][]string) {
-	filepath := path.Join(ConfigFolder, "yaml", filename)
+	filepath := path.Join(ConfigFolder, IngredientsFolder, filename)
 
 	content := ReadFile(filepath)
 
