@@ -94,7 +94,7 @@ func flagsHelp() {
 		"                              - Use \"db\" to update cooks-ingredients",
 		"                              - Use \"*\" to do both",
 		"Add                        cook add [values, separated by comma] in [category]",
-		"                           (files, raw-files, functions, lists, exts or chars)",
+		"                           	(files, raw-files, functions and lists)",
 		"                           (This will only make changes in custom.yaml)",
 		"Delete                     cook delete [keyword]",
 		"                           (This will only make changes in custom.yaml)",

@@ -187,6 +187,6 @@ func showMode(cmds []string) {
 			}
 		}
 	} else {
-		fmt.Println("\nNot Found " + set + "\nTry charset, extensions, patterns, files, raw-files, ports or <file>.yaml")
+		fmt.Println("\nNot Found " + set + "\nTry functions, files, raw-files, ports or <file>.yaml")
 	}
 }

@@ -85,20 +85,8 @@ func checkFileSet(p string, array *[]string) bool {
 
 func CheckYaml(p string, array *[]string) bool {
 
-	if val, exists := M["chars"][p]; exists {
-		*array = append(*array, strings.Split(val[0], "")...)
-		return true
-	}
-
 	if val, exists := M["lists"][p]; exists {
 		*array = append(*array, val...)
-		return true
-	}
-
-	if val, exists := M["exts"][p]; exists {
-		for _, ext := range val {
-			*array = append(*array, "."+ext)
-		}
 		return true
 	}
 
