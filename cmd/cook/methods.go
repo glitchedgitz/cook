@@ -29,9 +29,10 @@ var methodFunc = map[string]func([]string, string, *[]string){
 	"smart":      methods.SmartWords,
 	"smartjoin":  methods.SmartWordsJoin,
 	"regex":      methods.Regex,
-	"split":      methods.Split,
 	"sort":       methods.Sort,
 	"sortu":      methods.SortUnique,
+	"split":      methods.Split,
+	"replace":    methods.Replace,
 	"splitindex": methods.SplitIndex,
 	"reverse":    methods.Reverse,
 	"c":          methods.Charcode,
@@ -105,7 +106,6 @@ var availableEncoders = map[string]pencode.Encoder{
 }
 
 func applyMethods(vallll []string, meths []string, array *[]string) {
-
 	tmp := []string{}
 	analyseMethods := [][]string{}
 

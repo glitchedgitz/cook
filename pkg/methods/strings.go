@@ -39,6 +39,15 @@ func Reverse(values []string, useless string, array *[]string) {
 	}
 }
 
+func Replace(values []string, value string, array *[]string) {
+	s := strings.SplitN(value, ":", 2)
+	replaceText := s[0]
+	replaceWith := s[1]
+	for _, v := range values {
+		*array = append(*array, strings.ReplaceAll(v, replaceText, replaceWith))
+	}
+}
+
 func Split(values []string, split string, array *[]string) {
 	for _, v := range values {
 		*array = append(*array, strings.Split(v, split)...)
