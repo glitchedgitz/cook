@@ -12,6 +12,8 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
+var myyaml = "my.yaml"
+
 func analyseParams(params map[string]string) {
 	for param, value := range params {
 		// fmt.Println(params)
@@ -67,7 +69,7 @@ func addMode(cmds []string) {
 	values := splitValues(k[1])
 	category := cmds[2]
 	m := make(map[string]map[string][]string)
-	cook.ReadYaml("custom.yaml", m)
+	cook.ReadYaml(myyaml, m)
 
 	if _, exists := m[category]; exists {
 		m[category][keyword] = append(m[category][keyword], values...)
@@ -75,7 +77,7 @@ func addMode(cmds []string) {
 		m[category][keyword] = values
 	}
 
-	cook.WriteYaml("custom.yaml", m)
+	cook.WriteYaml(myyaml, m)
 	fmt.Printf("Added \"%s\" in \"%s\" ", keyword, category)
 }
 
@@ -107,7 +109,7 @@ func deleteMode(cmds []string) {
 	keyword := cmds[0]
 
 	m := make(map[string]map[string][]string)
-	cook.ReadYaml("custom.yaml", m)
+	cook.ReadYaml(myyaml, m)
 	category := ""
 
 	found := false
@@ -139,7 +141,7 @@ func deleteMode(cmds []string) {
 	if found {
 		delete(m[category], keyword)
 		fmt.Printf("Deleted \"%s\" from \"%s\" ", keyword, category)
-		cook.WriteYaml("custom.yaml", m)
+		cook.WriteYaml(myyaml, m)
 	} else {
 		log.Fatalln("Keyword doesn't exists")
 	}
