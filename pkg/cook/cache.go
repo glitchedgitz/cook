@@ -39,10 +39,10 @@ func CheckFileCache(filename string, files []string) {
 	makeCacheFolder()
 	filepath := path.Join(home, ".cache", "cook", filename)
 
-	if _, err := os.Stat(filepath); err != nil {
+	if _, e := os.Stat(filepath); e != nil {
 		fmt.Fprintf(os.Stderr, "Creating cache for %s\n", filename)
 		var tmp = make(map[string]bool)
-		f, err := os.OpenFile(filepath, os.O_APPEND, os.ModeAppend)
+		f, err := os.OpenFile(filepath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 		if err != nil {
 			log.Fatal("Creating File: ", err)
 		}
@@ -53,8 +53,9 @@ func CheckFileCache(filename string, files []string) {
 			fmt.Fprintf(os.Stderr, "Fetching %s\n", file)
 
 			res, err := http.Get(file)
+
 			if err != nil {
-				log.Fatal(err)
+				log.Fatal("Getting Data", err)
 			}
 
 			defer res.Body.Close()
@@ -80,6 +81,7 @@ func CheckFileCache(filename string, files []string) {
 		WriteYaml(path.Join(ConfigFolder, "check.yaml"), checkM)
 
 	} else {
+
 		chkfiles := checkM[filename]
 		if len(files) != len(chkfiles) {
 			os.Remove(filepath)
@@ -95,19 +97,6 @@ func CheckFileCache(filename string, files []string) {
 				break
 			}
 		}
-	}
-}
-
-func AppendToFile(filepath string, data []byte) {
-	f, err := os.OpenFile(filepath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer f.Close()
-
-	if _, err = f.Write(data); err != nil {
-		log.Fatal(err)
 	}
 }
 
