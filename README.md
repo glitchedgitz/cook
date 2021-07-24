@@ -24,24 +24,26 @@ After installation, run `cook`, it will download [cook-ingredients](https://gith
 1. **Values:** Separated by comma
 1. **Params:** Use `-` before anything to make it param. 
 1. **Raw Strings:** Use ` before and after the string to stop cook's parsing. Useful when you need to use any keyword as a word.
+1. **Pipe Input:** Take pipe input using `-` as value of any param.
+1. **File Input:** Use `:` after param name to take file input. `cook -f: live.txt f`
 
-# Usage
-### Basic
+# Some usage examples
+## Basic
 <img src="./assets/1.png"> 
 
-### Using Methods for cases
+## Using Methods for cases
 <img src="./assets/2.png"> 
 
-### Functions
+## Functions
 <img src="./assets/3.png"> 
 
-### Using leet method
+## Using leet method
 <img src="./assets/4.png"> 
 
-### Encode in base64 [Basic Authentication]
+## Encode in base64 [Basic Authentication]
 <img src="./assets/5.png"> 
 
-### Using smart and smartjoin methods
+## Using smart and smartjoin methods
 <img src="./assets/6.png"> 
 
 
