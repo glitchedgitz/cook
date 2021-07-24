@@ -1,266 +1,183 @@
-<img src="./images/01.png"> 
+<br>
+<img src="./assets/banner.png"> 
 
-<h3 align="center">
-<a href="https://twitter.com/giteshnxtlvl"><img src="./images/twitter.png"></a>
-<a href="https://github.com/giteshnxtlvl/cook/discussions/new"><img src="./images/New Feature Ideas.png"></a>
-<a href="https://github.com/giteshnxtlvl/cook/issues/new"><img src="./images/New ListPattern.png"></a>
-<a href="https://www.buymeacoffee.com/giteshnxtlvl"><img src="./images/BMEC.png"></a>
-</h3>
+# 🔥 What is COOK?
+Cook is a framework to simplify wordlist generation, modification, updating, searching, and storing them. You can create your unique wordlists, use 5500+ wordlists sets from different repositories, generate complex words permutations & combinations, play with URLs, use pre-defined sets, encode & decode your payloads, integrate with other tools, and much more…
+Moreover, everything is customizable.
 
-<h1 align="center">COOK</h1>
-<h3 align="center">A customizable wordlist and password generator</h3>
-<h4 align="center">Easily create permutations and combinations of words with predefined sets of extensions, words and patterns/function to create complex endpoints, wordlists and passwords. Easy UX, Checkout Usage</h4>
-
-
-
-- [Installation](#installation)
-- Usage
-  - [Basic Permutation](#basic-permutation)
-  - [Advance Permutation](#advance-permutation)
-  - [Customizing tool](#customizing-tool)
-- Predefined Sets
-  - [Extension Sets](#predefined-sets)
-  - [Words Sets](#create-your-own-unique-sets)
-  - [Character sets - Use it like crunch](#use-it-like-crunch)
-  - [Patterns/Functions](#patternsfunctions)
-  - [Ranges](#ranges)
-- Using Files
-  - [Regex Input from File](#regex-input-from-file)
-  - [File Not Found](#regex-input-from-file)
-  - [Save your wordlists by unique names](#save-wordlists-by-unique-names)
-- [Cases](#cases)
-- [Using COOK with other tools](#using-cook-with-other-tools)
-- [Useful Resources](#useful-resources)
-- [Contribute](#contribute)
-- [Upcoming Features](#upcoming-features)
-- [All predefined sets list](#all-sets)
-
-# Installation
-#### Using Go
+# 📄 Installation
+### Using GO
 ```
-  go get github.com/giteshnxtlvl/cook
+go get -u github.com/giteshnxtlvl/cook
 ```
-OR
-```
-  GO111MODULE=on go get github.com/giteshnxtlvl/cook
-```
-#### Update
-```
-  go get -u github.com/giteshnxtlvl/cook
-```
-
-#### Download latest builds  
-  https://github.com/giteshnxtlvl/cook/releases/
-
-# Customizing tool
-By customizing you will able to make and use your own lists and patterns/functions.
-
-**Method 1**  
-Cook's config file default location is `$HOME/.config/cook/cook.yaml`. For windows it will be `%USERPROFILE%/.config/cook/cook.yaml`
-
-**Method 2**
-1. Download [cook.yaml](https://github.com/giteshnxtlvl/cook/blob/main/cook.yaml)
-1. Create an environment variable `COOK` =`Path of file`  
-3. Done, Run `cook -config`
-
-**Method 3**   
-Use `-config-path` flag to specify location of the file. This is useful if you want to try somebody else config file. This method will override `COOK` env variable.
-
-
-# Basic Permutation
-
-  <img src="./images/02.png">  
+### Download latest builds  
+https://github.com/giteshnxtlvl/cook/releases/
   
-  **Recipe**
-  ```
-    cook -start admin,root  -sep _,-  -end secret,critical  start:sep:end
-  ```
-  ```
-    cook admin,root:_,-:secret,critical
-  ```
-# Advance Permutation
-Understanding concept is important!
-<img src="./images/09.png">
-  
+# 💻 Setup
+After installation, run `cook`, it will download [cook-ingredients](https://github.com/giteshnxtlvl/cook-ingredients) at `%USERPROFILE%/cook-ingredients` for windows and `$home/cook-ingredients` for linux.
 
-# Predefined Sets
-  <img src="./images/03.png">    
-  
-  **Recipe**
-  ```
-   cook -start admin,root  -sep _ -end secret  start:sep:archive
-  ```
-  ```
-   cook admin,root:_:archive
-  ```
-### Create your own unique sets  
-  <img src="./images/06.png">
+### Change default location of cook-ingredients
+- Create environment variable `COOK=path-of-repo` 
 
-### Use it like CRUNCH  
-  <img src="./images/08.png">
+# 👨‍🍳 Parsing Rules
+1. **Columns:** Separated by space
+1. **Values:** Separated by comma
+1. **Params:** Use `-` before anything to make it param. 
+1. **Raw Strings:** Use ` before and after the string to stop cook's parsing. Useful when you need to use any keyword as a word.
+1. **Pipe Input:** Take pipe input using `-` as value of any param.
+1. **File Input:** Use `:` after param name to take file input. `cook -f: live.txt f`
 
 
-# Patterns/Functions
+# 🧾 Some usage examples
 
-<img src="./images/11.png"> 
+<h3 align="center"><b>Permutation</b></h3>
+<p align="center">
+<img align="center" src="./assets/1.png"> 
+</p>
 
-**Recipe**
-```
-  cook -name elliot -birth date(17,Sep,1994) name:birth
-```
+<h3 align="center"><b>Using Methods for cases</b></h3>
+<p align="center">
+<img src="./assets/2.png"> 
+</p>
 
-# Ranges
-<img width="640" src="./images/13.png"> 
+<h3 align="center"><b>Functions</b></h3>
+<p align="center">
+<img src="./assets/3.png"> 
+</p>
 
-# Files
-  ### Regex Input from File  
-  
-  <img src="./images/07.png">    
-  
-  **Recipe**
-  ```
-   cook -exp raft-large-extensions.txt:\.asp.*  /:admin:exp
-  ```
-  
-  ### Save Wordlists by Unique Names  
+<h3 align="center"><b>leet method</b></h3>
+<p align="center">
+<img src="./assets/4.png"> 
+</p>
 
-<img src="./images/05.png">
+ <h3 align="center"><b>Basic Authentication</b></h3>
+<p align="center">
+<img src="./assets/5.png"> 
+</p>
 
-  ### File not found  
-  If file mentioned in param not found, then there will be no errors, instead it will do this
-  ```
-   cook -file file_not_exists.txt admin,root:_:file
-  ```
-  ```
-    admin_file_not_exists.txt
-    root_file_not_exists.txt
-  ```
+<h3 align="center"><b>Smart and smartjoin methods</b></h3>
+<p align="center">
+<img src="./assets/6.png"> 
+</p>
 
-# Cases
-<img src="./images/12.png">
 
-## Some Features
-### Minimum
-Use `-min <num>` to print minimum no of columns to print.  
-Example this command will print 1,2,3 digit numbers
-```
-cook n:n:n -min 1
-```
+# Flags
+| Flag | Usage |
+|---|---|
+|-a, -append| Append to the previous lines, instead of permutations |
+|-c, -col| Print column numbers and there values |
+|-conf, -config| Config Information |
+|-mc, -methodcol| Apply methods column wise  `-mc 0:md5,b64e; 1:reverse` <br> To all cols separate  `-mc md5,b64e` |
+|-m, -method| Apply methods to final output |
+|-h, -help| Help |
+|-min | Minimum no of columns to print |
 
-### Pipe input
-Use `-` as param value for pipe input
-```
-cook -d - d:anything
-```
 
-### Raw String
-Don't parse the value
-```
-cook -word `date(10,12,1999)`
-```
-
-# Usefull Resources
-Checkout [Resources.md](./Resources.md)
-- [Using COOK with other tools](./Resources.md)
-- [Awesome Wordlists, Tips and Tricks](./Resources.md)
-- [Fuzzing IIS Shortname Scanner](./Resources.md)
-
-# Contribute
-- Share your awesome recipes.
-- Share useful lists and patterns for COOK.
-  Modify here https://gist.github.com/giteshnxtlvl/55048a76a060da849ca8fefde2258da3#file-cook-yaml
-- Share Ideas or new Feature Request.
-- Check out [discussions](https://github.com/giteshnxtlvl/cook/discussions).
-- Update [Resources.md](./Resources.md)
-  - Add Useful Resources
-  - Add tools we can use with COOK.
-
-# Support  
-If you like the tool, support the development of tool, this will speed up development of [Upcoming Features](#upcoming-features)  
-
-<a href="https://www.buymeacoffee.com/giteshnxtlvl"><img width="300" src="./images/BMEC2X.png"></a>
-
-# Contributors
-- @giteshnxtlvl - Core
-- @noraj - Added ffuf command in [Using COOK with other tools](./Resources.md#using-cook-with-other-tools) and suggested nice appraoch for config file.
-
-# Upcoming Features
-- Endpoints Analyser
-- Interactive mode for configuring `cook.yaml`
-
-# All sets
-Modify here https://gist.github.com/giteshnxtlvl/55048a76a060da849ca8fefde2258da3#file-cook-yaml
-
-```yaml
-# Character set like crunch
-charSet:
-    sep   : [_- ] #common separators
-    n     : [0123456789]
-    A     : [ABCDEFGHIJKLMNOPQRSTUVWXYZ]
-    a     : [abcdefghijklmnopqrstuvwxyz]
-    aAn   : [abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789]
-    An    : [ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789]
-    an    : [abcdefghijklmnopqrstuvwxyz0123456789]
-    aA    : [abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ]
-    s     : ["!#$%&'()*+,-./:;<=>?@[\\]^_`{|}~&\""]
-    all   : ["!#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\""]
-
-# File to access from anywhere
-files:
-    raft_ext     : [E:\tools\wordlists\SecLists\Discovery\Web-Content\raft-large-extensions.txt]
-    raft_dir     : [E:\tools\wordlists\SecLists\Discovery\Web-Content\raft-large-directories.txt]
-    raft_files   : [E:\tools\wordlists\SecLists\Discovery\Web-Content\raft-large-files.txt]
-    robot_1000   : [E:\tools\wordlists\SecLists\Discovery\Web-Content\RobotsDisallowed-Top1000.txt]
-
-# Create your lists
-lists:
-    schemas      : [aim, callto, cvs, data, facetime, feed, file, ftp, git, gopher, gtalk, h323, hdl, http, https, imap, irc, irc6, ircs, itms, javascript, magnet, mailto, mms, msnim, news, nntp, prospero, rsync, rtsp, rtspu, sftp, shttp, sip, sips, skype, smb, snews, ssh, svn, svn, svn+ssh, telnet, tel, wais, ymsg]
-    bypass       : ["%00", "%09", "%0A", "%0D", "%0D%0A"]
-
-    admin_set    : [admin, root, su, superuser, administration]
-    api          : [/v1/,/v2/,/v3/,/v4/,/v5/,/api/]
-    pass_ends    : [123, "@123", "#123"]
-
-    months       : [January, February, March, April, May, June, July, August, September, October, November, December]
-    mons         : [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
-
-# Patterns
-patterns:
-    date : 
-        - date(D,M,Y)
-        - DMY  
-        - MDY 
-        - D/M/Y  
-        - M/D/Y 
-        - D-M-Y  
-        - M-D-Y   
-        - D.M.Y  
-        - M.D.Y  
-        - D.Y  
-        - M.Y  
-        - D.M
-
-# Extension Set, . will added before using this
-extensions:
-    config  : [conf, confq, config]
-    data    : [xml, json, yaml, yml]
-    backup  : [bak, backup, backup1, backup2]
-    exec    : [exe, msi, bin, command, sh, bat, crx]
-    web     : [html, html5, htm, js, jsx, jsp, wasm, php, php3, php5, php7]
-    iis     : [asax, ascx, asmx, aspx, exe, aspx.cs, ashx, axd, config, htm, jar, js, rdl, swf, txt, xls, xml, xsl, zpd, suo, sln]
-    archive : [7z, a, apk, xapk, ar, bz2, cab, cpio, deb, dmg, egg, gz, iso, jar, lha, mar, pea, rar, rpm, s7z, shar, tar, tbz2, tgz, tlz, war, whl, xpi, zip, zipx, xz, pak, tar.gz, gz]
-    code    : [c, cc, class, clj, cpp, cs, cxx, el, go, h, java, lua, m, m4, php, php3, php5, php7, pl, po, py, rb, rs, sh, swift, vb, vcxproj, xcodeproj, xml, diff, patch, js, jsx]
-
-    #Rest
-    css_type: [css, less, scss]
-    sheet   : [ods, xls, xlsx, csv, ics vcf]
-    slide   : [ppt, pptx, odp]
-    font    : [eot, otf, ttf, woff, woff2]
-    text    : [doc, docx, ebook, log, md, msg, odt, org, pages, pdf, rtf, rst, tex, txt, wpd, wps]
-    audio   : [aac, aiff, ape, au, flac, gsm, it, m3u, m4a, mid, mod, mp3, mpa, pls, ra, s3m, sid, wav, wma, xm]
-    book    : [mobi, epub, azw1, azw3, azw4, azw6, azw, cbr, cbz]
-    video   : [3g2, 3gp, aaf, asf, avchd, avi, drc, flv, m2v, m4p, m4v, mkv, mng, mov, mp2, mp4, mpe, mpeg, mpg, mpv, mxf, nsv, ogg, ogv, ogm, qt, rm, rmvb, roq, srt, svi, vob, webm, wmv, yuv]
-    image   : [3dm, 3ds, max, bmp, dds, gif, jpg, jpeg, png, psd, xcf, tga, thm, tif, tiff, yuv, ai, eps, ps, svg, dwg, dxf, gpx, kml, kmz, webp]
-
+# Cmds
 
 ```
+MODES
+  Search                     
+  Help                       
+  Update                     cook update [filename]
+                                - Use "cache" to update cached file from source
+                                - Use "db" to update cooks-ingredients
+                                - Use "*" to do both
+  Add                        cook add [values, separated by comma] in [category]
+                             (files, raw-files, functions, lists, exts or chars)
+                             (This will only make changes in custom.yaml)
+  Delete                     cook delete [keyword]
+                             (This will only make changes in custom.yaml)
+  Show                       cook show [category]
+                             Better not try for "files"
+```
+
+# Methods
+Apply different sets of operations to your wordlists.
+
+- `-m/-method` to apply methods on the final output
+- `-mc/-methodcol` to apply column-wise.
+- `param.methodname` apply to any parameter-wise, will example this param thing later.
+- `param.md5.b64e` apply multiple methods, this will first md5 hash the value and then base64 encode the hashed value.
+
+All Methods
+```
+METHODS
+    Apply different sets of operations to your wordlists
+
+STRING/LIST/JSON
+    sort                           - Sort them
+    sortu                          - Sort them with unique values only
+    reverse                        - Reverse string
+    leet                           - a->4, b->8, e->3 ...
+                                     leet[0] or leet[1]
+    json                           - Extract JSON field
+                                     json[key] or json[key:subkey:sub-subkey]
+    smart                          - Separate words with naming convensions
+                                     redirectUri, redirect_uri, redirect-uri  ->  [redirect, uri]
+    smartjoin                      - This will split the words from naming convensions &
+                                     param.smartjoin[c,_] (case, join)
+                                     redirect-uri, redirectUri, redirect_uri ->  redirect_Uri
+
+    u          upper               - Uppercase
+    l          lower               - Lowercase
+    t          title               - Titlecase
+
+URLS
+    fb         filebase            - Extract filename from path or url
+    s          scheme              - Extract http, https, gohper, ws, etc. from URL
+               user                - Extract username from url
+               pass                - Extract password from url
+    h          host                - Extract host from url
+    p          port                - Extract port from url
+    ph         path                - Extract path from url
+    f          fragment            - Extract fragment from url
+    q          query               - Extract whole query from url
+    k          keys                - Extract keys from url
+    v          values              - Extract values from url
+    d          domain              - Extract domain from url
+               tld                 - Extract tld from url
+               alldir              - Extract all dirrectories from url's path
+    sub        subdomain           - Extract subdomain from url
+               allsubs             - Extract subdomain from url
+
+ENCODERS
+    b64e       b64encode           - Base64 encoder
+    hexe       hexencode           - Hex string encoder
+    jsone      jsonescape          - JSON escape
+    urle       urlencode           - URL encode reserved characters
+               utf16               - UTF-16 encoder (Little Endian)
+               utf16be             - UTF-16 encoder (Big Endian)
+    xmle       xmlescape           - XML escape
+    urleall    urlencodeall        - URL encode all characters
+    unicodee   unicodeencodeall    - Unicode escape string encode (all characters)
+
+DECODERS
+    b64d       b64decode           - Base64 decoder
+    hexd       hexdecode           - Hex string decoder
+    jsonu      jsonunescape        - JSON unescape
+    unicoded   unicodedecode       - Unicode escape string decode
+    urld       urldecode           - URL decode
+    xmlu       xmlunescape         - XML unescape
+
+HASHES
+    md5                            - MD5 sum
+    sha1                           - SHA1 checksum
+    sha224                         - SHA224 checksum
+    sha256                         - SHA256 checksum
+    sha384                         - SHA384 checksum
+    sha512                         - SHA512 checksum
+```
+
+## Version 2 and 1 [Breaking Changes]
+Version 1.6 and Version 2 have signifant breaking changes to improe the usability of the tool.
+
+- Previously columns was separated with colon. Now they are separated by space
+- Single cook.yaml file removed. Now there is folder.
+- URL support for yaml file and added sources with over 5500 wordlist sets.
+- File regex removed, now use .regex[] method for regex
+- Taking file input needs colon after param
+- -case flag removed, now you can use upper, lower and title
+- Added Methods
+- Removed charset and extensions, now they are in list
+- Simplyfied ranges
