@@ -27,24 +27,38 @@ After installation, run `cook`, it will download [cook-ingredients](https://gith
 1. **Pipe Input:** Take pipe input using `-` as value of any param.
 1. **File Input:** Use `:` after param name to take file input. `cook -f: live.txt f`
 
-# Some usage examples
-### Basic
-<img src="./assets/1.png"> 
 
-### Using Methods for cases
+<h1 align="center">Some usage examples</h1>
+
+<h3 align="center"><b>Permutation</b></h3>
+<p align="center">
+<img align="center" src="./assets/1.png"> 
+</p>
+
+<h3 align="center"><b>Using Methods for cases</b></h3>
+<p align="center">
 <img src="./assets/2.png"> 
+</p>
 
-### Functions
+<h3 align="center"><b>Functions</b></h3>
+<p align="center">
 <img src="./assets/3.png"> 
+</p>
 
-### Using leet method
+<h3 align="center"><b>leet method</b></h3>
+<p align="center">
 <img src="./assets/4.png"> 
+</p>
 
-### Encode in base64 [Basic Authentication]
+ <h3 align="center"><b>Basic Authentication</b></h3>
+<p align="center">
 <img src="./assets/5.png"> 
+</p>
 
-### Using smart and smartjoin methods
+<h3 align="center"><b>Smart and smartjoin methods</b></h3>
+<p align="center">
 <img src="./assets/6.png"> 
+</p>
 
 
 # Flags
@@ -57,7 +71,6 @@ After installation, run `cook`, it will download [cook-ingredients](https://gith
 |-m, -method| Apply methods to final output |
 |-h, -help| Help |
 |-min | Minimum no of columns to print |
-
 
 
 # Cmds
