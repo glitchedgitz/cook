@@ -1,11 +1,11 @@
 <br>
 <img src="./assets/banner.png"> 
 
-# What is COOK?
+# 🔥 What is COOK?
 Cook is a framework to simplify wordlist generation, modification, updating, searching, and storing them. You can create your unique wordlists, use 5500+ wordlists sets from different repositories, generate complex words permutations & combinations, play with URLs, use pre-defined sets, encode & decode your payloads, integrate with other tools, and much more…
 Moreover, everything is customizable.
 
-# Installation
+# 📄 Installation
 ### Using GO
 ```
 go get -u github.com/giteshnxtlvl/cook
@@ -13,13 +13,13 @@ go get -u github.com/giteshnxtlvl/cook
 ### Download latest builds  
 https://github.com/giteshnxtlvl/cook/releases/
   
-# Setup
+# 💻 Setup
 After installation, run `cook`, it will download [cook-ingredients](https://github.com/giteshnxtlvl/cook-ingredients) at `%USERPROFILE%/cook-ingredients` for windows and `$home/cook-ingredients` for linux.
 
 ### Change default location of cook-ingredients
 - Create environment variable `COOK=path-of-repo` 
 
-# Parsing Rules
+# 👨‍🍳 Parsing Rules
 1. **Columns:** Separated by space
 1. **Values:** Separated by comma
 1. **Params:** Use `-` before anything to make it param. 
@@ -28,7 +28,7 @@ After installation, run `cook`, it will download [cook-ingredients](https://gith
 1. **File Input:** Use `:` after param name to take file input. `cook -f: live.txt f`
 
 
-<h1 align="center">Some usage examples</h1>
+# 🧾 Some usage examples
 
 <h3 align="center"><b>Permutation</b></h3>
 <p align="center">
