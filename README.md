@@ -28,22 +28,22 @@ After installation, run `cook`, it will download [cook-ingredients](https://gith
 1. **File Input:** Use `:` after param name to take file input. `cook -f: live.txt f`
 
 # Some usage examples
-## Basic
+### Basic
 <img src="./assets/1.png"> 
 
-## Using Methods for cases
+### Using Methods for cases
 <img src="./assets/2.png"> 
 
-## Functions
+### Functions
 <img src="./assets/3.png"> 
 
-## Using leet method
+### Using leet method
 <img src="./assets/4.png"> 
 
-## Encode in base64 [Basic Authentication]
+### Encode in base64 [Basic Authentication]
 <img src="./assets/5.png"> 
 
-## Using smart and smartjoin methods
+### Using smart and smartjoin methods
 <img src="./assets/6.png"> 
 
 
