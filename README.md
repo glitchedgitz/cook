@@ -8,8 +8,9 @@ Moreover, everything is customizable.
 # 📄 Installation
 ### Using GO
 ```
-go get -u github.com/giteshnxtlvl/cook
+GO111MODULE=auto go get -u github.com/giteshnxtlvl/cook/cmd/cook
 ```
+In windows set `GO111MODULE`=`on`/`auto` in env variables and use above cmd without it.
 ### Download latest builds  
 https://github.com/giteshnxtlvl/cook/releases/
   
