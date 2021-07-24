@@ -40,16 +40,17 @@ func CheckFileCache(filename string, files []string) {
 	filepath := path.Join(home, ".cache", "cook", filename)
 
 	if _, err := os.Stat(filepath); err != nil {
+		fmt.Fprintf(os.Stderr, "Creating cache for %s\n", filename)
 		var tmp = make(map[string]bool)
 		f, err := os.OpenFile(filepath, os.O_CREATE, 0644)
 		if err != nil {
-			panic(err)
+			log.Fatal("Creating File: ", err)
 		}
 
 		defer f.Close()
 
 		for _, file := range files {
-			VPrint(fmt.Sprintf("GetData(): Fetching %s\n", file))
+			fmt.Fprintf(os.Stderr, "Fetching %s\n", file)
 
 			res, err := http.Get(file)
 			if err != nil {
@@ -67,12 +68,12 @@ func CheckFileCache(filename string, files []string) {
 				}
 				tmp[line] = true
 				if _, err = f.WriteString(fileScanner.Text() + "\n"); err != nil {
-					log.Fatal(err)
+					log.Fatalf("Writing File: %v", err)
 				}
 			}
 
 			if err := fileScanner.Err(); err != nil {
-				log.Fatal(err)
+				log.Fatalf("FileScanner: %v", err)
 			}
 		}
 		checkM[filename] = files
@@ -113,7 +114,7 @@ func AppendToFile(filepath string, data []byte) {
 func UpdateCache() {
 
 	type filedata struct {
-		filepath string
+		filename string
 		files    []string
 	}
 
@@ -123,16 +124,19 @@ func UpdateCache() {
 	for i := 0; i < 10; i++ {
 		go func() {
 			for f := range goaddresses {
-				CheckFileCache(f.filepath, f.files)
+				filepath := path.Join(home, ".cache", "cook", f.filename)
+				os.Remove(filepath)
+				CheckFileCache(f.filename, f.files)
 				wg.Done()
 			}
 		}()
 	}
 
-	for k, files := range checkM {
+	for filename, files := range checkM {
 		wg.Add(1)
-		goaddresses <- filedata{path.Join(home, ".cache", "cook", k), files}
+		goaddresses <- filedata{filename, files}
 	}
 
 	wg.Wait()
+	fmt.Fprintf(os.Stderr, "All files updated")
 }
