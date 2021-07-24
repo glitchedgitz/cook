@@ -29,7 +29,9 @@ After installation, run `cook`, it will download [cook-ingredients](https://gith
 1. **File Input:** Use `:` after param name to take file input. `cook -f: live.txt f`
 
 
-# 🧾 Some usage examples
+<br><br>
+
+<h1 align="center">🧾 Some usage examples</h1>
 
 <h3 align="center"><b>Permutation</b></h3>
 <p align="center">
