@@ -36,8 +36,8 @@ func ParseFunc(value string, array *[]string) bool {
 	}
 
 	funcName, funcArgs := parse.ReadCrBrSepBy(value, ",")
-	fmt.Println(funcName)
-	fmt.Println(funcArgs)
+	// fmt.Println(funcName)
+	// fmt.Println(funcArgs)
 
 	fmt.Print("")
 
@@ -45,8 +45,8 @@ func ParseFunc(value string, array *[]string) bool {
 
 		funcDef := strings.Split(funcPatterns[0][1:len(funcPatterns[0])-1], ",")
 
-		fmt.Printf("Func Arg: %v", funcArgs)
-		fmt.Printf("\tFunc Def: %v", funcDef)
+		// fmt.Printf("Func Arg: %v", funcArgs)
+		// fmt.Printf("\tFunc Def: %v", funcDef)
 
 		if len(funcDef) != len(funcArgs) {
 			log.Fatalln("\nErr: No of Arguments are different for")

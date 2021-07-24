@@ -56,9 +56,9 @@ func Split(values []string, split string, array *[]string) {
 
 func SplitIndex(values []string, value string, array *[]string) {
 
-	vals := strings.SplitN(value, ":", 2)
-	split := vals[0]
-	index, err := strconv.Atoi(vals[1])
+	vals := strings.Split(value, ":")
+	split := strings.Join(vals[:len(vals)-1], ":")
+	index, err := strconv.Atoi(vals[len(vals)-1])
 
 	if err != nil {
 		log.Fatalln("Not Integer Value: "+values[1], err)
