@@ -42,7 +42,7 @@ func CheckFileCache(filename string, files []string) {
 	if _, err := os.Stat(filepath); err != nil {
 		fmt.Fprintf(os.Stderr, "Creating cache for %s\n", filename)
 		var tmp = make(map[string]bool)
-		f, err := os.OpenFile(filepath, os.O_CREATE, 0644)
+		f, err := os.OpenFile(filepath, os.O_APPEND, os.ModeAppend)
 		if err != nil {
 			log.Fatal("Creating File: ", err)
 		}
