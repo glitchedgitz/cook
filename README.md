@@ -2,32 +2,37 @@
 <img src="./assets/banner.png"> 
 
 # 🔥 What is COOK?
-Cook is a framework to simplify wordlist generation, modification, updating, searching, and storing them. You can create your unique wordlists, use 5500+ wordlists sets from different repositories, generate complex words permutations & combinations, play with URLs, use pre-defined sets, encode & decode your payloads, integrate with other tools, and much more…
-Moreover, everything is customizable.
+Cook is a framework to simplify wordlist generation, modification, updating, searching, and storing them.
+- You can create your unique wordlists, 
+- use 5500+ wordlists sets from different repositories, 
+- generate complex words permutations & combinations, 
+- play with URLs, 
+- use pre-defined sets, 
+- encode & decode your payloads, 
+- integrate with other tools, and much more…
+- Moreover, everything is customizable.
 
 # 📄 Installation
-### Using GO
+Use Go or [Download latest builds](https://github.com/giteshnxtlvl/cook/releases/)
 ```
 GO111MODULE=auto go get -u github.com/giteshnxtlvl/cook/cmd/cook
 ```
-In windows set `GO111MODULE`=`on`/`auto` in env variables and use above cmd without it.
-### Download latest builds  
-https://github.com/giteshnxtlvl/cook/releases/
+In windows set `GO111MODULE`=`on`/`auto` in env variables and use above cmd without it.  
   
-# 💻 Setup
+### Setup
 After installation, run `cook`, it will download [cook-ingredients](https://github.com/giteshnxtlvl/cook-ingredients) at `%USERPROFILE%/cook-ingredients` for windows and `$home/cook-ingredients` for linux.
 
-### Change default location of cook-ingredients
-- Create environment variable `COOK=path-of-repo` 
+To change default location of cook-ingredients, you can create environment variable `COOK=path-of-repo` 
 
 # 👨‍🍳 Parsing Rules
 1. **Columns:** Separated by space
 1. **Values:** Separated by comma
-1. **Params:** Use `-` before anything to make it param. 
+1. **Params:** You can give param any name, use `-` before anything to make it param `-param value`
 1. **Raw Strings:** Use ` before and after the string to stop cook's parsing. Useful when you need to use any keyword as a word.
 1. **Pipe Input:** Take pipe input using `-` as value of any param.
 1. **File Input:** Use `:` after param name to take file input. `cook -f: live.txt f`
-
+2. **Functions:** Can be called using params only.
+3. **For Using methods:** Use param 
 
 <br><br>
 
