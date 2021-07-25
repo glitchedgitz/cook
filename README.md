@@ -12,6 +12,10 @@ Cook is a framework to simplify wordlist generation, modification, updating, sea
 - integrate with other tools, and much more…
 - Moreover, everything is customizable.
 
+
+### Blog explaining the tool
+https://medium.com/@giteshnxtlvl/cook-the-wordlists-framework-1b28f59ff5d5
+
 # 📄 Installation
 Use Go or [Download latest builds](https://github.com/giteshnxtlvl/cook/releases/)
 ```
