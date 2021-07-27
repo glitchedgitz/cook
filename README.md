@@ -13,7 +13,7 @@ Cook is a framework to simplify wordlist generation, modification, updating, sea
 - Moreover, everything is customizable.
 
 
-# Detailed Usage
+# Detail Usage
 https://github.com/giteshnxtlvl/cook/wiki/Usage
 
 # 📄 Installation
