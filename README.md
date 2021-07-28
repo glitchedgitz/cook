@@ -12,10 +12,6 @@ Cook is a framework to simplify wordlist generation, modification, updating, sea
 - integrate with other tools, and much more…
 - Moreover, everything is customizable.
 
-
-# Detail Usage
-https://github.com/giteshnxtlvl/cook/wiki/Usage
-
 # 📄 Installation
 Use Go or [Download latest builds](https://github.com/giteshnxtlvl/cook/releases/)
 ```
@@ -40,37 +36,13 @@ To change default location of cook-ingredients, you can create environment varia
 
 <br><br>
 
-<h1 align="center">🧾 Some usage examples</h1>
-
-<h3 align="center"><b>Permutation</b></h3>
-<p align="center">
-<img align="center" src="./assets/1.png"> 
-</p>
-
-<h3 align="center"><b>Using Methods for cases</b></h3>
-<p align="center">
-<img src="./assets/2.png"> 
-</p>
-
-<h3 align="center"><b>Functions</b></h3>
-<p align="center">
-<img src="./assets/3.png"> 
-</p>
-
-<h3 align="center"><b>leet method</b></h3>
-<p align="center">
-<img src="./assets/4.png"> 
-</p>
-
- <h3 align="center"><b>Basic Authentication</b></h3>
-<p align="center">
-<img src="./assets/5.png"> 
-</p>
-
-<h3 align="center"><b>Smart and smartjoin methods</b></h3>
-<p align="center">
-<img src="./assets/6.png"> 
-</p>
+<h1 align="center">🧾 Docs</h1>
+<img src="./assets/02.png"> 
+<img src="./assets/03.png"> 
+<img src="./assets/04.png"> 
+<img src="./assets/05.png"> 
+<img src="./assets/06.png"> 
+<img src="./assets/07.png"> 
 
 
 # Flags
