@@ -1,5 +1,12 @@
 <br>
-<img src="./assets/banner.png"> 
+<img src="./assets/001.png"> 
+<img src="./assets/002.png"> 
+<img src="./assets/0003.png"> 
+<img src="./assets/004.png"> 
+<img src="./assets/005.png"> 
+<img src="./assets/006.png"> 
+<img src="./assets/007.png"> 
+
 
 # 🔥 What is COOK?
 Cook is a framework to simplify wordlist generation, modification, updating, searching, and storing them.
@@ -35,16 +42,6 @@ To change default location of cook-ingredients, you can create environment varia
 3. **For Using methods:** Use param 
 
 <br><br>
-
-<h1 align="center">🧾 Docs</h1>
-<img src="./assets/01.png"> 
-<img src="./assets/02.png"> 
-<img src="./assets/03.png"> 
-<img src="./assets/04.png"> 
-<img src="./assets/05.png"> 
-<img src="./assets/06.png"> 
-<img src="./assets/07.png"> 
-
 
 # Flags
 | Flag | Usage |
