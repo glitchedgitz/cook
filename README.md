@@ -22,9 +22,9 @@ Cook is a framework to simplify wordlist generation, modification, updating, sea
 # 📄 Installation
 Use Go or [Download latest builds](https://github.com/giteshnxtlvl/cook/releases/)
 ```
-GO111MODULE=auto go get -u github.com/giteshnxtlvl/cook/cmd/cook
+go install github.com/giteshnxtlvl/cook/cmd/cook@latest
 ```
-In windows set `GO111MODULE`=`on`/`auto` in env variables and use above cmd without it.  
+
   
 ### Setup
 After installation, run `cook`, it will download [cook-ingredients](https://github.com/giteshnxtlvl/cook-ingredients) at `%USERPROFILE%/cook-ingredients` for windows and `$home/cook-ingredients` for linux.
