@@ -1,88 +1,55 @@
-<br>
-<img src="./assets/001.png"> 
-<img src="./assets/002.png"> 
-<img src="./assets/003.png"> 
-<img src="./assets/004.png"> 
-<img src="./assets/005.png"> 
-<img src="./assets/006.png"> 
-<img src="./assets/007.png"> 
+<img src="assets/head.png">
 
+# COOK
+An overpower wordlist generator, splitter, merger, finder, saver, create words permutation and combinations, apply different encoding/decoding and everything you need.  
 
-# 🔥 What is COOK?
-Cook is a framework to simplify wordlist generation, modification, updating, searching, and storing them.
-- You can create your unique wordlists, 
-- use 5500+ wordlists sets from different repositories, 
-- generate complex words permutations & combinations, 
-- play with URLs, 
-- use pre-defined sets, 
-- encode & decode your payloads, 
-- integrate with other tools, and much more…
-- Moreover, everything is customizable.
+Frustration killer! & Customizable!
 
-# 📄 Installation
-Use Go or [Download latest builds](https://github.com/giteshnxtlvl/cook/releases/)
+# Customizable
+Cook is highly customizable and it depends on
+[cook-ingredients](https://github.com/giteshnxtlvl/cook-ingredients). Cook Ingredients consists YAML Collection of word-sets, extensions, funcitons to generate pattern and wordlists.
+
+### Installation
+Use Go or download [latest builds](https://github.com/giteshnxtlvl/cook/releases/)  
 ```
 go install github.com/giteshnxtlvl/cook/cmd/cook@latest
 ```
 
-  
-### Setup
-After installation, run `cook`, it will download [cook-ingredients](https://github.com/giteshnxtlvl/cook-ingredients) at `%USERPROFILE%/cook-ingredients` for windows and `$home/cook-ingredients` for linux.
+> After installation, run `cook` for one time, it will download [cook-ingredients](https://github.com/giteshnxtlvl/cook-ingredients) automatically at `%USERPROFILE%/cook-ingredients` for windows and `$home/cook-ingredients` for linux.
 
-To change default location of cook-ingredients, you can create environment variable `COOK=path-of-repo` 
+# Basic
+Without basics, everything is useless.
+<img src="assets/basic.png">
 
-# 👨‍🍳 Parsing Rules
-1. **Columns:** Separated by space
-1. **Values:** Separated by comma
-1. **Params:** You can give param any name, use `-` before anything to make it param `-param value`
-1. **Raw Strings:** Use ` before and after the string to stop cook's parsing. Useful when you need to use any keyword as a word.
-1. **Pipe Input:** Take pipe input using `-` as value of any param.
-1. **File Input:** Use `:` after param name to take file input. `cook -f: live.txt f`
-2. **Functions:** Can be called using params only.
-3. **For Using methods:** Use param 
+## Parametric Approach
+You can define your own params and use them to generate the pattern. This will be useful once you understand [methods](#methods)
 
-<br><br>
+# Save wordlists and word sets
+<img src="assets/savewordlist.png">
 
-# Flags
-| Flag | Usage |
-|---|---|
-|-a, -append| Append to the previous lines, instead of permutations |
-|-c, -col| Print column numbers and there values |
-|-conf, -config| Config Information |
-|-mc, -methodcol| Apply methods column wise  `-mc 0:md5,b64e; 1:reverse` <br> To all cols separate  `-mc md5,b64e` |
-|-m, -method| Apply methods to final output |
-|-h, -help| Help |
-|-min | Minimum no of columns to print |
-
-
-# Cmds
-
+### Search Wordlist
 ```
-MODES
-  Search                     
-  Help                       
-  Update                     cook update [filename]
-                                - Use "cache" to update cached file from source
-                                - Use "db" to update cooks-ingredients
-                                - Use "*" to do both
-  Add                        cook add [values, separated by comma] in [category]
-                             (files, raw-files, functions, lists, exts or chars)
-                             (This will only make changes in custom.yaml)
-  Delete                     cook delete [keyword]
-                             (This will only make changes in custom.yaml)
-  Show                       cook show [category]
-                             Better not try for "files"
+cook search keyword
+```
+
+## Reading File using Cook
+If you want to use a file from current working directory.  
+Use `:` after param name. 
+```
+cook -f: live.txt f
 ```
 
 # Methods
-Apply different sets of operations to your wordlists.
+Methods will let you apply diffenent sets of operation on final output or particular column as you want. You can encode, decode, reverse, split, sort, extract different part of urls and much more...
 
 - `-m/-method` to apply methods on the final output
 - `-mc/-methodcol` to apply column-wise.
 - `param.methodname` apply to any parameter-wise, will example this param thing later.
 - `param.md5.b64e` apply multiple methods, this will first md5 hash the value and then base64 encode the hashed value.
 
-All Methods
+
+<details><summary>All methods</summary>
+
 ```
 METHODS
     Apply different sets of operations to your wordlists
@@ -91,6 +58,9 @@ STRING/LIST/JSON
     sort                           - Sort them
     sortu                          - Sort them with unique values only
     reverse                        - Reverse string
+    split                          - split[char]
+    splitindex                     - splitindex[char:index]
+    replace                        - Replace All replace[this:tothis]
     leet                           - a->4, b->8, e->3 ...
                                      leet[0] or leet[1]
     json                           - Extract JSON field
@@ -126,6 +96,9 @@ URLS
 ENCODERS
     b64e       b64encode           - Base64 encoder
     hexe       hexencode           - Hex string encoder
+               charcode            - Give charcode encoding
+                                     charcode[0] without semicolon
+                                     charcode[1] with semicolon
     jsone      jsonescape          - JSON escape
     urle       urlencode           - URL encode reserved characters
                utf16               - UTF-16 encoder (Little Endian)
@@ -149,17 +122,28 @@ HASHES
     sha256                         - SHA256 checksum
     sha384                         - SHA384 checksum
     sha512                         - SHA512 checksum
+  
+```
+</details>
+
+## Multiple Methods
+You can apply multiple set of operations on partiocular column or final output in one command. So you don't have to re-run the tool again and again.
+
+# Direct fuzzing with FUFF
+You can use generated output from cook directly with [ffuf](https://github.com/ffuf/ffuf) using pipe
+
+```
+cook usernames_list : passwords_list -m b64e | ffuf -u https://target.com -w - -H "Authorization: Basic FUZZ"
 ```
 
-## Version 2 and 1 [Breaking Changes]
-Version 1.6 and Version 2 have signifant breaking changes to improe the usability of the tool.
+Similarly you can fuzz directories/headers/params/numeric ids... And can apply required algorithms on your payloads.
 
-- Previously columns was separated with colon. Now they are separated by space
-- Single cook.yaml file removed. Now there is folder.
-- URL support for yaml file and added sources with over 5500 wordlist sets.
-- File regex removed, now use .regex[] method for regex
-- Taking file input needs colon after param
-- -case flag removed, now you can use upper, lower and title
-- Added Methods
-- Removed charset and extensions, now they are in list
-- Simplyfied ranges
+# Ranges
+
+
+# Functions
+```
+cook -dob date[17,Sep,1994] elliot _,-, dob
+```
+> Customize:    
+ Create your own functions in `cook-ingredients/my.yaml` under functions:
