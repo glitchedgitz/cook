@@ -71,7 +71,7 @@ func UserDefinedFlags() map[string]string {
 	tmp = append(tmp, Args...)
 
 	for _, cmd := range tmp {
-		if len(cmd) > 1 && strings.HasPrefix(cmd, "-") {
+		if len(cmd) > 1 && strings.Count(cmd, "-") == 1 && strings.HasPrefix(cmd, "-") {
 			value := S(cmd, cmd)
 			cmd = strings.Replace(cmd, "-", "", 1)
 			userDefined[cmd] = value

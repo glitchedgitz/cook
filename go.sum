@@ -12,8 +12,6 @@ github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/ffuf/pencode v0.0.0-20210513164852-47e578431524 h1:1mN5/i+atczHYY8niCGqIBHGJqBqXIPKiCeA+b2g+aY=
 github.com/ffuf/pencode v0.0.0-20210513164852-47e578431524/go.mod h1:Qmgn2URTRtZ5wMntUke1+/G7z8rofTFHG1EvN3addNY=
-github.com/giteshnxtlvl/cook v2.0.0+incompatible h1:aY/7zJZJ6KJISlkpKZvq118dbSvLSBYkeVTNPJNb8dk=
-github.com/giteshnxtlvl/cook v2.0.0+incompatible/go.mod h1:Idno/uGO9V99PBXe5PZUOf3bchBogvUH3pSCaBLWntw=
 github.com/manifoldco/promptui v0.9.0 h1:3V4HzJk1TtXW1MTZMP7mdlwbBpIinw3HztaIlYthEiA=
 github.com/manifoldco/promptui v0.9.0/go.mod h1:ka04sppxSGFAtxX0qhlYQjISsg9mR4GWtQEhdbn6Pgg=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

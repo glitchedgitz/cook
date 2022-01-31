@@ -5,7 +5,7 @@ An overpower wordlist generator, splitter, merger, finder, saver, create words p
 
 Frustration killer! & Customizable!
 
-# Customizable
+### Customizable
 Cook is highly customizable and it depends on
 [cook-ingredients](https://github.com/giteshnxtlvl/cook-ingredients). Cook Ingredients consists YAML Collection of word-sets, extensions, funcitons to generate pattern and wordlists.
 
@@ -129,6 +129,12 @@ HASHES
 ## Multiple Methods
 You can apply multiple set of operations on partiocular column or final output in one command. So you don't have to re-run the tool again and again.
 
+To understanding the usage, suppose you read a blog, consider this one https://blog.assetnote.io/2020/09/18/finding-hidden-files-folders-iis-bigquery/.
+
+```
+cook -z shub_zip_files z.json[path].fb.sortu.smartjoin[c:_]
+```
+
 # Direct fuzzing with FUFF
 You can use generated output from cook directly with [ffuf](https://github.com/ffuf/ffuf) using pipe
 
@@ -138,12 +144,70 @@ cook usernames_list : passwords_list -m b64e | ffuf -u https://target.com -w - -
 
 Similarly you can fuzz directories/headers/params/numeric ids... And can apply required algorithms on your payloads.
 
-# Ranges
-
-
 # Functions
 ```
 cook -dob date[17,Sep,1994] elliot _,-, dob
 ```
 > Customize:    
  Create your own functions in `cook-ingredients/my.yaml` under functions:
+
+# Parsing Rules
+|  |  |
+|---|---|
+|Columns| Separated by space |
+|Values| Separated by comma |
+|Params| You can give param any name, use `-` before anything to make it param `-param value` |
+|Raw Strings| Use ` before and after the string to stop cook's parsing. Useful when you need to use any keyword as a word. |
+|Pipe Input| Take pipe input using `-` as value of any param. |
+|File Input| Use `:` after param name to take file input. `cook -f: live.txt f`|
+|Functions | Can be called using params only. |
+|Methods | Can be used on params or on final output |
+
+# Flags
+| Flag | Usage |
+|---|---|
+|-a, -append| Append to the previous lines, instead of permutations |
+|-c, -col| Print column numbers and there values |
+|-conf, -config| Config Information |
+|-mc, -methodcol| Apply methods column wise  `-mc 0:md5,b64e; 1:reverse` <br> To all cols separate  `-mc md5,b64e` |
+|-m, -method| Apply methods to final output |
+|-h, -help| Help |
+|-min | Minimum no of columns to print |
+
+### -append
+Append line by line. So basically if you want to merge two lists line by line. Then use it. And as always you can append multiple columns using column
+<img src="./assets/append.png"> 
+
+### -min
+<img src="./assets/min.png">
+
+# Ranges
+Something useful...
+<img src="./assets/ranges.png">
+
+# Repeat Operator (*)
+You can repeat a string horizontally or vertically.
+- Use `*` for horizontal repeating.
+- Use `**` for vertical repeating.
+- Create Null Payloads and directly fuzz with fuff. `cook **100 | fuff ...`
+
+</details>
+
+# Breaking Changes in veriosn v2.x.x
+Version 1.6 and Version 2 have signifant breaking changes to improe the usability of the tool.
+
+- Previously columns was separated with colon. Now they are separated by space
+- Single cook.yaml file removed. Now there is folder.
+- URL support for yaml file and added sources with over 5500 wordlist sets.
+- File regex removed, now use .regex[] method for regex
+- Taking file input needs colon after param
+- -case flag removed, now you can use upper, lower and title
+- Added Methods
+- Removed charset and extensions, now they are in list
+- Simplyfied ranges
+
+# Contribute
+- Add wordlists, wordsets, functions, ports and other things in [cook-ingredients](https://github.com/giteshnxtlvl/cook-ingredients)
+- Making **raw string** works like as it works in programming languages. Means better parser.
+- I don't know, you might use your creativity and add some awesome features.
+Or you can [buy me a coffee](https://www.buymeacoffee.com/giteshnxtlvl)☕

@@ -31,11 +31,11 @@ func PrintFunc(k string, v []string, search string) {
 //Checking for functions
 func ParseFunc(value string, array *[]string) bool {
 
-	if !(strings.Contains(value, "(") && strings.Contains(value, ")")) {
+	if !(strings.Contains(value, "[") && strings.Contains(value, "]")) {
 		return false
 	}
 
-	funcName, funcArgs := parse.ReadCrBrSepBy(value, ",")
+	funcName, funcArgs := parse.ReadSqBrSepBy(value, ",")
 	// fmt.Println(funcName)
 	// fmt.Println(funcArgs)
 
