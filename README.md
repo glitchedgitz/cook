@@ -190,11 +190,13 @@ Append line by line. So basically if you want to merge two lists line by line. T
 Something useful...
 <img src="./assets/ranges.png">
 
-# Repeat Operator (*)
+# Repeat Operator
 You can repeat a string horizontally or vertically.
 - Use `*` for horizontal repeating.
 - Use `**` for vertical repeating.
+- And try this `*10-1` or this `*1-10`.
 - Create Null Payloads and directly fuzz with fuff. `cook **100 | fuff ...`
+<img src="./assets/repeat.png">
 
 </details>
 
