@@ -49,9 +49,7 @@ Methods will let you apply diffenent sets of operation on final output or partic
 - `param.md5.b64e` apply multiple methods, this will first md5 hash the value and then base64 encode the hashed value.
 
 <img src="assets/methods.png">
-<img src="assets/meth1.png">
-<img src="assets/meth2.png">
-<img src="assets/meth3.png">
+<img src="assets/methdocs.png">
 
 <details><summary>All methods</summary>
 
