@@ -48,6 +48,10 @@ Methods will let you apply diffenent sets of operation on final output or partic
 - `param.methodname` apply to any parameter-wise, will example this param thing later.
 - `param.md5.b64e` apply multiple methods, this will first md5 hash the value and then base64 encode the hashed value.
 
+<img src="assets/methods.png">
+<img src="assets/meth1.png">
+<img src="assets/meth2.png">
+<img src="assets/meth3.png">
 
 <details><summary>All methods</summary>
 
@@ -136,7 +140,7 @@ To understanding the usage, suppose you read a blog, consider this one https://b
 cook -z shub_zip_files z.json[path].fb.sortu.smartjoin[c:_]
 ```
 
-<img src="multiplemethods.png">
+<img src="./assets/multiplemethods.png">
 
 # Direct fuzzing with FUFF
 You can use generated output from cook directly with [ffuf](https://github.com/ffuf/ffuf) using pipe
