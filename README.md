@@ -23,6 +23,7 @@ Without basics, everything is useless.
 
 ## Parametric Approach
 You can define your own params and use them to generate the pattern. This will be useful once you understand [methods](#methods)
+<img src="assets/parameterapproach.png">
 
 # Save wordlists and word sets
 <img src="assets/savewordlist.png">
@@ -135,6 +136,8 @@ To understanding the usage, suppose you read a blog, consider this one https://b
 cook -z shub_zip_files z.json[path].fb.sortu.smartjoin[c:_]
 ```
 
+<img src="multiplemethods.png">
+
 # Direct fuzzing with FUFF
 You can use generated output from cook directly with [ffuf](https://github.com/ffuf/ffuf) using pipe
 
@@ -148,6 +151,8 @@ Similarly you can fuzz directories/headers/params/numeric ids... And can apply r
 ```
 cook -dob date[17,Sep,1994] elliot _,-, dob
 ```
+<img src="./assets/functions.png">
+
 > Customize:    
  Create your own functions in `cook-ingredients/my.yaml` under functions:
 
