@@ -1,4 +1,4 @@
-module github.com/giteshnxtlvl/cook
+module github.com/giteshnxtlvl/cook/v2
 
 go 1.17
 
@@ -13,5 +13,5 @@ require (
 
 require (
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e // indirect
-	golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e // indirect
+	golang.org/x/sys v0.0.0-20220128215802-99c3d69c2c27 // indirect
 )
