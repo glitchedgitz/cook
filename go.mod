@@ -1,4 +1,4 @@
-module github.com/giteshnxtlvl/cook/v2
+module github.com/giteshnxtlvl/cook
 
 go 1.17
 
