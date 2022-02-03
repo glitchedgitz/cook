@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/giteshnxtlvl/cook/pkg/parse"
+	"github.com/giteshnxtlvl/cook/v2/pkg/parse"
 )
 
 var (

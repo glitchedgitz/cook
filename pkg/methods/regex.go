@@ -1,6 +1,6 @@
 package methods
 
-import "github.com/giteshnxtlvl/cook/pkg/cook"
+import "github.com/giteshnxtlvl/cook/v2/pkg/cook"
 
 func Regex(values []string, regex string, array *[]string) {
 	data := []byte{}

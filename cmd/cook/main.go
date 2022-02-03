@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/giteshnxtlvl/cook/pkg/cook"
+	"github.com/giteshnxtlvl/cook/v2/pkg/cook"
 )
 
 var total = 0

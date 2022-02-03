@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/giteshnxtlvl/cook/pkg/cook"
+	"github.com/giteshnxtlvl/cook/v2/pkg/cook"
 )
 
 var leetValues = make(map[string][]string)

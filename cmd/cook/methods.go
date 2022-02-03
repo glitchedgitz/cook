@@ -10,9 +10,9 @@ import (
 	"github.com/adrg/strutil"
 	"github.com/adrg/strutil/metrics"
 	"github.com/ffuf/pencode/pkg/pencode"
-	"github.com/giteshnxtlvl/cook/pkg/cook"
-	"github.com/giteshnxtlvl/cook/pkg/methods"
-	"github.com/giteshnxtlvl/cook/pkg/parse"
+	"github.com/giteshnxtlvl/cook/v2/pkg/cook"
+	"github.com/giteshnxtlvl/cook/v2/pkg/methods"
+	"github.com/giteshnxtlvl/cook/v2/pkg/parse"
 )
 
 var methodFunc = map[string]func([]string, string, *[]string){
