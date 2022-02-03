@@ -12,7 +12,7 @@ Cook is highly customizable and it depends on
 ### Installation
 Use Go or download [latest builds](https://github.com/giteshnxtlvl/cook/releases/)  
 ```
-go install github.com/giteshnxtlvl/cook/cmd/cook@latest
+go install -v github.com/giteshnxtlvl/cook/cmd/cook@master
 ```
 
 > After installation, run `cook` for one time, it will download [cook-ingredients](https://github.com/giteshnxtlvl/cook-ingredients) automatically at `%USERPROFILE%/cook-ingredients` for windows and `$home/cook-ingredients` for linux.
