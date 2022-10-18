@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/giteshnxtlvl/cook/v2/pkg/cook"
+	"github.com/glitchedgitz/cook/v2/pkg/cook"
 	"golang.org/x/net/publicsuffix"
 )
 

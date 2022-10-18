@@ -7,15 +7,15 @@ Frustration killer! & Customizable!
 
 ### Customizable
 Cook is highly customizable and it depends on
-[cook-ingredients](https://github.com/giteshnxtlvl/cook-ingredients). Cook Ingredients consists YAML Collection of word-sets, extensions, funcitons to generate pattern and wordlists.
+[cook-ingredients](https://github.com/glitchedgitz/cook-ingredients). Cook Ingredients consists YAML Collection of word-sets, extensions, funcitons to generate pattern and wordlists.
 
 ### Installation
-Use Go or download [latest builds](https://github.com/giteshnxtlvl/cook/releases/)  
+Use Go or download [latest builds](https://github.com/glitchedgitz/cook/releases/)  
 ```
-go install -v github.com/giteshnxtlvl/cook/v2/cmd/cook@latest
+go install -v github.com/glitchedgitz/cook/v2/cmd/cook@latest
 ```
 
-> After installation, run `cook` for one time, it will download [cook-ingredients](https://github.com/giteshnxtlvl/cook-ingredients) automatically at `%USERPROFILE%/cook-ingredients` for windows and `$home/cook-ingredients` for linux.
+> After installation, run `cook` for one time, it will download [cook-ingredients](https://github.com/glitchedgitz/cook-ingredients) automatically at `%USERPROFILE%/cook-ingredients` for windows and `$home/cook-ingredients` for linux.
 
 # Basic
 Without basics, everything is useless.
@@ -216,7 +216,7 @@ Version 1.6 and Version 2 have signifant breaking changes to improe the usabilit
 - Simplyfied ranges
 
 # Contribute
-- Add wordlists, wordsets, functions, ports and other things in [cook-ingredients](https://github.com/giteshnxtlvl/cook-ingredients)
+- Add wordlists, wordsets, functions, ports and other things in [cook-ingredients](https://github.com/glitchedgitz/cook-ingredients)
 - Making **raw string** works like as it works in programming languages. Means better parser.
 - I don't know, you might use your creativity and add some awesome features.
-Or you can [buy me a coffee](https://www.buymeacoffee.com/giteshnxtlvl)☕
+Or you can [buy me a coffee](https://www.buymeacoffee.com/glitchedgitz)☕

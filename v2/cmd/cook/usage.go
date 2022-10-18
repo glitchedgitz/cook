@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/giteshnxtlvl/cook/v2/pkg/cook"
+	"github.com/glitchedgitz/cook/v2/pkg/cook"
 )
 
 var version = "2.0"
@@ -24,7 +24,7 @@ var banner = fmt.Sprintf(`
       THE WORDLIST'S FRAMEWORK
 
             Version %s
-    Gitesh Sharma @giteshnxtlvl
+    Gitesh Sharma @glitchedgitz
 `, version)
 
 var helpFunctions = map[string]func(){
@@ -76,7 +76,7 @@ func printHelp(title string, description ...string) {
 
 func flagsHelp() {
 
-	printHelp("GITHUB", "https://github.com/giteshnxtlvl/cook")
+	printHelp("GITHUB", "https://github.com/glitchedgitz/cook")
 
 	printHelp(
 		"USAGE",

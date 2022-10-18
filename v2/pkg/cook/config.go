@@ -43,7 +43,7 @@ func firstRun() {
 	}
 
 	structure := make(map[string][]string)
-	err = yaml.Unmarshal([]byte(GetData("https://raw.githubusercontent.com/giteshnxtlvl/cook-ingredients/main/structure")), &structure)
+	err = yaml.Unmarshal([]byte(GetData("https://raw.githubusercontent.com/glitchedgitz/cook-ingredients/main/structure")), &structure)
 	if err != nil {
 		log.Fatalf("Err: Parsing YAML %v", err)
 	}

@@ -21,11 +21,11 @@ func getLocalFile(m map[string][]string) {
 }
 
 func getRepoFile(m map[string][]string) {
-	content := GetData("https://raw.githubusercontent.com/giteshnxtlvl/cook-ingredients/main/info.yaml")
+	content := GetData("https://raw.githubusercontent.com/glitchedgitz/cook-ingredients/main/info.yaml")
 
 	err := yaml.Unmarshal([]byte(content), &m)
 	if err != nil {
-		log.Fatalf("Err: Parsing YAML %s %v", "https://raw.githubusercontent.com/giteshnxtlvl/cook-ingredients/main/info.yaml", err)
+		log.Fatalf("Err: Parsing YAML %s %v", "https://raw.githubusercontent.com/glitchedgitz/cook-ingredients/main/info.yaml", err)
 	}
 }
 
@@ -45,7 +45,7 @@ var wg sync.WaitGroup
 func updateFile(file string) {
 	// fmt.Println("Updating : ", file)
 	defer wg.Done()
-	content := GetData("https://raw.githubusercontent.com/giteshnxtlvl/cook-ingredients/main/" + file)
+	content := GetData("https://raw.githubusercontent.com/glitchedgitz/cook-ingredients/main/" + file)
 	localFile := path.Join(ConfigFolder, file)
 	WriteFile(localFile, content)
 }

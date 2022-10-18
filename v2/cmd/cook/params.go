@@ -7,9 +7,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/giteshnxtlvl/cook/v2/pkg/cook"
-	"github.com/giteshnxtlvl/cook/v2/pkg/methods"
-	"github.com/giteshnxtlvl/cook/v2/pkg/parse"
+	"github.com/glitchedgitz/cook/v2/pkg/cook"
+	"github.com/glitchedgitz/cook/v2/pkg/methods"
+	"github.com/glitchedgitz/cook/v2/pkg/parse"
 )
 
 var home, _ = os.UserHomeDir()

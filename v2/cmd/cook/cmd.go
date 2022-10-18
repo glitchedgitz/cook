@@ -8,7 +8,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/giteshnxtlvl/cook/v2/pkg/cook"
+	"github.com/glitchedgitz/cook/v2/pkg/cook"
 	"github.com/manifoldco/promptui"
 )
 
