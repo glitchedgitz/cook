@@ -202,7 +202,7 @@ You can repeat a string horizontally or vertically.
 
 </details>
 
-# Breaking Changes in veriosn v2.x.x
+# Breaking Changes in version v2.x.x
 Version 1.6 and Version 2 have signifant breaking changes to improe the usability of the tool.
 
 - Previously columns was separated with colon. Now they are separated by space
