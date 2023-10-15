@@ -9,7 +9,12 @@ import (
 	"github.com/glitchedgitz/cook/v2/pkg/cook"
 )
 
-var version = "2.0"
+var (
+	version     = "2.0"
+	ingredients = false
+	update      = false
+)
+
 var banner = fmt.Sprintf(`                            
 
   ░    ░  ░   ░ ░      ░ ░  ░  ░
@@ -25,27 +30,32 @@ var banner = fmt.Sprintf(`
 
             Version %s
     Gitesh Sharma @glitchedgitz
-`, version)
+https://github.com/glitchedgitz/cook
+
+[COOK INGREDIENTS]         %v
+[UPDATE AVAILABLE]         %v
+
+`, cook.Cyan(version), cook.Cyan(ingredients), cook.Cyan(update))
 
 var helpFunctions = map[string]func(){
 	"methods": methHelp,
-	"meths":   methHelp,
 	"usage":   usageHelp,
 	"flags":   flagsHelp,
 }
 
 func helpMode(h []string) {
 
-	helpModeNames := func() string {
-		t := ""
+	printHelp := func() {
+		log.Printf("cook help [word] \n")
 		for k := range helpFunctions {
-			t += k + ", "
+			log.Printf("- cook help %s \n", cook.Green(k))
 		}
-		return t
-	}()
+		log.Printf("cook -h")
+		log.Fatal()
+	}
 
 	if len(h) <= 0 {
-		log.Fatalf("Ask for these... %s", helpModeNames)
+		printHelp()
 	}
 
 	help := strings.ToLower(h[0])
@@ -53,7 +63,7 @@ func helpMode(h []string) {
 	if fn, exists := helpFunctions[help]; exists {
 		fn()
 	} else {
-		log.Fatalf("Ask for these... %s", helpModeNames)
+		printHelp()
 	}
 
 	os.Exit(0)
@@ -61,13 +71,12 @@ func helpMode(h []string) {
 
 func showHelp() {
 	fmt.Fprintln(os.Stderr, banner)
-	fmt.Fprintln(os.Stderr, cook.Reset)
 	flagsHelp()
 	os.Exit(0)
 }
 
 func printHelp(title string, description ...string) {
-	fmt.Println(cook.Blue + title + cook.Reset)
+	fmt.Println(cook.Green(title))
 	for _, d := range description {
 		fmt.Println("    " + d)
 	}
@@ -75,8 +84,6 @@ func printHelp(title string, description ...string) {
 }
 
 func flagsHelp() {
-
-	printHelp("GITHUB", "https://github.com/glitchedgitz/cook")
 
 	printHelp(
 		"USAGE",

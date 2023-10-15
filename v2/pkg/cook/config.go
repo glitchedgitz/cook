@@ -33,8 +33,7 @@ func exists(path string) bool {
 }
 
 func firstRun() {
-
-	fmt.Fprintln(os.Stderr, "First Run")
+	fmt.Fprintln(os.Stderr, "["+Cyan("First Run")+"]")
 	fmt.Fprintln(os.Stderr, "Creating and Downloading Cook's Ingredients...\n\n ")
 
 	err := os.MkdirAll(path.Join(ConfigFolder, IngredientsFolder), os.ModePerm)
@@ -59,7 +58,6 @@ func firstRun() {
 		WriteFile(path.Join(ConfigFolder, IngredientsFolder, filename), GetData(v))
 	}
 	fmt.Fprint(os.Stderr, "\rDone                             \r")
-
 }
 
 func CookConfig() {

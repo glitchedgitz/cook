@@ -38,9 +38,9 @@ var cmdFunctions = map[string]func([]string){
 }
 
 func showConf() {
-	fmt.Println(cook.Blue + "\n    CONFIG" + cook.Reset)
+	fmt.Println(cook.Blue("\n    CONFIG"))
 	fmt.Printf("    Location: %v\n", cook.ConfigFolder)
-	fmt.Printf(cook.Blue+"\n    %-25s   %s     %s   %s   %s\n"+cook.Reset, "FILE", "SETS", "VERN", "PREFIX", "REPO")
+	fmt.Printf(cook.Blue("\n    %-25s   %s     %s   %s   %s\n"), "FILE", "SETS", "VERN", "PREFIX", "REPO")
 	fmt.Println(cook.ConfigInfo)
 
 	os.Exit(0)
@@ -130,6 +130,10 @@ func parseMethod() {
 func parseInput() {
 	parse.Help = banner
 	cook.Verbose = verbose
+
+	if len(os.Args) < 2 {
+		showHelp()
+	}
 
 	parse.Parse()
 

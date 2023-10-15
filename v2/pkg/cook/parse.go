@@ -21,14 +21,14 @@ var (
 
 func PrintFunc(k string, v []string, search string) {
 	// fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+Reset))
-	fmt.Printf("%s%s{\n", Blue+k+Reset, strings.ReplaceAll(v[0], search, Blue+search+Reset))
+	fmt.Printf("%s%s{\n", Blue(k), strings.ReplaceAll(v[0], search, Blue(search)))
 	for _, file := range v[1:] {
-		fmt.Printf("    %s\n", strings.ReplaceAll(file, search, Blue+search+Reset))
+		fmt.Printf("    %s\n", strings.ReplaceAll(file, search, Blue(search)))
 	}
 	fmt.Print("}\n\n")
 }
 
-//Checking for functions
+// Checking for functions
 func ParseFunc(value string, array *[]string) bool {
 
 	if !(strings.Contains(value, "[") && strings.Contains(value, "]")) {

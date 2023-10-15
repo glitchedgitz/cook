@@ -38,15 +38,15 @@ func searchMode(cmds []string) {
 			if strings.Contains(k, search) {
 				fmt.Println()
 				if cat == "files" || cat == "raw-files" {
-					fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+cook.Reset))
+					fmt.Println(strings.ReplaceAll(k, search, cook.Cyan(search)))
 					for _, file := range v {
-						fmt.Printf("    %s\n", strings.ReplaceAll(file, search, cook.Blue+search+cook.Reset))
+						fmt.Printf("    %s\n", strings.ReplaceAll(file, search, cook.Blue(search)))
 					}
 				} else if cat == "functions" {
 					cook.PrintFunc(k, v, search)
 				} else {
-					fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+cook.Reset))
-					fmt.Println(strings.ReplaceAll(fmt.Sprintf("    %v\n", v), search, cook.Blue+search+cook.Reset))
+					fmt.Println(strings.ReplaceAll(k, search, cook.Cyan(search)))
+					fmt.Println(strings.ReplaceAll(fmt.Sprintf("    %v\n", v), search, cook.Blue(search)))
 				}
 				found = true
 			}
@@ -157,7 +157,7 @@ func infoMode(cmds []string) {
 		cook.ReadYaml(set, m)
 	}
 
-	fmt.Println("\n" + cook.Blue + set + cook.Reset)
+	fmt.Println("\n" + cook.Blue(set))
 	fmt.Println("Path    : ", path.Join(cook.ConfigFolder, cook.IngredientsFolder, set))
 	fmt.Println("Sets    : ", len(m))
 	fmt.Println("Version : ", len(m))
@@ -172,7 +172,7 @@ func showMode(cmds []string) {
 	}
 
 	if vals, exists := cook.M[set]; exists {
-		fmt.Printf("\n" + cook.Blue + strings.ToUpper(set) + cook.Reset + "\n\n")
+		fmt.Printf("\n" + cook.Blue(strings.ToUpper(set)) + "\n\n")
 
 		keys := []string{}
 		for k := range vals {

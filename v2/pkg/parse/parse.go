@@ -115,11 +115,6 @@ func ReadCrBrSepBy(cmd string, sep string) (string, []string) {
 }
 
 func Parse() {
-
-	if len(os.Args) < 2 {
-		print(Help)
-	}
-
 	if showError && len(userDefined) > 0 {
 		panic(fmt.Sprintf("Undefined Flags%v", userDefined))
 	}
