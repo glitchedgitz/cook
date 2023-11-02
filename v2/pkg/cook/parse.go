@@ -70,7 +70,15 @@ var InputFile = make(map[string]bool)
 func ParseFile(param string, value string, array *[]string) bool {
 
 	if InputFile[param] {
-		FileValues(value, array)
+		if strings.Contains(value, "https://") || strings.Contains(value, "http://") {
+			// Parse URL
+			URLValues(value, array)
+		} else {
+			// When you paste URL from chrome
+			// file:///C://Users//gites//AppData//Local/grroxy/downloaded_lL5A
+			value = strings.TrimLeft(value, "file:///")
+			FileValues(value, array)
+		}
 		return true
 	}
 
