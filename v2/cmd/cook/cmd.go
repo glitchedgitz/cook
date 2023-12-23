@@ -26,38 +26,6 @@ func analyseParams(params map[string]string) {
 	}
 }
 
-func searchMode(cmds []string) {
-
-	search := cmds[0]
-	found := false
-
-	for cat, vv := range cook.M {
-		for k, v := range vv {
-			k = strings.ToLower(k)
-
-			if strings.Contains(k, search) {
-				fmt.Println()
-				if cat == "files" || cat == "raw-files" {
-					fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+cook.Reset))
-					for _, file := range v {
-						fmt.Printf("    %s\n", strings.ReplaceAll(file, search, cook.Blue+search+cook.Reset))
-					}
-				} else if cat == "functions" {
-					cook.PrintFunc(k, v, search)
-				} else {
-					fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+cook.Reset))
-					fmt.Println(strings.ReplaceAll(fmt.Sprintf("    %v\n", v), search, cook.Blue+search+cook.Reset))
-				}
-				found = true
-			}
-		}
-	}
-
-	if !found {
-		fmt.Println("Not Found: ", search)
-	}
-}
-
 // Add new set in custom.yaml
 // cook add [keyord]=[values separated by comma] in [category]
 func addMode(cmds []string) {

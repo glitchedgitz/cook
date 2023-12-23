@@ -17,6 +17,8 @@ var ConfigFolder string
 var IngredientsFolder = "ingredients"
 
 var ConfigInfo string
+
+// Contains category and their data
 var M = make(map[string]map[string][]string)
 var checkM = make(map[string][]string)
 

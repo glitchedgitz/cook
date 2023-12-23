@@ -28,7 +28,7 @@ func PrintFunc(k string, v []string, search string) {
 	fmt.Print("}\n\n")
 }
 
-//Checking for functions
+// Checking for functions
 func ParseFunc(value string, array *[]string) bool {
 
 	if !(strings.Contains(value, "[") && strings.Contains(value, "]")) {
