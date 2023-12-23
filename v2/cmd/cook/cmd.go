@@ -42,10 +42,12 @@ func addMode(cmds []string) {
 	if _, exists := m[category]; exists {
 		m[category][keyword] = append(m[category][keyword], values...)
 	} else {
-		m[category][keyword] = values
+		m[category] = map[string][]string{
+			keyword: values,
+		}
 	}
 
-	cook.WriteYaml(myyaml, m)
+	cook.WriteYaml(path.Join(cook.ConfigFolder, cook.IngredientsFolder, myyaml), m)
 	fmt.Printf("Added \"%s\" in \"%s\" ", keyword, category)
 }
 
@@ -109,7 +111,7 @@ func deleteMode(cmds []string) {
 	if found {
 		delete(m[category], keyword)
 		fmt.Printf("Deleted \"%s\" from \"%s\" ", keyword, category)
-		cook.WriteYaml(myyaml, m)
+		cook.WriteYaml(path.Join(cook.ConfigFolder, cook.IngredientsFolder, myyaml), m)
 	} else {
 		log.Fatalln("Keyword doesn't exists")
 	}
