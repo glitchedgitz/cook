@@ -5,43 +5,138 @@ An overpower wordlist generator, splitter, merger, finder, saver, create words p
 
 Frustration killer! & Customizable!
 
-### Customizable
-Cook is highly customizable and it depends on
-[cook-ingredients](https://github.com/glitchedgitz/cook-ingredients). Cook Ingredients consists YAML Collection of word-sets, extensions, funcitons to generate pattern and wordlists.
-
 ### Installation
 Use Go or download [latest builds](https://github.com/glitchedgitz/cook/releases/)  
 ```
 go install -v github.com/glitchedgitz/cook/v2/cmd/cook@latest
 ```
-
-> After installation, run `cook` for one time, it will download [cook-ingredients](https://github.com/glitchedgitz/cook-ingredients) automatically at `%USERPROFILE%/cook-ingredients` for windows and `$home/cook-ingredients` for linux.
+> After installation, run `cook` for one time.    
+> It will setup and download [cook-ingredients](https://github.com/glitchedgitz/cook-ingredients) at    
+> `%USERPROFILE%/cook-ingredients` for windows &     
+> `$home/cook-ingredients` for linux.
 
 # Basic
+
 Without basics, everything is useless.
 <img src="assets/basic.png">
 
-## Parametric Approach
-You can define your own params and use them to generate the pattern. This will be useful once you understand [methods](#methods)
+### Ranges
+<img src="./assets/ranges.png">
+
+#### Use case: Sites using custom suffix/preffix?
+<img src="assets/prefixsuffix.png">
+
+
+## Param Approach
+Name them anything and use them to generate the pattern.
+This will be more useful when you apply encoding column-wise using [methods](#methods).
+
+```bash
+cook -start intigriti,bugcrowd  -sep _,- -end users.rar,secret.zip  / start sep end
+```
+
 <img src="assets/parameterapproach.png">
 
-# Save wordlists and word sets
+```
+Note: you must include parameter in the pattern, otherwise it will not print anything. 
+```
+
+### `-append` join wordlists line by line
+
+Append line by line. So basically if you want to merge two lists line by line. Then use it. And as always you can append multiple columns using column
+<img src="./assets/append.png">
+
+### `-min` Print at every step
+<img src="./assets/min.png">
+
+
+
+### `*` and `**` Repeat Operator
+
+- Use `*` for horizontal repeating.
+- Use `**` for vertical repeating.
+- And try this `*10-1` or this `*1-10`.
+
+<img src="./assets/repeat.png">
+
+#### `Null Payloads` fuzzing with fuff
+```bash
+cook **100 | ffuf -w - -u https://example.com/FUZZ
+```
+
+# Access Wordlists from seclist/assetnotes/fuzzdb/etc...
+
+Cook uses [cook-ingredients](https://github.com/glitchedgitz/cook-ingredients), it's `YAML` Collection of word-sets, extensions, funcitons to generate pattern and wordlists.
 <img src="assets/savewordlist.png">
 
-### Search Wordlist
+Current fetched databases
+
+| Name                  | Link                                               |
+|-----------------------|----------------------------------------------------|
+| Assetnotes Wordlsits  | [https://wordlists.assetnote.io/](https://wordlists.assetnote.io/) |
+| Seclist               | [https://github.com/danielmiessler/SecLists](https://github.com/danielmiessler/SecLists) |
+| FuzzDB                | [https://github.com/fuzzdb-project/fuzzdb](https://github.com/fuzzdb-project/fuzzdb) |
+| Bruteforce Database   | [https://github.com/duyet/bruteforce-database](https://github.com/duyet/bruteforce-database) |
+| Bruteforce Lists      | [https://github.com/random-robbie/bruteforce-lists](https://github.com/random-robbie/bruteforce-lists) |
+| OneListForAll         | [https://github.com/six2dez/OneListForAll](https://github.com/six2dez/OneListForAll) |
+
+#### You probably need to search wordlists from these repos
+
 ```
-cook search keyword
+cook search [keyword]
 ```
 
-## Reading File using Cook
-If you want to use a file from current working directory.  
-Use `:` after param name. 
+Here we search for `api` using `cook search api`
+
+<img src="assets/search.png">
+
+>
+>
+
+then using the file name you can fetch use the file `cook an-apiroutes`
+
+> Note that `sec` is shortname for seclist, `an` for assetnote, `fz` for fuzzdb like this...
+
+<img src="assets/using.png" width="70%">
+
+
+
+
+### Add/Update/Delete wordlists/wordsets
+Edit `my.yaml` manually or use these commands.
+
+#### Add/Update:
+```
+cook add [keyword]=[values, separated by comma] in [category]
+```
+If `keyword` doesn't exist it will create it.Otherwise it will update it and add the new value in the same variable.
+
+```bash
+cook add same variable=https://example2.com in files
+```
+
+```bash
+cook add unique_name=word1,word2,word3 in lists
+```
+> Category are `files`, `raw-files`, `functions` and `lists`
+
+#### Delete
+```cook delete [keyword]```
+
+## Local File or Fetch URL
+To fetch local files or URLs, use `:` after param name. 
+
 ```
 cook -f: live.txt f
 ```
+```
+cook -f: https://example.com/wordlist.txt f
+```
 
 # Methods
-Methods will let you apply diffenent sets of operation on final output or particular column as you want. You can encode, decode, reverse, split, sort, extract different part of urls and much more...
+Using methods you can encode, decode, reverse, split, sort, extract and can do much more...
+
+Methods can be applied on final output or column-wise
 
 - `-m/-method` to apply methods on the final output
 - `-mc/-methodcol` to apply column-wise.
@@ -49,6 +144,27 @@ Methods will let you apply diffenent sets of operation on final output or partic
 - `param.md5.b64e` apply multiple methods, this will first md5 hash the value and then base64 encode the hashed value.
 
 <img src="assets/methods.png">
+
+## Smart Break & Smart Join
+
+Special focus on these 2 methods, these will be great help everytime you use any wordlist.
+
+#### Smart Break
+```
+$ cook adminNew,admin_new -m smart
+admin
+New
+admin
+new
+```
+
+#### Smart Join - It breaks and join back with the supplied character.
+```
+$ cook adminNew -m smartjoin[:_]
+admin_New
+```
+
+All methods `cook help methods`
 <img src="assets/methdocs.png">
 
 <details><summary>All methods</summary>
@@ -129,16 +245,39 @@ HASHES
 ```
 </details>
 
-## Multiple Methods
-You can apply multiple set of operations on partiocular column or final output in one command. So you don't have to re-run the tool again and again.
+# ULTIMATE USAGE
+Too overpower? But everyday you came accross weird BB stuff, like a big json file from target? May be you want to extract, join, merge or whatever. You can use cook smartly as per your usecase.
 
-To understanding the usage, suppose you read a blog, consider this one https://blog.assetnote.io/2020/09/18/finding-hidden-files-folders-iis-bigquery/.
+### Real life usage example:
+Let's say you read this blog https://blog.assetnote.io/2020/09/18/finding-hidden-files-folders-iis-bigquery/.
+
+Now you will also want to save `BIG ZIP FILE` wordlist by assetnote. `https://storage.googleapis.com/zipfilesbq/zipfiles.json`
+
+COOK already saved this file at `cook shub_zip_files`, but if save a wordlist, use `cook add shub_zip_files=[URL] in files`
+
+File contains data like this, but this isn't directly useful for you, Is it?
+```json
+{"repo_name":"cocowool/RoseCMS","ref":"refs/heads/1","path":"user_guide/_downloads/ELDocs.tmbundle.zip","mode":"33261","id":"f7a11b364ca918379b48ad525798148e7470b6b1"}
+{"repo_name":"xuguanfeng/practise","ref":"refs/heads/1","path":"node_modules/selenium-webdriver/node_modules/adm-zip/test/assets/fast.zip","mode":"33188","id":"f4ed17b98c9d7bcd21efc4523ce75fbe2b071d0a"}
+{"repo_name":"xuguanfeng/practise","ref":"refs/heads/1","path":"node_modules/selenium-webdriver/node_modules/adm-zip/test/assets/store.zip","mode":"33188","id":"e2add30dc0e3129dc89e20a71abe7314052d0002"}
+{"repo_name":"xuguanfeng/practise","ref":"refs/heads/1","path":"node_modules/selenium-webdriver/node_modules/adm-zip/test/assets/ultra.zip","mode":"33188","id":"86a8ec776107c075ce2c7f803472aa97dc25cbf7"}
+{"repo_name":"xuguanfeng/practise","ref":"refs/heads/1","path":"node_modules/selenium-webdriver/node_modules/adm-zip/test/assets/normal.zip","mode":"33188","id":"b4602c94ee000ee54c71c9302b9db956b3fd9f0e"}
+{"repo_name":"xuguanfeng/practise","ref":"refs/heads/1","path":"node_modules/selenium-webdriver/node_modules/adm-zip/test/assets/fastest.zip","mode":"33188","id":"f4ed17b98c9d7bcd21efc4523ce75fbe2b071d0a"}
+{"repo_name":"xuguanfeng/practise","ref":"refs/heads/1","path":"node_modules/selenium-webdriver/node_modules/adm-zip/test/assets/maximum.zip","mode":"33188","id":"86a8ec776107c075ce2c7f803472aa97dc25cbf7"}
+...
+```
+
+### Single line solution
+Not just we can extract it, we extracted filebase from path and sort unique, then use smartjoin to create diff permuataions.
 
 ```
 cook -z shub_zip_files z.json[path].fb.sortu.smartjoin[c:_]
 ```
 
 <img src="./assets/multiplemethods.png">
+
+
+
 
 # Direct fuzzing with FUFF
 You can use generated output from cook directly with [ffuf](https://github.com/ffuf/ffuf) using pipe
@@ -181,41 +320,12 @@ cook -dob date[17,Sep,1994] elliot _,-, dob
 |-h, -help| Help |
 |-min | Minimum no of columns to print |
 
-### -append
-Append line by line. So basically if you want to merge two lists line by line. Then use it. And as always you can append multiple columns using column
-<img src="./assets/append.png"> 
-
-### -min
-<img src="./assets/min.png">
-
-# Ranges
-Something useful...
-<img src="./assets/ranges.png">
-
-# Repeat Operator
-You can repeat a string horizontally or vertically.
-- Use `*` for horizontal repeating.
-- Use `**` for vertical repeating.
-- And try this `*10-1` or this `*1-10`.
-- Create Null Payloads and directly fuzz with fuff. `cook **100 | fuff ...`
-<img src="./assets/repeat.png">
-
 </details>
 
-# Breaking Changes in veriosn v2.x.x
-Version 1.6 and Version 2 have signifant breaking changes to improe the usability of the tool.
-
-- Previously columns was separated with colon. Now they are separated by space
-- Single cook.yaml file removed. Now there is folder.
-- URL support for yaml file and added sources with over 5500 wordlist sets.
-- File regex removed, now use .regex[] method for regex
-- Taking file input needs colon after param
-- -case flag removed, now you can use upper, lower and title
-- Added Methods
-- Removed charset and extensions, now they are in list
-- Simplyfied ranges
-
 # Contribute
+- Concurrency
+- Autocomplete for shells
+- Make append work something like this `cook file1 =/= file2`, make sure chars directly work with all terminals.
 - Add wordlists, wordsets, functions, ports and other things in [cook-ingredients](https://github.com/glitchedgitz/cook-ingredients)
 - Making **raw string** works like as it works in programming languages. Means better parser.
 - I don't know, you might use your creativity and add some awesome features.
