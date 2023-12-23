@@ -134,7 +134,7 @@ func applyMethods(vallll []string, meths []string, array *[]string) {
 				tmp = append(tmp, string(output))
 			}
 		} else {
-			fmt.Fprintf(os.Stderr, "\nFunc \"%s\" Doesn't exists\n", f)
+			fmt.Fprintf(os.Stderr, "\nMethod \"%s\" Doesn't exists\n", f)
 			mistypedCheck(f)
 			os.Exit(0)
 		}

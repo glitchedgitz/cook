@@ -2,13 +2,17 @@ package main
 
 import (
 	"fmt"
+	"strings"
 )
 
 func print() {
 
 	if len(methodsForAll) > 0 {
 		tmp := []string{}
-		applyMethods(final, splitMethods(methodsForAll), &tmp)
+
+		for _, meth := range strings.Split(methodsForAll, ",") {
+			applyMethods(final, splitMethods(meth), &tmp)
+		}
 		for _, v := range tmp {
 			fmt.Println(v)
 		}
