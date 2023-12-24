@@ -50,20 +50,6 @@ Append line by line. So basically if you want to merge two lists line by line. T
 <img src="./assets/min.png">
 
 
-
-### `*` and `**` Repeat Operator
-
-- Use `*` for horizontal repeating.
-- Use `**` for vertical repeating.
-- And try this `*10-1` or this `*1-10`.
-
-<img src="./assets/repeat.png">
-
-#### `Null Payloads` fuzzing with fuff
-```bash
-cook **100 | ffuf -w - -u https://example.com/FUZZ
-```
-
 # Access Wordlists from seclist/assetnotes/fuzzdb/etc...
 
 Cook uses [cook-ingredients](https://github.com/glitchedgitz/cook-ingredients), it's `YAML` Collection of word-sets, extensions, funcitons to generate pattern and wordlists.
@@ -287,6 +273,19 @@ cook usernames_list : passwords_list -m b64e | ffuf -u https://target.com -w - -
 ```
 
 Similarly you can fuzz directories/headers/params/numeric ids... And can apply required algorithms on your payloads.
+
+### Repeat Operator `*` and `**`
+
+- Use `*` for horizontal repeating.
+- Use `**` for vertical repeating.
+- And try this `*10-1` or this `*1-10`.
+
+<img src="./assets/repeat.png">
+
+- `Null Payloads` fuzzing with fuff
+```bash
+cook **100 | ffuf -w - -u https://example.com/FUZZ
+```
 
 # Functions
 ```
