@@ -274,7 +274,7 @@ cook usernames_list : passwords_list -m b64e | ffuf -u https://target.com -w - -
 
 Similarly you can fuzz directories/headers/params/numeric ids... And can apply required algorithms on your payloads.
 
-### Repeat Operator `*` and `**`
+# Repeat Operator `*` and `**`
 
 - Use `*` for horizontal repeating.
 - Use `**` for vertical repeating.
