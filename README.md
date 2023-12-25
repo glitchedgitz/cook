@@ -127,28 +127,56 @@ Methods can be applied on final output or column-wise
 - `-m/-method` to apply methods on the final output
 - `-mc/-methodcol` to apply column-wise.
 - `param.methodname` apply to any parameter-wise, will example this param thing later.
-- `param.md5.b64e` apply multiple methods, this will first md5 hash the value and then base64 encode the hashed value.
+
 
 <img src="assets/methods.png">
 
-## Smart Break & Smart Join
+## Multiple Encoding
+
+- **Overlapping Encodings**:
+    - Use dot `.`    
+    - `md5.b64e.urle` apply multiple methods one by one.   
+    - Output Logic:
+        - `Generated Pattern` > `md5 hashing` > `base 64 encoding` > `URL Encoding`.
+- **Different Encodings**:     
+    - Use comma `,`    
+    - `md5,sha1,sha256` apply different encoding to the same generated pattern.    
+    - Output Logic:
+        - `Generated Pattern` > `md5 hashing`
+        - `Generated Pattern` > `sha1 hashing`
+        - `Generated Pattern` > `sha256 hashing`
+
+<img src="assets/multipleencodings.png">
+
+## Smart Break & Smart Join 💫
 
 Special focus on these 2 methods, these will be great help everytime you use any wordlist.
 
-#### Smart Break
+### Smart Break `-m smart`
+
 ```
-$ cook adminNew,admin_new -m smart
+▶ cook adminNew,admin_new -m smart
 admin
 New
 admin
 new
 ```
 
-#### Smart Join - It breaks and join back with the supplied character.
+### Smart Join `-m smartjoin[<case>:<char>]`
+It breaks and join back with the supplied character.
 ```
-$ cook adminNew -m smartjoin[:_]
+▶ cook adminNew,admin-old -m smartjoin[:_]
 admin_New
+admin_old
 ```
+**Apply Cases over separated**
+
+Here we applied camlecase
+```
+▶ cook suppose_this_is_long_text -m smartjoin[c:_]
+suppose_This_Is_Long_Text
+```
+
 
 All methods `cook help methods`
 <img src="assets/methdocs.png">
@@ -262,18 +290,6 @@ cook -z shub_zip_files z.json[path].fb.sortu.smartjoin[c:_]
 
 <img src="./assets/multiplemethods.png">
 
-
-
-
-# Direct fuzzing with FUFF
-You can use generated output from cook directly with [ffuf](https://github.com/ffuf/ffuf) using pipe
-
-```
-cook usernames_list : passwords_list -m b64e | ffuf -u https://target.com -w - -H "Authorization: Basic FUZZ"
-```
-
-Similarly you can fuzz directories/headers/params/numeric ids... And can apply required algorithms on your payloads.
-
 # Repeat Operator `*` and `**`
 
 - Use `*` for horizontal repeating.
@@ -282,7 +298,16 @@ Similarly you can fuzz directories/headers/params/numeric ids... And can apply r
 
 <img src="./assets/repeat.png">
 
-- `Null Payloads` fuzzing with fuff
+# Direct fuzzing with FUFF
+
+You can use generated output from cook directly with [ffuf](https://github.com/ffuf/ffuf) or any other tools using pipe.
+
+```
+cook usernames_list : passwords_list -m b64e | ffuf -u https://target.com -w - -H "Authorization: Basic FUZZ"
+```
+
+Similarly you can fuzz directories/headers/params/numeric ids... And can apply required algorithms on your payloads.
+### `Null Payloads` fuzzing with fuff
 ```bash
 cook **100 | ffuf -w - -u https://example.com/FUZZ
 ```
