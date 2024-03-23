@@ -5,12 +5,10 @@ import (
 	"log"
 	"time"
 
-	"github.com/glitchedgitz/cook/v2/pkg/cook"
+	cook "github.com/glitchedgitz/cook/v2/pkg/config"
 	"github.com/glitchedgitz/cook/v2/pkg/methods"
 	"github.com/glitchedgitz/cook/v2/pkg/parse"
 )
-
-
 
 func initiate() {
 	parse.Help = banner

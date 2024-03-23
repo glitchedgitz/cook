@@ -6,10 +6,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/glitchedgitz/cook/v2/pkg/cook"
+	"github.com/glitchedgitz/cook/v2/pkg/config"
 )
-
-
 
 func helpMode(h []string) {
 

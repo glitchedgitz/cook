@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/glitchedgitz/cook/v2/pkg/cook"
+	cook "github.com/glitchedgitz/cook/v2/pkg/config"
 )
 
 func appendMode(values []string) {

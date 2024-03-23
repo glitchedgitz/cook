@@ -10,7 +10,7 @@ import (
 	"github.com/adrg/strutil"
 	"github.com/adrg/strutil/metrics"
 	"github.com/ffuf/pencode/pkg/pencode"
-	"github.com/glitchedgitz/cook/v2/pkg/cook"
+	"github.com/glitchedgitz/cook/v2/pkg/config"
 	"github.com/glitchedgitz/cook/v2/pkg/methods"
 	"github.com/glitchedgitz/cook/v2/pkg/parse"
 )
