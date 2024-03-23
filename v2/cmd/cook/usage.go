@@ -36,13 +36,13 @@ func helpMode(h []string) {
 
 func showHelp() {
 	fmt.Fprintln(os.Stderr, banner)
-	fmt.Fprintln(os.Stderr, cook.Reset)
+	fmt.Fprintln(os.Stderr, config.Reset)
 	flagsHelp()
 	os.Exit(0)
 }
 
 func printHelp(title string, description ...string) {
-	fmt.Println(cook.Blue + title + cook.Reset)
+	fmt.Println(config.Blue + title + config.Reset)
 	for _, d := range description {
 		fmt.Println("    " + d)
 	}

@@ -184,7 +184,7 @@ func checkMethods(p string, array *[]string) bool {
 
 			vallll := []string{}
 
-			if !checkParam(u, &vallll) && !cook.CheckYaml(u, &vallll) {
+			if !checkParam(u, &vallll) && !config.CheckYaml(u, &vallll) {
 				return false
 			}
 
