@@ -11,8 +11,9 @@ import (
 var Args = os.Args[1:]
 var showError = false
 var Help = ""
+var userDefined = make(map[string]string)
 
-func B(flag, flagL string) bool {
+func Boolean(flag, flagL string) bool {
 	for i, cmd := range Args {
 		if cmd == flag || cmd == flagL {
 			Args = append(Args[:i], Args[i+1:]...)
@@ -22,7 +23,7 @@ func B(flag, flagL string) bool {
 	return false
 }
 
-func S(flag, flagL string) string {
+func String(flag, flagL string) string {
 	l := len(Args)
 	for i, cmd := range Args {
 		if cmd == flag || cmd == flagL {
@@ -39,7 +40,7 @@ func S(flag, flagL string) string {
 	return ""
 }
 
-func I(flag, flagL string) int {
+func Integer(flag, flagL string) int {
 	intValue := 0
 	l := len(Args)
 
@@ -63,7 +64,6 @@ func I(flag, flagL string) int {
 	return -4541
 }
 
-var userDefined = make(map[string]string)
 
 func UserDefinedFlags() map[string]string {
 	tmp := []string{}
@@ -72,7 +72,7 @@ func UserDefinedFlags() map[string]string {
 
 	for _, cmd := range tmp {
 		if len(cmd) > 1 && strings.Count(cmd, "-") == 1 && strings.HasPrefix(cmd, "-") {
-			value := S(cmd, cmd)
+			value := String(cmd, cmd)
 			cmd = strings.Replace(cmd, "-", "", 1)
 			userDefined[cmd] = value
 		}

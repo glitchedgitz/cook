@@ -16,14 +16,14 @@ var home, _ = os.UserHomeDir()
 var totalCols = 0
 
 var (
-	help          = parse.B("-h", "-help")
-	verbose       = parse.B("-v", "-verbose")
-	showCol       = parse.B("-c", "-col")
-	min           = parse.I("-min", "-min")
-	methodParam   = parse.S("-mc", "-methodcol")
-	methodsForAll = parse.S("-m", "-method")
-	appendParam   = parse.S("-a", "-append")
-	showConfig    = parse.B("-conf", "-config")
+	help          = parse.Boolean("-h", "-help")
+	verbose       = parse.Boolean("-v", "-verbose")
+	showCol       = parse.Boolean("-c", "-col")
+	min           = parse.Integer("-min", "-min")
+	methodParam   = parse.String("-mc", "-methodcol")
+	methodsForAll = parse.String("-m", "-method")
+	appendParam   = parse.String("-a", "-append")
+	showConfig    = parse.Boolean("-conf", "-config")
 )
 
 var cmdFunctions = map[string]func([]string){
