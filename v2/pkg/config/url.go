@@ -1,4 +1,4 @@
-package cook
+package config
 
 import (
 	"bufio"
@@ -9,7 +9,7 @@ import (
 )
 
 func URLValues(url string, array *[]string) {
-	
+
 	// Make an HTTP GET request to the URL
 	response, err := http.Get(url)
 	if err != nil {

@@ -1,4 +1,4 @@
-package cook
+package config
 
 import (
 	"fmt"
