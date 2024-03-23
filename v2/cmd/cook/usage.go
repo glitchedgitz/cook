@@ -9,30 +9,7 @@ import (
 	"github.com/glitchedgitz/cook/v2/pkg/cook"
 )
 
-var version = "2.0"
-var banner = fmt.Sprintf(`                            
 
-  ░    ░  ░   ░ ░      ░ ░  ░  ░
-  ░ ░   ░    ░ ░ ░ ▒  ░ ░  ▒  ░
-░░▒ ▒░ ░  ░ ▒ ▒░   ░ ▒ ▒░ ░ ░ ▒ ░
-░ ░▒ ▒  ░░ ▒░▒░▒░ ░ ▒░▒░▒░ ▒ ▒▒ ▓▒        
- ▄████▄   ▒█████   ▒█████   ██ ▄█▀           
-▒██▀ ▀█  ▒██▒  ██▒▒██▒  ██▒ ██▄█▒            
-▒▓█    ▄ ▒██░  ██▒▒██░  ██▒▓███▄░                         
- ▒▓███▀ ░░ ████▓▒░░ ████▓▒░▒██▒ █▄
-
-      THE WORDLIST'S FRAMEWORK
-
-            Version %s
-    Gitesh Sharma @glitchedgitz
-`, version)
-
-var helpFunctions = map[string]func(){
-	"methods": methHelp,
-	"meths":   methHelp,
-	"usage":   usageHelp,
-	"flags":   flagsHelp,
-}
 
 func helpMode(h []string) {
 
