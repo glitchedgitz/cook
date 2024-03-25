@@ -15,6 +15,21 @@ go install -v github.com/glitchedgitz/cook/v2/cmd/cook@latest
 > `%USERPROFILE%/cook-ingredients` for windows &     
 > `$home/cook-ingredients` for linux.
 
+### Use as library
+```golang
+COOK := New(&COOK{
+    Config: &config.Config{
+        ConfigPath: "",
+    },
+    Pattern: scenario.pattern,
+})
+
+...
+
+COOK.Run()
+fmt.Printf("Generated list: %v", COOK.Final)
+```
+
 # Basic
 
 Without basics, everything is useless.

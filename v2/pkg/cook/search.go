@@ -1,23 +1,23 @@
-package main
+package cook
 
 import (
 	"fmt"
 	"strings"
 
-	cook "github.com/glitchedgitz/cook/v2/pkg/config"
+	"github.com/glitchedgitz/cook/v2/pkg/config"
+	"github.com/glitchedgitz/cook/v2/pkg/util"
 )
 
 func printWordlistNames(k, search string) string {
-	return cook.TerminalColor(strings.ReplaceAll(k,
-		search, cook.TerminalColor(search, cook.Background)+cook.Red), cook.Red) + cook.Reset
+	return util.TerminalColor(strings.ReplaceAll(k,
+		search, util.TerminalColor(search, util.Background)+util.Red), util.Red) + util.Reset
 }
 
-func searchMode(cmds []string) {
+func (cook *COOK) SearchMode(search string) {
 
-	search := cmds[0]
 	found := false
 
-	for cat, vv := range cook.M {
+	for cat, vv := range cook.Config.M {
 		for k, v := range vv {
 			k = strings.ToLower(k)
 
@@ -29,15 +29,15 @@ func searchMode(cmds []string) {
 					links := ""
 
 					for i, file := range v {
-						links += fmt.Sprintf(" " + cook.TerminalLink(file, fmt.Sprintf("%d", i+1), cook.Blue))
+						links += fmt.Sprintf(" " + util.TerminalLink(file, fmt.Sprintf("%d", i+1), util.Blue))
 					}
 					fmt.Printf("%-90s Links[%s ]", coloredName, links)
 				} else if cat == "functions" {
-					cook.PrintFunc(k, v, search)
+					config.PrintFunc(k, v, search)
 				} else {
 					coloredName := printWordlistNames(k, search)
-					// words := fmt.Sprintf(strings.ReplaceAll(fmt.Sprintf("    %v\n", v), search, cook.Blue+search+cook.Reset))
-					words := cook.TerminalColor(fmt.Sprint(v), cook.Blue)
+					// words := fmt.Sprintf(strings.ReplaceAll(fmt.Sprintf("    %v\n", v), search, util.Blue+search+config.Reset))
+					words := util.TerminalColor(fmt.Sprint(v), util.Blue)
 					fmt.Printf("%-90s Wordset %s", coloredName, words)
 				}
 				found = true

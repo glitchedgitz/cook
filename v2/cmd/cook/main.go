@@ -3,29 +3,53 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"time"
 
-	cook "github.com/glitchedgitz/cook/v2/pkg/config"
-	"github.com/glitchedgitz/cook/v2/pkg/methods"
+	"github.com/glitchedgitz/cook/v2/pkg/config"
+	"github.com/glitchedgitz/cook/v2/pkg/cook"
 	"github.com/glitchedgitz/cook/v2/pkg/parse"
 )
 
-func initiate() {
-	parse.Help = banner
-	cook.Verbose = verbose
-	help = parse.Boolean("-h", "-help")
-	verbose = parse.Boolean("-v", "-verbose")
-	showCol = parse.Boolean("-c", "-col")
-	min = parse.Integer("-min", "-min")
-	methodParam = parse.String("-mc", "-methodcol")
-	methodsForAll = parse.String("-m", "-method")
-	appendParam = parse.String("-a", "-append")
-	showConfig = parse.Boolean("-conf", "-config")
-	parse.Parse()
-}
+var COOK *cook.COOK
+var configPath string
+var total = 0
+
+// Initializing with empty string, so loops will run for 1st column
+var start = time.Now()
+
+// Flags
+var (
+	help          bool
+	verbose       bool
+	showCol       bool
+	min           int
+	methodParam   string
+	methodsForAll string
+	appendParam   string
+	showConfig    bool
+	reConfigure   bool
+)
 
 func main() {
-	initiate()
+	parseFlags := parse.NewParse()
+	parseFlags.Help = banner
+	// cook.Verbose = verbose
+	help = parseFlags.Boolean("-h", "-help")
+	verbose = parseFlags.Boolean("-v", "-verbose")
+	showCol = parseFlags.Boolean("-c", "-col")
+	min = parseFlags.Integer("-min", "-min")
+	methodParam = parseFlags.String("-mc", "-methodcol")
+	methodsForAll = parseFlags.String("-m", "-method")
+	appendParam = parseFlags.String("-a", "-append")
+	showConfig = parseFlags.Boolean("-conf", "-config")
+	reConfigure = parseFlags.Boolean("-reconfigure", "-reconf")
+	configPath = parseFlags.String("-config-path", "-config-path")
+	parseFlags.Parse()
+
+	if !verbose {
+		log.SetFlags(0)
+	}
 
 	if help {
 		// terminate after showing help
@@ -37,38 +61,44 @@ func main() {
 		showConf()
 	}
 
-	cook.CookConfig()
-
-	params = parse.UserDefinedFlags()
-	pattern = parse.Args
-
-	totalCols = len(pattern)
-
-	analyseParams(params)
-	cmdsMode()
-	setMin()
-	methods.LeetBegin()
-
-	if len(appendParam) > 0 {
-		parseAppend()
+	if len(os.Getenv("COOK")) > 0 {
+		configPath = os.Getenv("COOK")
 	}
 
-	if len(methodParam) > 0 {
-		parseMethod()
-	}
+	COOK = cook.New(&cook.COOK{
+		Config: &config.Config{
+			ConfigPath:  configPath,
+			ReConfigure: reConfigure,
+			Verbose:     verbose,
+		},
+		Pattern:       parseFlags.Args,
+		Verbose:       verbose,
+		Min:           min,
+		AppendParam:   appendParam,
+		MethodParam:   methodParam,
+		MethodsForAll: methodsForAll,
+		PrintResult:   true,
+	})
 
 	if showCol {
-		showCols()
+		COOK.ShowCols()
 	}
 
-	cook.VPrint(fmt.Sprintf("Pattern: %v \n", pattern))
+	if COOK.TotalCols > 0 {
+		if fn, exists := cmdFunctions[COOK.Pattern[0]]; exists {
+			fn(COOK.Pattern[1:])
+			os.Exit(0)
+		}
+	}
 
-	run()
+	VPrint(fmt.Sprintf("Pattern: %v \n", COOK.Pattern))
+	// COOK.CurrentStage()
+	COOK.Run()
 
-	cook.VPrint(fmt.Sprintf("%-40s: %s", "Elapsed Time", time.Since(start)))
-	cook.VPrint(fmt.Sprintf("%-40s: %d", "Total words generated", total))
-}
+	if verbose {
+		COOK.CurrentStage()
+	}
 
-func init() {
-	log.SetFlags(0)
+	VPrint(fmt.Sprintf("%-40s: %s", "Elapsed Time", time.Since(start)))
+	VPrint(fmt.Sprintf("%-40s: %d", "Total words generated", total))
 }

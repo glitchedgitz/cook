@@ -4,7 +4,7 @@ import (
 	"strings"
 )
 
-func SmartWords(words []string, useless string, array *[]string) {
+func  (m *Methods)SmartWords(words []string, useless string, array *[]string) {
 	for _, word := range words {
 		str := []string{}
 
@@ -30,7 +30,7 @@ func SmartWords(words []string, useless string, array *[]string) {
 	}
 }
 
-func SmartWordsJoin(words []string, values string, array *[]string) {
+func (m *Methods) SmartWordsJoin(words []string, values string, array *[]string) {
 
 	vals := strings.SplitN(values, ":", 2)
 	applyCase := strings.ToLower(vals[0])

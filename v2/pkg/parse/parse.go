@@ -8,31 +8,39 @@ import (
 	"strings"
 )
 
-var Args = os.Args[1:]
-var showError = false
-var Help = ""
-var userDefined = make(map[string]string)
+type CookParse struct {
+	Args        []string
+	showError   bool
+	Help        string
+	userDefined map[string]string
+	//  Help = ""
+	//  userDefined = make(map[string]string)
+	//  p.Args = os.p.Args[1:]
+	//  showError = false
+	//  Help = ""
+	//  userDefined = make(map[string]string)
+}
 
-func Boolean(flag, flagL string) bool {
-	for i, cmd := range Args {
+func (p *CookParse) Boolean(flag, flagL string) bool {
+	for i, cmd := range p.Args {
 		if cmd == flag || cmd == flagL {
-			Args = append(Args[:i], Args[i+1:]...)
+			p.Args = append(p.Args[:i], p.Args[i+1:]...)
 			return true
 		}
 	}
 	return false
 }
 
-func String(flag, flagL string) string {
-	l := len(Args)
-	for i, cmd := range Args {
+func (p *CookParse) String(flag, flagL string) string {
+	l := len(p.Args)
+	for i, cmd := range p.Args {
 		if cmd == flag || cmd == flagL {
 			if i+1 == l {
 				fmt.Printf("Err: Flag '%s' doesn't have any value", cmd)
 				os.Exit(0)
 			}
-			value := Args[i+1]
-			Args = append(Args[:i], Args[i+2:]...)
+			value := p.Args[i+1]
+			p.Args = append(p.Args[:i], p.Args[i+2:]...)
 			return value
 		}
 	}
@@ -40,45 +48,45 @@ func String(flag, flagL string) string {
 	return ""
 }
 
-func Integer(flag, flagL string) int {
+func (p *CookParse) Integer(flag, flagL string) int {
 	intValue := 0
-	l := len(Args)
+	l := len(p.Args)
 
-	for i, cmd := range Args {
+	for i, cmd := range p.Args {
 		if cmd == flag || cmd == flagL {
-			if i+1 == l || Args[i+1] == "" {
+			if i+1 == l || p.Args[i+1] == "" {
 				fmt.Printf("Err: Flag '%s' doesn't have any value", cmd)
 				os.Exit(0)
 			} else {
 				var err error
-				intValue, err = strconv.Atoi(Args[i+1])
+				intValue, err = strconv.Atoi(p.Args[i+1])
 				// min -= 1
 				if err != nil {
 					log.Fatalf("Err: Flag %s needs integer value", flag)
 				}
 			}
-			Args = append(Args[:i], Args[i+2:]...)
+			p.Args = append(p.Args[:i], p.Args[i+2:]...)
 			return intValue
 		}
 	}
 	return -4541
 }
 
-
-func UserDefinedFlags() map[string]string {
+func (p *CookParse) UserDefinedFlags() map[string]string {
 	tmp := []string{}
 
-	tmp = append(tmp, Args...)
+	tmp = append(tmp, p.Args...)
 
 	for _, cmd := range tmp {
+
 		if len(cmd) > 1 && strings.Count(cmd, "-") == 1 && strings.HasPrefix(cmd, "-") {
-			value := String(cmd, cmd)
+			value := p.String(cmd, cmd)
 			cmd = strings.Replace(cmd, "-", "", 1)
-			userDefined[cmd] = value
+			p.userDefined[cmd] = value
 		}
 	}
 
-	return userDefined
+	return p.userDefined
 }
 
 // Read square brackets
@@ -114,15 +122,28 @@ func ReadCrBrSepBy(cmd string, sep string) (string, []string) {
 	return name, values
 }
 
-func Parse() {
+func NewParse(args ...string) *CookParse {
+	if len(args) == 0 {
+		args = os.Args[1:]
+	}
+	return &CookParse{
+		Args:        args,
+		showError:   false,
+		Help:        "",
+		userDefined: make(map[string]string),
+	}
+}
+
+func (p *CookParse) Parse() {
 
 	if len(os.Args) < 2 {
-		print(Help)
+		print(p.Help)
 	}
 
-	if showError && len(userDefined) > 0 {
-		panic(fmt.Sprintf("Undefined Flags%v", userDefined))
+	if p.showError && len(p.userDefined) > 0 {
+		panic(fmt.Sprintf("Undefined Flags%v", p.userDefined))
 	}
+
 }
 
 func init() {

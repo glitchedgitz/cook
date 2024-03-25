@@ -2,20 +2,11 @@ package methods
 
 import (
 	"log"
-	"path"
 	"strconv"
 	"strings"
-
-	cook "github.com/glitchedgitz/cook/v2/pkg/config"
 )
 
-var leetValues = make(map[string][]string)
-
-func LeetBegin() {
-	cook.ReadInfoYaml(path.Join(cook.ConfigFolder, "leet.yaml"), leetValues)
-}
-
-func Leet(values []string, value string, array *[]string) {
+func (m *Methods) Leet(values []string, value string, array *[]string) {
 
 	mode, err := strconv.Atoi(value)
 	if err != nil {
@@ -25,7 +16,7 @@ func Leet(values []string, value string, array *[]string) {
 	for _, v := range values {
 		var tmp = make(map[string]bool)
 		v2 := v
-		for l, ch := range leetValues {
+		for l, ch := range m.LeetValues {
 			for _, c := range ch {
 				if strings.Contains(v, c) {
 					t := strings.ReplaceAll(v, c, l)
@@ -43,6 +34,5 @@ func Leet(values []string, value string, array *[]string) {
 				*array = append(*array, k)
 			}
 		}
-
 	}
 }

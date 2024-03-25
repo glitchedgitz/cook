@@ -8,44 +8,33 @@ import (
 	"path"
 	"strings"
 
+	"github.com/glitchedgitz/cook/v2/pkg/util"
 	"gopkg.in/yaml.v3"
 )
 
-// var content []byte
-var home, _ = os.UserHomeDir()
-var ConfigFolder string
-var IngredientsFolder = "ingredients"
-
-var ConfigInfo string
-
-// Contains category and their data
-var M = make(map[string]map[string][]string)
-var checkM = make(map[string][]string)
-
-func exists(path string) bool {
-	_, err := os.Stat(path)
-	if err == nil {
-		return true
-	}
-	if os.IsNotExist(err) {
-		return false
-	}
-	log.Fatalln(path)
-	return false
-}
-
-func firstRun() {
+// First Run
+func (conf *Config) FirstRun() {
 
 	fmt.Fprintln(os.Stderr, "First Run")
 	fmt.Fprintln(os.Stderr, "Creating and Downloading Cook's Ingredients...\n\n ")
 
-	err := os.MkdirAll(path.Join(ConfigFolder, IngredientsFolder), os.ModePerm)
+	err := os.MkdirAll(conf.ConfigPath, os.ModePerm)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	err = os.MkdirAll(conf.IngredientsPath, os.ModePerm)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	err = os.MkdirAll(conf.CachePath, os.ModePerm)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	structure := make(map[string][]string)
-	err = yaml.Unmarshal([]byte(GetData("https://raw.githubusercontent.com/glitchedgitz/cook-ingredients/main/structure")), &structure)
+	err = yaml.Unmarshal([]byte(conf.GetData("https://raw.githubusercontent.com/glitchedgitz/cook-ingredients/main/structure")), &structure)
 	if err != nil {
 		log.Fatalf("Err: Parsing YAML %v", err)
 	}
@@ -53,31 +42,26 @@ func firstRun() {
 	for _, v := range structure["infofiles"] {
 		filename := path.Base(v)
 		fmt.Fprint(os.Stderr, "\rDownloading                             \r", filename)
-		WriteFile(path.Join(ConfigFolder, filename), GetData(v))
+		util.WriteFile(path.Join(conf.ConfigPath, filename), conf.GetData(v))
 	}
 	for _, v := range structure["yamlfiles"] {
 		filename := path.Base(v)
 		fmt.Fprint(os.Stderr, "\rDownloading                             \r", filename)
-		WriteFile(path.Join(ConfigFolder, IngredientsFolder, filename), GetData(v))
+		util.WriteFile(path.Join(conf.IngredientsPath, filename), conf.GetData(v))
 	}
 	fmt.Fprint(os.Stderr, "\rDone                             \r")
 
 }
 
-func CookConfig() {
-	if len(os.Getenv("COOK")) > 0 {
-		ConfigFolder = os.Getenv("COOK")
-	} else {
-		ConfigFolder = path.Join(home, "cook-ingredients")
+func (conf *Config) CookConfig() {
+
+	if conf.ReConfigure || !util.Exists(conf.ConfigPath) {
+		conf.FirstRun()
 	}
 
-	if !exists(ConfigFolder) {
-		firstRun()
-	}
+	conf.VPrint(fmt.Sprintf("Config Folder  %s", conf.ConfigPath))
 
-	VPrint(fmt.Sprintf("Config Folder  %s", ConfigFolder))
-
-	files, err := ioutil.ReadDir(path.Join(ConfigFolder, IngredientsFolder))
+	files, err := ioutil.ReadDir(conf.IngredientsPath)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -86,7 +70,10 @@ func CookConfig() {
 	totalFiles := 0
 
 	var local = make(map[string][]string)
-	getLocalFile(local)
+	conf.getLocalFile(local)
+
+	conf.M = make(map[string]map[string][]string)
+	conf.CheckM = make(map[string][]string)
 
 	for _, file := range files {
 		var m = make(map[string]map[string][]string)
@@ -105,26 +92,27 @@ func CookConfig() {
 			configRows = fmt.Sprintf("%-4s   %-6s   %s", v, p, r)
 		}
 
-		ReadYaml(filename, m)
+		util.ReadYaml(path.Join(conf.IngredientsPath, filename), m)
 
 		total := 0
 		for k, v := range m {
-			if _, exists := M[k]; !exists {
-				M[k] = make(map[string][]string)
+			if _, exists := conf.M[k]; !exists {
+				conf.M[k] = make(map[string][]string)
 			}
 
 			for kk, vv := range v {
-				M[k][prefix+strings.ToLower(kk)] = vv
+				conf.M[k][prefix+strings.ToLower(kk)] = vv
 				total++
 			}
 		}
 		wholeTotal += total
 		totalFiles++
-		ConfigInfo += fmt.Sprintf("    %-25s   %-8d %s\n", filename, total, configRows)
+		// Temporary Commented
+		conf.ConfigInfo += fmt.Sprintf("    %-25s   %-8d %s\n", filename, total, configRows)
 	}
 
-	ConfigInfo += fmt.Sprintf("\n    %-25s   %d\n", "TOTAL FILES", totalFiles)
-	ConfigInfo += fmt.Sprintf("    %-25s   %d\n", "TOTAL WORDLISTS SET", wholeTotal)
+	conf.ConfigInfo += fmt.Sprintf("\n    %-25s   %d\n", "TOTAL FILES", totalFiles)
+	conf.ConfigInfo += fmt.Sprintf("    %-25s   %d\n", "TOTAL WORDLISTS SET", wholeTotal)
 
-	ReadInfoYaml(path.Join(ConfigFolder, "check.yaml"), checkM)
+	util.ReadInfoYaml(path.Join(conf.ConfigPath, "check.yaml"), conf.CheckM)
 }

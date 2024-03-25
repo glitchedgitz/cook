@@ -9,27 +9,20 @@ import (
 	"strings"
 
 	"github.com/glitchedgitz/cook/v2/pkg/parse"
-)
-
-var (
-	Help       = false
-	Verbose    = false
-	ConfigPath = ""
-	UpperCase  = false
-	LowerCase  = false
+	"github.com/glitchedgitz/cook/v2/pkg/util"
 )
 
 func PrintFunc(k string, v []string, search string) {
 	// fmt.Println(strings.ReplaceAll(k, search, "\u001b[48;5;239m"+search+Reset))
-	fmt.Printf("%s%s{\n", Blue+k+Reset, strings.ReplaceAll(v[0], search, Blue+search+Reset))
+	fmt.Printf("%s%s{\n", util.Blue+k+util.Reset, strings.ReplaceAll(v[0], search, util.Blue+search+util.Reset))
 	for _, file := range v[1:] {
-		fmt.Printf("    %s\n", strings.ReplaceAll(file, search, Blue+search+Reset))
+		fmt.Printf("    %s\n", strings.ReplaceAll(file, search, util.Blue+search+util.Reset))
 	}
 	fmt.Print("}\n\n")
 }
 
 // Checking for functions
-func ParseFunc(value string, array *[]string) bool {
+func (conf *Config) ParseFunc(value string, array *[]string) bool {
 
 	if !(strings.Contains(value, "[") && strings.Contains(value, "]")) {
 		return false
@@ -41,7 +34,7 @@ func ParseFunc(value string, array *[]string) bool {
 
 	fmt.Print("")
 
-	if funcPatterns, exists := M["functions"][funcName]; exists {
+	if funcPatterns, exists := conf.M["functions"][funcName]; exists {
 
 		funcDef := strings.Split(funcPatterns[0][1:len(funcPatterns[0])-1], ",")
 
@@ -65,11 +58,9 @@ func ParseFunc(value string, array *[]string) bool {
 	return false
 }
 
-var InputFile = make(map[string]bool)
+func (conf *Config) ParseFile(param string, value string, array *[]string) bool {
 
-func ParseFile(param string, value string, array *[]string) bool {
-
-	if InputFile[param] {
+	if conf.InputFile[param] {
 		if strings.Contains(value, "https://") || strings.Contains(value, "http://") {
 			// Parse URL
 			URLValues(value, array)
@@ -82,16 +73,15 @@ func ParseFile(param string, value string, array *[]string) bool {
 		return true
 	}
 
-	if checkFileSet(value, array) {
+	if conf.checkFileSet(value, array) {
 		return true
 	}
 
 	return false
 }
 
-var pipe []string
-
 func PipeInput(value string, array *[]string) bool {
+	var pipe []string
 	if value == "-" {
 		sc := bufio.NewScanner(os.Stdin)
 		if len(pipe) > 0 {
@@ -120,7 +110,6 @@ func RawInput(value string, array *[]string) bool {
 
 func ParseRanges(p string, array *[]string) bool {
 
-	success := false
 	chars := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
 	if strings.Count(p, "-") == 1 {
@@ -137,10 +126,10 @@ func ParseRanges(p string, array *[]string) bool {
 				*array = append(*array, strconv.Itoa(start))
 				start++
 			}
-			success = true
+			return true
 		}
 
-		if !success && len(from) == 1 && len(to) == 1 && strings.Contains(chars, from) && strings.Contains(chars, to) {
+		if len(from) == 1 && len(to) == 1 && strings.Contains(chars, from) && strings.Contains(chars, to) {
 			start = strings.Index(chars, from)
 			stop = strings.Index(chars, to)
 
@@ -150,11 +139,11 @@ func ParseRanges(p string, array *[]string) bool {
 					*array = append(*array, charsList[start])
 					start++
 				}
-				success = true
+				return true
 			}
 		}
 	}
-	return success
+	return false
 }
 
 func ParsePorts(ports []string, array *[]string) {

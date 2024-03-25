@@ -7,6 +7,8 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+
+	"github.com/glitchedgitz/cook/v2/pkg/util"
 )
 
 func AddFilesToArray(value string, array *[]string) {
@@ -89,16 +91,16 @@ func FindRegex(data []byte, expresssion string, array *[]string) {
 	}
 }
 
-func FileRegex(file string, expresssion string, array *[]string) {
-	FindRegex(ReadFile(file), expresssion, array)
+func (conf *Config) FileRegex(file string, expresssion string, array *[]string) {
+	FindRegex(util.ReadFile(file), expresssion, array)
 }
 
-func RawFileRegex(files []string, expresssion string, array *[]string) {
+func (conf *Config) RawFileRegex(files []string, expresssion string, array *[]string) {
 	for _, file := range files {
 		if strings.HasPrefix(file, "http://") || strings.HasPrefix(file, "https://") {
-			FindRegex(GetData(file), expresssion, array)
+			FindRegex(conf.GetData(file), expresssion, array)
 		} else {
-			FileRegex(file, expresssion, array)
+			conf.FileRegex(file, expresssion, array)
 		}
 	}
 }

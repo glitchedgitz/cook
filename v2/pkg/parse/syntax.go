@@ -1,8 +1,8 @@
-package main
+package parse
 
 import "strings"
 
-func splitMethods(p string) []string {
+func SplitMethods(p string) []string {
 	chars := strings.Split(p, "")
 	s := []string{}
 	tmp := ""
@@ -28,7 +28,7 @@ func splitMethods(p string) []string {
 	return s
 }
 
-func splitValues(p string) []string {
+func SplitValues(p string) []string {
 	chars := strings.Split(p, "")
 	s := []string{}
 	tmp := ""
