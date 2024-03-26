@@ -5,30 +5,26 @@ import (
 	"log"
 	"os"
 	"path"
+	"strconv"
+	"strings"
 
+	"github.com/glitchedgitz/cook/v2/pkg/config"
 	"github.com/glitchedgitz/cook/v2/pkg/methods"
 	"github.com/glitchedgitz/cook/v2/pkg/parse"
 	"github.com/glitchedgitz/cook/v2/pkg/util"
 )
 
-func New(newCook *COOK) *COOK {
-
-	// Cook pattern can contain flags and values
-	// So we are parsing them here
-
-	parseFlags := parse.NewParse(newCook.Pattern...)
-	newCook.Params = parseFlags.UserDefinedFlags()
-	newCook.Pattern = parseFlags.Args
-
-	// fmt.Print("Params: ", newCook.Params, "\n")
-	// fmt.Print("Pattern: ", newCook.Pattern, "\n")
-
-	if newCook.Config.HomeFolder == "" {
-		newCook.Config.HomeFolder, _ = os.UserHomeDir()
+func (cook *COOK) SetupConfig() {
+	if cook.Config == nil {
+		cook.Config = &config.Config{}
 	}
 
-	if newCook.Config.ConfigPath == "" {
-		newCook.Config.ConfigPath = path.Join(newCook.Config.HomeFolder, ".config", "cook")
+	if cook.Config.HomeFolder == "" {
+		cook.Config.HomeFolder, _ = os.UserHomeDir()
+	}
+
+	if cook.Config.ConfigPath == "" {
+		cook.Config.ConfigPath = path.Join(cook.Config.HomeFolder, ".config", "cook")
 	}
 
 	cacheDir, err := os.UserCacheDir()
@@ -36,25 +32,96 @@ func New(newCook *COOK) *COOK {
 		log.Fatalln(err)
 	}
 
-	newCook.Config.CachePath = path.Join(cacheDir, "cook")
-	newCook.Config.IngredientsPath = path.Join(newCook.Config.ConfigPath, "cook-ingredients")
+	cook.Config.CachePath = path.Join(cacheDir, "cook")
+	cook.Config.IngredientsPath = path.Join(cook.Config.ConfigPath, "cook-ingredients")
 
-	newCook.VPrint(fmt.Sprintln("ConfigPath: ", newCook.Config.ConfigPath))
-	newCook.VPrint(fmt.Sprintln("IngredientsPath: ", newCook.Config.IngredientsPath))
-	newCook.VPrint(fmt.Sprintln("CachePath: ", newCook.Config.CachePath))
+	cook.VPrint(fmt.Sprintln("ConfigPath: ", cook.Config.ConfigPath))
+	cook.VPrint(fmt.Sprintln("IngredientsPath: ", cook.Config.IngredientsPath))
+	cook.VPrint(fmt.Sprintln("CachePath: ", cook.Config.CachePath))
 
+}
+
+// Cook pattern can contain flags and values
+// So we are parsing them here
+func (cook *COOK) ParseCustomFlags() {
+	parseFlags := parse.NewParse(cook.Pattern...)
+	cook.Params = parseFlags.UserDefinedFlags()
+	cook.Pattern = parseFlags.Args
+}
+
+func (cook *COOK) SetupMethods() {
 	leetValues := make(map[string][]string)
-	util.ReadInfoYaml(path.Join(newCook.Config.ConfigPath, "leet.yaml"), leetValues)
+	util.ReadInfoYaml(path.Join(cook.Config.ConfigPath, "leet.yaml"), leetValues)
 	m := methods.New(leetValues)
-	newCook.Method = m
+	cook.Method = m
+}
 
+func (cook *COOK) SetMin() {
+	if cook.Min < 0 {
+		cook.Min = cook.TotalCols - 1
+	} else {
+		if cook.Min > cook.TotalCols {
+			fmt.Println("Err: min is greator than no of columns")
+			os.Exit(0)
+		}
+		cook.Min -= 1
+	}
+}
+
+func (cook *COOK) ParseAppend() {
+	columns := strings.Split(cook.AppendParam, ",")
+	for _, colNum := range columns {
+		intValue, err := strconv.Atoi(colNum)
+		if err != nil {
+			log.Fatalf("Err: Column Value %s in not integer", colNum)
+		}
+		cook.AppendMap[intValue] = true
+	}
+}
+
+func (cook *COOK) ParseMethod() {
+	meths := strings.Split(cook.MethodParam, ";")
+	forAllCols := []string{}
+
+	var modifiedCol = make(map[int]bool)
+
+	for _, m := range meths {
+		if strings.Contains(m, ":") {
+			s := strings.SplitN(m, ":", 2)
+			i, err := strconv.Atoi(s[0])
+			if err != nil {
+				log.Fatalf("Err: \"%s\" is not integer", s[0])
+			}
+			if i >= cook.TotalCols {
+				log.Fatalf("Err: No Column %d", i)
+			}
+			cook.MethodMap[i] = strings.Split(s[1], ",")
+			modifiedCol[i] = true
+		} else {
+			forAllCols = append(forAllCols, strings.Split(m, ",")...)
+		}
+	}
+
+	for i := 0; i < cook.TotalCols; i++ {
+		if !modifiedCol[i] {
+			cook.MethodMap[i] = forAllCols
+		}
+	}
+}
+
+func NewWithoutConfig() *COOK {
+	NewCook := &COOK{}
+	return New(NewCook)
+}
+
+func New(newCook *COOK) *COOK {
+
+	newCook.SetupConfig()
+	newCook.ParseCustomFlags()
+	newCook.SetupMethods()
 	newCook.Config.CookConfig()
 
 	newCook.TotalCols = len(newCook.Pattern)
-
-	newCook.analyseParams(newCook.Params)
-	// cmdsMode()
-
 	if newCook.Min < 0 {
 		newCook.Min = newCook.TotalCols
 	}

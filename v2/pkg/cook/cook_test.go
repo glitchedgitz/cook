@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"strings"
 	"testing"
-
-	"github.com/glitchedgitz/cook/v2/pkg/config"
 )
 
 func compareTwoArrays(a, b []string) bool {
@@ -54,12 +52,9 @@ func TestNew(t *testing.T) {
 		t.Run(fmt.Sprintf("s%d:%s", i, scenario.pattern), func(t *testing.T) {
 			fmt.Printf("\nScenario: ------------------------------------------ %d\n", i)
 			COOK := New(&COOK{
-				Config: &config.Config{
-					ConfigPath: "",
-				},
 				Pattern: scenario.pattern,
 			})
-			COOK.Run()
+			COOK.Generate()
 			fmt.Printf("Given Pattern:     %v\n", strings.Join(scenario.pattern, " "))
 			fmt.Printf("Generated Pattern: %v\n", COOK.Final)
 			fmt.Printf("Expected Pattern:  %v\n", scenario.expectedResult)

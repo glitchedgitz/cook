@@ -93,7 +93,7 @@ func main() {
 
 	VPrint(fmt.Sprintf("Pattern: %v \n", COOK.Pattern))
 	// COOK.CurrentStage()
-	COOK.Run()
+	COOK.Generate()
 
 	if verbose {
 		COOK.CurrentStage()

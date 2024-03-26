@@ -28,7 +28,7 @@ func (cook *COOK) CurrentStage() {
 	fmt.Print("\tTotalCols: ", cook.TotalCols, "\n")
 }
 
-func (cook *COOK) Run() {
+func (cook *COOK) Generate() {
 	for columnNum, param := range cook.Pattern {
 
 		columnValues := []string{}
