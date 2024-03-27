@@ -23,28 +23,55 @@ func searchMode(cmds []string) {
 	for cat, vv := range COOK.Config.M {
 		for k, v := range vv {
 			k = strings.ToLower(k)
+			k = strings.TrimSpace(k)
+			if cat == "files" || cat == "raw-files" {
+				link := ""
+				if strings.HasPrefix(v[0], "https://raw.githubusercontent.com") {
+					path := strings.Split(v[0], "/")[4:]
+					link = strings.ToTitle(path[0]) + " > " + strings.Join(path[2:len(path)-1], " > ")
+				} else {
+					d := strings.TrimPrefix(v[0], "http://")
+					d = strings.TrimPrefix(d, "https://")
+					link = d
+					// link = strings.Join(strings.Split(d, "/"), " > ")
+				}
+				if strings.Contains(strings.ToLower(link+k), search) {
+					coloredName := k
+					coloredName = printWordlistNames(k, search)
+					link = strings.ToLower(link)
 
-			if strings.Contains(k, search) {
-				if cat == "files" || cat == "raw-files" {
-
-					coloredName := printWordlistNames(k, search)
-
+					link = printWordlistNames(link, search)
 					links := ""
-
 					for i, file := range v {
+
+						// fmt.Println(link)
 						links += fmt.Sprintf(" " + util.TerminalLink(file, fmt.Sprintf("%d", i+1), util.Blue))
 					}
-					fmt.Printf("%-90s Links[%s ]", coloredName, links)
-				} else if cat == "functions" {
-					config.PrintFunc(k, v, search)
-				} else {
-					coloredName := printWordlistNames(k, search)
-					// words := fmt.Sprintf(strings.ReplaceAll(fmt.Sprintf("    %v\n", v), search, util.Blue+search+config.Reset))
-					words := util.TerminalColor(fmt.Sprint(v), util.Blue)
-					fmt.Printf("%-90s Wordset %s", coloredName, words)
+
+					// because of color encoding using %-70s was not working right
+					repeat := 50 - len(k)
+					extraSpace := ""
+					if repeat > 0 {
+						extraSpace = strings.Repeat(" ", repeat)
+					}
+
+					fmt.Printf("%s%s  %s [%s ]", coloredName, extraSpace, link, links)
+					found = true
+					fmt.Println()
 				}
-				found = true
-				fmt.Println()
+			} else {
+				if strings.Contains(k, search) {
+					if cat == "functions" {
+						config.PrintFunc(k, v, search)
+					} else {
+						coloredName := printWordlistNames(k, search)
+						// words := fmt.Sprintf(strings.ReplaceAll(fmt.Sprintf("    %v\n", v), search, util.Blue+search+config.Reset))
+						words := util.TerminalColor(fmt.Sprint(v), util.Blue)
+						fmt.Printf("%-90s Wordset %s", coloredName, words)
+					}
+					found = true
+					fmt.Println()
+				}
 			}
 		}
 	}
