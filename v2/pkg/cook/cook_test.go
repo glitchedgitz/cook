@@ -45,7 +45,11 @@ func TestNew(t *testing.T) {
 		// Wordlist
 		{[]string{"sec-amazon-api-gateway.txt"}, []string{"AmazonAPIGateway_5m3r4dmaP1", "AmazonAPIGateway_6qpee1cnq6"}, false},
 
+		// Params
 		{[]string{"-p", "test,vest", "p"}, []string{"test", "vest"}, false},
+
+		// File params
+		{[]string{"-f:", "../../../test_file/test.txt", "f"}, []string{"line1", "line2", "line3", "line4"}, false},
 	}
 
 	for i, scenario := range scenarios {

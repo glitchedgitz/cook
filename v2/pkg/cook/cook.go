@@ -27,6 +27,8 @@ func (cook *COOK) SetupConfig() {
 		cook.Config.ConfigPath = path.Join(cook.Config.HomeFolder, ".config", "cook")
 	}
 
+	cook.Config.InputFile = make(map[string]bool)
+
 	cacheDir, err := os.UserCacheDir()
 	if err != nil {
 		log.Fatalln(err)
@@ -126,8 +128,8 @@ func New(newCook *COOK) *COOK {
 		newCook.Min = newCook.TotalCols
 	}
 	newCook.SetMin()
+	newCook.AnalyseParams()
 	newCook.Final = []string{""}
-	// methods.LeetBegin()
 
 	if len(newCook.AppendParam) > 0 {
 		newCook.ParseAppend()

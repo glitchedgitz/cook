@@ -15,14 +15,18 @@ import (
 
 const myyaml = "my.yaml"
 
-func (cook *COOK) analyseParams(params map[string]string) {
-	for param, value := range params {
-		// fmt.Println(params)
+func (cook *COOK) AnalyseParams() {
+	for param, value := range cook.Params {
 		if strings.HasSuffix(param, ":") {
-			delete(params, param)
+			// remove the param from the list
+			delete(cook.Params, param)
 			param = strings.TrimSuffix(param, ":")
+
+			// add the param to the list without colon
+			cook.Params[param] = value
+
+			// parsing file
 			cook.Config.InputFile[param] = true
-			params[param] = value
 		}
 	}
 }
