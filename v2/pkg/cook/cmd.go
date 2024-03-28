@@ -10,7 +10,6 @@ import (
 
 	"github.com/glitchedgitz/cook/v2/pkg/config"
 	"github.com/glitchedgitz/cook/v2/pkg/util"
-	"github.com/manifoldco/promptui"
 )
 
 const myyaml = "my.yaml"
@@ -87,19 +86,24 @@ func (cook *COOK) Delete(keyword string) {
 
 		if _, exists := v[keyword]; exists {
 			category = k
-			prompt := promptui.Select{
-				Label: fmt.Sprintf("Are you sure, you want to delete \"%s\" from \"%s\"?", keyword, k),
-				Items: []string{"No", "Yes"},
-			}
 
-			_, result, err := prompt.Run()
+			// Take input from user
+			fmt.Println("Enter your input:")
+			var input string
+			_, err := fmt.Scanln(&input)
+			if err != nil {
+				fmt.Printf("Read from console failed, %s\n", err)
+				return
+			}
 
 			if err != nil {
 				fmt.Printf("Prompt failed %v\n", err)
 				return
 			}
 
-			if result == "Yes" {
+			input = strings.ToLower(input)
+
+			if input == "yes" || input == "y" {
 				found = true
 			} else {
 				log.Fatalln("Not deleted")
