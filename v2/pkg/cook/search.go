@@ -10,7 +10,7 @@ func (cook *COOK) Search(search string) (map[string]map[string][]string, bool) {
 
 	found := true
 
-	for cat, vv := range cook.Config.M {
+	for cat, vv := range cook.Config.Ingredients {
 		for k, v := range vv {
 			k = strings.ToLower(k)
 			if strings.Contains(k, search) {

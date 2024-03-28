@@ -64,7 +64,7 @@ func (cook *COOK) Update(f string) {
 		cook.Config.UpdateDb()
 	} else if f == updateCacheStr {
 		cook.Config.UpdateCache()
-	} else if files, exists := cook.Config.M["files"][f]; exists {
+	} else if files, exists := cook.Config.Ingredients["files"][f]; exists {
 		filepath := path.Join(cook.Config.CachePath, f)
 		os.Remove(filepath)
 		cook.Config.CheckFileCache(f, files)
@@ -145,7 +145,7 @@ func (cook *COOK) Show(set string) {
 		return
 	}
 
-	if vals, exists := cook.Config.M[set]; exists {
+	if vals, exists := cook.Config.Ingredients[set]; exists {
 		fmt.Printf("\n" + util.Blue + strings.ToUpper(set) + util.Reset + "\n\n")
 
 		keys := []string{}

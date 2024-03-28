@@ -34,7 +34,7 @@ func (conf *Config) ParseFunc(value string, array *[]string) bool {
 
 	fmt.Print("")
 
-	if funcPatterns, exists := conf.M["functions"][funcName]; exists {
+	if funcPatterns, exists := conf.Ingredients["functions"][funcName]; exists {
 
 		funcDef := strings.Split(funcPatterns[0][1:len(funcPatterns[0])-1], ",")
 

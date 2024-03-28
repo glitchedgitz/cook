@@ -72,8 +72,8 @@ func (conf *Config) CookConfig() {
 	var local = make(map[string][]string)
 	conf.getLocalFile(local)
 
-	conf.M = make(map[string]map[string][]string)
-	conf.CheckM = make(map[string][]string)
+	conf.Ingredients = make(map[string]map[string][]string)
+	conf.CheckIngredients = make(map[string][]string)
 
 	for _, file := range files {
 		var m = make(map[string]map[string][]string)
@@ -96,12 +96,12 @@ func (conf *Config) CookConfig() {
 
 		total := 0
 		for k, v := range m {
-			if _, exists := conf.M[k]; !exists {
-				conf.M[k] = make(map[string][]string)
+			if _, exists := conf.Ingredients[k]; !exists {
+				conf.Ingredients[k] = make(map[string][]string)
 			}
 
 			for kk, vv := range v {
-				conf.M[k][prefix+strings.ToLower(kk)] = vv
+				conf.Ingredients[k][prefix+strings.ToLower(kk)] = vv
 				total++
 			}
 		}
@@ -114,5 +114,5 @@ func (conf *Config) CookConfig() {
 	conf.ConfigInfo += fmt.Sprintf("\n    %-25s   %d\n", "TOTAL FILES", totalFiles)
 	conf.ConfigInfo += fmt.Sprintf("    %-25s   %d\n", "TOTAL WORDLISTS SET", wholeTotal)
 
-	util.ReadInfoYaml(path.Join(conf.ConfigPath, "check.yaml"), conf.CheckM)
+	util.ReadInfoYaml(path.Join(conf.ConfigPath, "check.yaml"), conf.CheckIngredients)
 }

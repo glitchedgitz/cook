@@ -12,8 +12,8 @@ func (cook *COOK) CurrentStage() {
 	fmt.Print("\tConfigPath: ", cook.Config.ConfigPath, "\n")
 	fmt.Print("\tIngredientsPath: ", cook.Config.IngredientsPath, "\n")
 	fmt.Print("\tCachePath: ", cook.Config.CachePath, "\n")
-	// fmt.Println("cook.Config.M: ", cook.Config.M)
-	// fmt.Println("cook.checkM: ", cook.Config.M)
+	// fmt.Println("cook.Config.Ingredients: ", cook.Config.Ingredients)
+	// fmt.Println("cook.checkM: ", cook.Config.Ingredients)
 
 	fmt.Println("Vars----")
 	fmt.Print("\tPattern: ", cook.Pattern, "\n")

@@ -79,23 +79,23 @@ func (conf *Config) CheckFileCache(filename string, files []string) {
 				log.Fatalf("FileScanner: %v", err)
 			}
 		}
-		conf.CheckM[filename] = files
-		util.WriteYaml(path.Join(conf.ConfigPath, "check.yaml"), conf.CheckM)
+		conf.CheckIngredients[filename] = files
+		util.WriteYaml(path.Join(conf.ConfigPath, "check.yaml"), conf.CheckIngredients)
 
 	} else {
 
-		chkfiles := conf.CheckM[filename]
+		chkfiles := conf.CheckIngredients[filename]
 		if len(files) != len(chkfiles) {
 			os.Remove(filepath)
 			conf.CheckFileCache(filename, files)
-			util.WriteYaml(path.Join(conf.ConfigPath, "check.yaml"), conf.CheckM)
+			util.WriteYaml(path.Join(conf.ConfigPath, "check.yaml"), conf.CheckIngredients)
 			return
 		}
 		for i, v := range chkfiles {
 			if v != files[i] {
 				os.Remove(filepath)
 				conf.CheckFileCache(filename, files)
-				util.WriteYaml(path.Join(conf.ConfigPath, "check.yaml"), conf.CheckM)
+				util.WriteYaml(path.Join(conf.ConfigPath, "check.yaml"), conf.CheckIngredients)
 				break
 			}
 		}
@@ -123,7 +123,7 @@ func (conf *Config) UpdateCache() {
 		}()
 	}
 
-	for filename, files := range conf.CheckM {
+	for filename, files := range conf.CheckIngredients {
 		wg.Add(1)
 		goaddresses <- filedata{filename, files}
 	}

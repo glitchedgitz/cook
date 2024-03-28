@@ -20,7 +20,7 @@ func searchMode(cmds []string) {
 	search := cmds[0]
 	// convert the below fucntion to as data to map
 
-	for cat, vv := range COOK.Config.M {
+	for cat, vv := range COOK.Config.Ingredients {
 		for k, v := range vv {
 			k = strings.ToLower(k)
 			k = strings.TrimSpace(k)

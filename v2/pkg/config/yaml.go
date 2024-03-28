@@ -7,13 +7,13 @@ import (
 )
 
 func (conf *Config) checkFileSet(p string, array *[]string) bool {
-	if files, exists := conf.M["files"][p]; exists {
+	if files, exists := conf.Ingredients["files"][p]; exists {
 
 		conf.CheckFileCache(p, files)
 		FileValues(path.Join(conf.CachePath, p), array)
 		return true
 
-	} else if files, exists := conf.M["raw-files"][p]; exists {
+	} else if files, exists := conf.Ingredients["raw-files"][p]; exists {
 
 		tmp := make(map[string]bool)
 		for _, file := range files {
@@ -36,12 +36,12 @@ func (conf *Config) checkFileSet(p string, array *[]string) bool {
 
 func (conf *Config) CheckYaml(p string, array *[]string) bool {
 
-	if val, exists := conf.M["lists"][p]; exists {
+	if val, exists := conf.Ingredients["lists"][p]; exists {
 		*array = append(*array, val...)
 		return true
 	}
 
-	if val, exists := conf.M["ports"][p]; exists {
+	if val, exists := conf.Ingredients["ports"][p]; exists {
 		ParsePorts(val, array)
 		return true
 	}
