@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 	"testing"
+
+	"gopkg.in/yaml.v3"
 )
 
 func TestSearch(t *testing.T) {
@@ -24,7 +26,17 @@ func TestSearch(t *testing.T) {
 			dashes := strings.Repeat("-", 49-len(scenario.search))
 			fmt.Printf("Search: %s %s\n", dashes, scenario.search)
 			COOK := NewWithoutConfig()
-			COOK.Search(scenario.search)
+			results, found := COOK.Search(scenario.search)
+			if found {
+				//Convert results object to yaml
+				r, err := yaml.Marshal(results)
+				if err != nil {
+					t.Fatal("Error: ", err)
+				}
+				fmt.Println(string(r))
+			} else {
+				fmt.Println("Not Found")
+			}
 		})
 	}
 
