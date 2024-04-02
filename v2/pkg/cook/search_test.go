@@ -18,6 +18,7 @@ func TestSearch(t *testing.T) {
 		{"api"},
 		{"xss"},
 		{"tld"},
+		{"orange"},
 	}
 
 	for i, scenario := range scenarios {
