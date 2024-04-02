@@ -36,13 +36,15 @@ func FileValues(pattern string, array *[]string) {
 		fileScanner := bufio.NewScanner(ReadFile)
 
 		for fileScanner.Scan() {
-			line := strings.TrimRight(fileScanner.Text(), "\r")
+			line := fileScanner.Text()
+			line = strings.TrimRight(line, "\r")
 			*array = append(*array, line)
 		}
 
 		if err := fileScanner.Err(); err != nil {
 			log.Fatal(err)
 		}
+
 	}
 }
 
@@ -63,11 +65,16 @@ func RawFileValues(pattern string, allLines map[string]bool) {
 		fileScanner := bufio.NewScanner(ReadFile)
 
 		for fileScanner.Scan() {
-			line := strings.TrimRight(fileScanner.Text(), "\r")
+			line := fileScanner.Text()
+			line = strings.TrimRight(line, "\n")
+			line = strings.TrimRight(line, "\r")
 			if allLines[line] {
 				continue
 			}
 			allLines[line] = true
+		}
+		if err := fileScanner.Err(); err != nil {
+			log.Fatal(err)
 		}
 	}
 }
