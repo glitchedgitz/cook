@@ -122,9 +122,37 @@ func ParseRanges(p string, array *[]string) bool {
 		stop, err2 := strconv.Atoi(to)
 
 		if err1 == nil && err2 == nil {
-			for start <= stop {
-				*array = append(*array, strconv.Itoa(start))
-				start++
+			// this is number
+			fromLen := len(from)
+			toLen := len(to)
+
+			minPadded := 0
+			if fromLen < toLen {
+				minPadded = fromLen
+			} else {
+				minPadded = toLen
+			}
+
+			if start < stop {
+				for start <= stop {
+					repeat := minPadded - len(strconv.Itoa(start))
+					padZero := ""
+					if repeat > 0 {
+						padZero = strings.Repeat("0", repeat)
+					}
+					*array = append(*array, fmt.Sprintf("%s%d", padZero, start))
+					start++
+				}
+			} else {
+				for start >= stop {
+					repeat := minPadded - len(strconv.Itoa(start))
+					padZero := ""
+					if repeat > 0 {
+						padZero = strings.Repeat("0", repeat)
+					}
+					*array = append(*array, fmt.Sprintf("%s%d", padZero, start))
+					start--
+				}
 			}
 			return true
 		}
