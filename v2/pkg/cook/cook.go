@@ -131,6 +131,9 @@ func New(newCook *COOK) *COOK {
 	newCook.AnalyseParams()
 	newCook.Final = []string{""}
 
+	newCook.AppendMap = make(map[int]bool)
+	newCook.MethodMap = make(map[int][]string)
+
 	if len(newCook.AppendParam) > 0 {
 		newCook.ParseAppend()
 	}
