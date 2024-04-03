@@ -18,21 +18,23 @@ go install -v github.com/glitchedgitz/cook/v2/cmd/cook@latest
 ### Use as library
 ```golang
 COOK := New(&COOK{
-    Config: &config.Config{
-        ConfigPath: "",
-    },
     Pattern: scenario.pattern,
 })
 
-...
-
-COOK.Run()
+COOK.Generate()
 fmt.Printf("Generated list: %v", COOK.Final)
+```
+
+Search the cook-ingredients using library
+```golang
+COOK := NewWithoutConfig()
+results := COOK.Search("api")
+fmt.Printf("Searched: %v", results)
 ```
 
 # Basic
 
-Without basics, everything is useless.
+Without basics, everything is complex.
 <img src="assets/basic.png">
 
 ### Ranges
