@@ -119,14 +119,15 @@ func NewWithoutConfig() *COOK {
 func New(newCook *COOK) *COOK {
 
 	newCook.SetupConfig()
+	newCook.Config.CookConfig()
 	newCook.ParseCustomFlags()
 	newCook.SetupMethods()
-	newCook.Config.CookConfig()
 
 	newCook.TotalCols = len(newCook.Pattern)
 	if newCook.Min < 0 {
 		newCook.Min = newCook.TotalCols
 	}
+
 	newCook.SetMin()
 	newCook.AnalyseParams()
 	newCook.Final = []string{""}

@@ -72,7 +72,6 @@ func main() {
 			Verbose:     verbose,
 		},
 		Pattern:       parseFlags.Args,
-		Verbose:       verbose,
 		Min:           min,
 		AppendParam:   appendParam,
 		MethodParam:   methodParam,

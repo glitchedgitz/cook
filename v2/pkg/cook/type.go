@@ -19,5 +19,4 @@ type COOK struct {
 	Final         []string
 	TotalCols     int
 	PrintResult   bool
-	Verbose       bool
 }

@@ -6,7 +6,7 @@ import (
 )
 
 func (cook *COOK) VPrint(msg string) {
-	if cook.Verbose {
+	if cook.Config.Verbose {
 		fmt.Fprintln(os.Stderr, msg)
 	}
 }

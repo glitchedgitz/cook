@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"path"
@@ -56,12 +55,11 @@ func (conf *Config) FirstRun() {
 func (conf *Config) CookConfig() {
 
 	if conf.ReConfigure || !util.Exists(conf.ConfigPath) {
+		fmt.Println("First Run")
 		conf.FirstRun()
 	}
 
-	conf.VPrint(fmt.Sprintf("Config Folder  %s", conf.ConfigPath))
-
-	files, err := ioutil.ReadDir(conf.IngredientsPath)
+	files, err := os.ReadDir(conf.IngredientsPath)
 	if err != nil {
 		log.Fatalln(err)
 	}
