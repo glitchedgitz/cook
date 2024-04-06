@@ -19,7 +19,7 @@ func AddFilesToArray(value string, array *[]string) {
 	}
 }
 
-func FileValues(pattern string, array *[]string) {
+func FileValues(pattern string, array *[]string, peek int) {
 	files, err := filepath.Glob(pattern)
 	if err != nil {
 		log.Fatalln("Err: In pattern ", err)
@@ -39,6 +39,12 @@ func FileValues(pattern string, array *[]string) {
 			line := fileScanner.Text()
 			line = strings.TrimRight(line, "\r")
 			*array = append(*array, line)
+			if peek > 0 {
+				peek--
+				if peek == 0 {
+					break
+				}
+			}
 		}
 
 		if err := fileScanner.Err(); err != nil {

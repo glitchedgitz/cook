@@ -34,7 +34,7 @@ func (cook *COOK) Generate() {
 		columnValues := []string{}
 
 		for _, p := range parse.SplitValues(param) {
-			if config.RawInput(p, &columnValues) || config.ParseRanges(p, &columnValues) || RepeatOp(p, &columnValues) || cook.CheckMethods(p, &columnValues) || cook.CheckParam(p, &columnValues) || cook.Config.CheckYaml(p, &columnValues) {
+			if config.RawInput(p, &columnValues) || config.ParseRanges(p, &columnValues, cook.Config.Peek) || RepeatOp(p, &columnValues) || cook.CheckMethods(p, &columnValues) || cook.CheckParam(p, &columnValues) || cook.Config.CheckYaml(p, &columnValues) {
 				continue
 			}
 			columnValues = append(columnValues, p)

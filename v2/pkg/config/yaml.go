@@ -10,7 +10,7 @@ func (conf *Config) checkFileSet(p string, array *[]string) bool {
 	if files, exists := conf.Ingredients["files"][p]; exists {
 
 		conf.CheckFileCache(p, files)
-		FileValues(path.Join(conf.CachePath, p), array)
+		FileValues(path.Join(conf.CachePath, p), array, conf.Peek)
 		return true
 
 	} else if files, exists := conf.Ingredients["raw-files"][p]; exists {
@@ -37,12 +37,16 @@ func (conf *Config) checkFileSet(p string, array *[]string) bool {
 func (conf *Config) CheckYaml(p string, array *[]string) bool {
 
 	if val, exists := conf.Ingredients["lists"][p]; exists {
-		*array = append(*array, val...)
+		if conf.Peek > 0 && len(val) > conf.Peek {
+			*array = append(*array, val[:conf.Peek]...)
+		} else {
+			*array = append(*array, val...)
+		}
 		return true
 	}
 
 	if val, exists := conf.Ingredients["ports"][p]; exists {
-		ParsePorts(val, array)
+		ParsePorts(val, array, conf.Peek)
 		return true
 	}
 

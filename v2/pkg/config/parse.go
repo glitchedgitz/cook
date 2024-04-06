@@ -68,7 +68,7 @@ func (conf *Config) ParseFile(param string, value string, array *[]string) bool 
 			// When you paste URL from chrome
 			// file:///C://Users//gites//AppData//Local/grroxy/downloaded_lL5A
 			value = strings.TrimLeft(value, "file:///")
-			FileValues(value, array)
+			FileValues(value, array, conf.Peek)
 		}
 		return true
 	}
@@ -108,7 +108,7 @@ func RawInput(value string, array *[]string) bool {
 	return false
 }
 
-func ParseRanges(p string, array *[]string) bool {
+func ParseRanges(p string, array *[]string, peek int) bool {
 
 	chars := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
@@ -142,6 +142,12 @@ func ParseRanges(p string, array *[]string) bool {
 					}
 					*array = append(*array, fmt.Sprintf("%s%d", padZero, start))
 					start++
+					if peek > 0 {
+						peek--
+						if peek == 0 {
+							break
+						}
+					}
 				}
 			} else {
 				for start >= stop {
@@ -152,6 +158,12 @@ func ParseRanges(p string, array *[]string) bool {
 					}
 					*array = append(*array, fmt.Sprintf("%s%d", padZero, start))
 					start--
+					if peek > 0 {
+						peek--
+						if peek == 0 {
+							break
+						}
+					}
 				}
 			}
 			return true
@@ -174,10 +186,10 @@ func ParseRanges(p string, array *[]string) bool {
 	return false
 }
 
-func ParsePorts(ports []string, array *[]string) {
+func ParsePorts(ports []string, array *[]string, peek int) {
 
 	for _, p := range ports {
-		if ParseRanges(p, array) {
+		if ParseRanges(p, array, peek) {
 			continue
 		}
 		port, err := strconv.Atoi(p)

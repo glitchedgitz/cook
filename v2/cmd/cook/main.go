@@ -24,6 +24,7 @@ var (
 	verbose       bool
 	showCol       bool
 	min           int
+	peek          int
 	methodParam   string
 	methodsForAll string
 	appendParam   string
@@ -39,6 +40,7 @@ func main() {
 	verbose = parseFlags.Boolean("-v", "-verbose")
 	showCol = parseFlags.Boolean("-c", "-col")
 	min = parseFlags.Integer("-min", "-min")
+	peek = parseFlags.Integer("-peek", "-peek")
 	methodParam = parseFlags.String("-mc", "-methodcol")
 	methodsForAll = parseFlags.String("-m", "-method")
 	appendParam = parseFlags.String("-a", "-append")
@@ -70,6 +72,7 @@ func main() {
 			ConfigPath:  configPath,
 			ReConfigure: reConfigure,
 			Verbose:     verbose,
+			Peek:        peek,
 		},
 		Pattern:       parseFlags.Args,
 		Min:           min,

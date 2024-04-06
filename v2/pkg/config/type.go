@@ -13,5 +13,6 @@ type Config struct {
 	ConfigPath       string
 	CachePath        string
 	IngredientsPath  string
+	Peek             int
 	Verbose          bool
 }
