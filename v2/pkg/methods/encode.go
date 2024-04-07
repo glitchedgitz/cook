@@ -3,7 +3,7 @@ package methods
 import "strconv"
 
 // Get Charcode of string
-func Charcode(values []string, semicolon string, array *[]string) {
+func (m *Methods) Charcode(values []string, semicolon string, array *[]string) {
 	addSemiColon := false
 	if semicolon == "1" {
 		addSemiColon = true

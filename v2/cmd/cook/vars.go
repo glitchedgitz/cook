@@ -1,32 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"os"
-	"time"
-)
 
-var total = 0
-
-// Initializing with empty string, so loops will run for 1st column
-var final = []string{""}
-var params map[string]string
-var pattern []string
-var start = time.Now()
-
-var home, _ = os.UserHomeDir()
-var totalCols = 0
-var methodMap = make(map[int][]string)
-
-// Flags
-var (
-	help          bool
-	verbose       bool
-	showCol       bool
-	min           int
-	methodParam   string
-	methodsForAll string
-	appendParam   string
-	showConfig    bool
+	"github.com/glitchedgitz/cook/v2/pkg/util"
 )
 
 // cook [cmdFunctions]
@@ -44,7 +22,17 @@ var cmdFunctions = map[string]func([]string){
 // cook help [helpFunctions]
 var helpFunctions = map[string]func(){
 	"methods": methHelp,
-	"meths":   methHelp,
 	"usage":   usageHelp,
 	"flags":   flagsHelp,
+}
+
+func showConf() {
+	// cook.CookConfig()
+
+	fmt.Println(util.Blue + "\n    CONFIG" + util.Reset)
+	fmt.Printf("    Location: %v\n", COOK.Config.ConfigPath)
+	fmt.Printf(util.Blue+"\n    %-25s   %s     %s   %s   %s\n"+util.Reset, "FILE", "SETS", "VERN", "PREFIX", "REPO")
+	fmt.Println(COOK.Config.ConfigInfo)
+
+	os.Exit(0)
 }

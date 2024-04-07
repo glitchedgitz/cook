@@ -1,9 +1,4 @@
-package config
-
-import (
-	"fmt"
-	"os"
-)
+package util
 
 // These are messed up, something is something else
 var (
@@ -15,9 +10,3 @@ var (
 	Reset      = "\u001b[0m"
 	Reverse    = "\u001b[7m"
 )
-
-func VPrint(msg string) {
-	if Verbose {
-		fmt.Fprintln(os.Stderr, msg)
-	}
-}

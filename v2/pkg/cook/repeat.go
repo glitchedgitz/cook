@@ -1,4 +1,4 @@
-package main
+package cook
 
 import (
 	"strconv"
@@ -11,7 +11,7 @@ const (
 	RepeatVerticalOp   = "**"
 )
 
-func repeatOp(value string, array *[]string) bool {
+func RepeatOp(value string, array *[]string) bool {
 
 	getRange := func(looprange string) (int, int, bool) {
 		t := strings.Split(looprange, RepeatRangeOp)

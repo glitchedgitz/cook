@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/glitchedgitz/cook/v2/pkg/config"
+	"github.com/glitchedgitz/cook/v2/pkg/util"
 )
 
 func helpMode(h []string) {
@@ -36,13 +36,13 @@ func helpMode(h []string) {
 
 func showHelp() {
 	fmt.Fprintln(os.Stderr, banner)
-	fmt.Fprintln(os.Stderr, config.Reset)
+	fmt.Fprintln(os.Stderr, util.Reset)
 	flagsHelp()
 	os.Exit(0)
 }
 
 func printHelp(title string, description ...string) {
-	fmt.Println(config.Blue + title + config.Reset)
+	fmt.Println(util.Blue + title + util.Reset)
 	for _, d := range description {
 		fmt.Println("    " + d)
 	}
@@ -79,6 +79,7 @@ func flagsHelp() {
 
 	printHelp(
 		"FLAGS",
+		"        -peek              Peek the output using `-peek 50` for first 50 lines",
 		"-a      -append            Append to the previous lines, instead of permutations",
 		"-c      -col               Print column numbers and there values",
 		"-conf,  -config            Config Information",

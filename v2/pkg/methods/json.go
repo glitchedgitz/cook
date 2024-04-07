@@ -6,7 +6,7 @@ import (
 	"github.com/buger/jsonparser"
 )
 
-func GetJsonField(lines []string, get string, array *[]string) {
+func (m *Methods) GetJsonField(lines []string, get string, array *[]string) {
 	values := strings.Split(get, ":")
 	for _, line := range lines {
 		data := []byte(line)

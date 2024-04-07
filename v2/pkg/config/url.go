@@ -25,14 +25,20 @@ func URLValues(url string, array *[]string) {
 	}
 
 	// Create a bufio.Reader to read the response body
-	reader := bufio.NewReader(response.Body)
-
-	// Read and print the body line by line
-	for {
-		line, err := reader.ReadString('\n')
-		if err != nil {
-			break
-		}
-		*array = append(*array, strings.TrimRight(line, "\r"))
+	scanner := bufio.NewScanner(response.Body)
+	for scanner.Scan() {
+		line := scanner.Text()
+		line = strings.TrimRight(line, "\r")
+		*array = append(*array, line)
 	}
+	// Read and print the body line by line
+	// for {
+	// 	line, err := reader.ReadString('\n')
+	// 	if err != nil {
+	// 		break
+	// 	}
+	// 	line = strings.TrimRight(line, "\n")
+	// 	line = strings.TrimRight(line, "\r")
+	// 	*array = append(*array, line)
+	// }
 }

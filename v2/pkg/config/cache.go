@@ -9,11 +9,13 @@ import (
 	"os"
 	"path"
 	"sync"
+
+	"github.com/glitchedgitz/cook/v2/pkg/util"
 )
 
 // Return data from url
-func GetData(url string) []byte {
-	VPrint(fmt.Sprintf("GetData(): Fetching %s\n", url))
+func (conf *Config) GetData(url string) []byte {
+	conf.VPrint(fmt.Sprintf("GetData(): Fetching %s\n", url))
 
 	res, err := http.Get(url)
 	if err != nil {
@@ -26,18 +28,18 @@ func GetData(url string) []byte {
 	return data
 }
 
-func makeCacheFolder() {
-	err := os.MkdirAll(path.Join(home, ".cache", "cook"), os.ModePerm)
+func (conf *Config) makeCacheFolder() {
+	err := os.MkdirAll(conf.CachePath, os.ModePerm)
 	if err != nil {
 		log.Fatalln("Err: Making .cache folder in HOME/USERPROFILE ", err)
 	}
 }
 
 // Checking if file's cache present
-func CheckFileCache(filename string, files []string) {
+func (conf *Config) CheckFileCache(filename string, files []string) {
 
-	makeCacheFolder()
-	filepath := path.Join(home, ".cache", "cook", filename)
+	conf.makeCacheFolder()
+	filepath := path.Join(conf.CachePath, filename)
 
 	if _, e := os.Stat(filepath); e != nil {
 		fmt.Fprintf(os.Stderr, "Creating cache for %s\n", filename)
@@ -77,30 +79,30 @@ func CheckFileCache(filename string, files []string) {
 				log.Fatalf("FileScanner: %v", err)
 			}
 		}
-		checkM[filename] = files
-		WriteYaml(path.Join(ConfigFolder, "check.yaml"), checkM)
+		conf.CheckIngredients[filename] = files
+		util.WriteYaml(path.Join(conf.ConfigPath, "check.yaml"), conf.CheckIngredients)
 
 	} else {
 
-		chkfiles := checkM[filename]
+		chkfiles := conf.CheckIngredients[filename]
 		if len(files) != len(chkfiles) {
 			os.Remove(filepath)
-			CheckFileCache(filename, files)
-			WriteYaml(path.Join(ConfigFolder, "check.yaml"), checkM)
+			conf.CheckFileCache(filename, files)
+			util.WriteYaml(path.Join(conf.ConfigPath, "check.yaml"), conf.CheckIngredients)
 			return
 		}
 		for i, v := range chkfiles {
 			if v != files[i] {
 				os.Remove(filepath)
-				CheckFileCache(filename, files)
-				WriteYaml(path.Join(ConfigFolder, "check.yaml"), checkM)
+				conf.CheckFileCache(filename, files)
+				util.WriteYaml(path.Join(conf.ConfigPath, "check.yaml"), conf.CheckIngredients)
 				break
 			}
 		}
 	}
 }
 
-func UpdateCache() {
+func (conf *Config) UpdateCache() {
 
 	type filedata struct {
 		filename string
@@ -113,15 +115,15 @@ func UpdateCache() {
 	for i := 0; i < 10; i++ {
 		go func() {
 			for f := range goaddresses {
-				filepath := path.Join(home, ".cache", "cook", f.filename)
+				filepath := path.Join(conf.CachePath, f.filename)
 				os.Remove(filepath)
-				CheckFileCache(f.filename, f.files)
+				conf.CheckFileCache(f.filename, f.files)
 				wg.Done()
 			}
 		}()
 	}
 
-	for filename, files := range checkM {
+	for filename, files := range conf.CheckIngredients {
 		wg.Add(1)
 		goaddresses <- filedata{filename, files}
 	}

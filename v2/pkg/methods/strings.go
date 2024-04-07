@@ -7,12 +7,12 @@ import (
 	"strings"
 )
 
-func Sort(values []string, useless string, array *[]string) {
+func (m *Methods) Sort(values []string, useless string, array *[]string) {
 	sort.Strings(values)
 	*array = append(*array, values...)
 }
 
-func SortUnique(values []string, useless string, array *[]string) {
+func (m *Methods) SortUnique(values []string, useless string, array *[]string) {
 
 	tmp := make(map[string]bool)
 
@@ -28,7 +28,7 @@ func SortUnique(values []string, useless string, array *[]string) {
 	}
 }
 
-func Reverse(values []string, useless string, array *[]string) {
+func (m *Methods) Reverse(values []string, useless string, array *[]string) {
 	for _, v := range values {
 		runes := []rune(v)
 		for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
@@ -39,7 +39,7 @@ func Reverse(values []string, useless string, array *[]string) {
 	}
 }
 
-func Replace(values []string, value string, array *[]string) {
+func (m *Methods) Replace(values []string, value string, array *[]string) {
 	s := strings.SplitN(value, ":", 2)
 	replaceText := s[0]
 	replaceWith := s[1]
@@ -48,13 +48,13 @@ func Replace(values []string, value string, array *[]string) {
 	}
 }
 
-func Split(values []string, split string, array *[]string) {
+func (m *Methods) Split(values []string, split string, array *[]string) {
 	for _, v := range values {
 		*array = append(*array, strings.Split(v, split)...)
 	}
 }
 
-func SplitIndex(values []string, value string, array *[]string) {
+func (m *Methods) SplitIndex(values []string, value string, array *[]string) {
 
 	vals := strings.Split(value, ":")
 	split := strings.Join(vals[:len(vals)-1], ":")
