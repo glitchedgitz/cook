@@ -67,51 +67,19 @@ Append line by line. So basically if you want to merge two lists line by line. T
 <img src="./assets/min.png">
 
 
-# Access Wordlists from seclist/assetnotes/fuzzdb/etc...
+# Save wordlists/lists/chars everything in `my.yaml`
 
-Cook uses [cook-ingredients](https://github.com/glitchedgitz/cook-ingredients), it's `YAML` Collection of word-sets, extensions, funcitons to generate pattern and wordlists.
 <img src="assets/savewordlist.png">
-
-Current fetched databases
-
-| Name                  | Link                                               |
-|-----------------------|----------------------------------------------------|
-| Assetnotes Wordlsits  | [https://wordlists.assetnote.io/](https://wordlists.assetnote.io/) |
-| Seclist               | [https://github.com/danielmiessler/SecLists](https://github.com/danielmiessler/SecLists) |
-| FuzzDB                | [https://github.com/fuzzdb-project/fuzzdb](https://github.com/fuzzdb-project/fuzzdb) |
-| Bruteforce Database   | [https://github.com/duyet/bruteforce-database](https://github.com/duyet/bruteforce-database) |
-| Bruteforce Lists      | [https://github.com/random-robbie/bruteforce-lists](https://github.com/random-robbie/bruteforce-lists) |
-| OneListForAll         | [https://github.com/six2dez/OneListForAll](https://github.com/six2dez/OneListForAll) |
-
-#### You probably need to search wordlists from these repos
-
-```
-cook search [keyword]
-```
-
-Here we search for `api` using `cook search api`
-
-<img src="assets/search.png">
-
->
->
-
-then using the file name you can fetch use the file `cook an-apiroutes`
-
-> Note that `sec` is shortname for seclist, `an` for assetnote, `fz` for fuzzdb like this...
-
-<img src="assets/using.png" width="70%">
-
-
-
 
 ### Add/Update/Delete wordlists/wordsets
 Edit `my.yaml` manually or use these commands.
 
-#### Add/Update:
+#### Add/Update
+
 ```
 cook add [keyword]=[values, separated by comma] in [category]
 ```
+
 If `keyword` doesn't exist it will create it.Otherwise it will update it and add the new value in the same variable.
 
 ```bash
@@ -121,20 +89,34 @@ cook add same variable=https://example2.com in files
 ```bash
 cook add unique_name=word1,word2,word3 in lists
 ```
+
 > Category are `files`, `raw-files`, `functions` and `lists`
 
 #### Delete
+
 ```cook delete [keyword]```
 
 ## Local File or Fetch URL
-To fetch local files or URLs, use `:` after param name. 
+
+To fetch local files or URLs, use `:` after param name.
 
 ```
 cook -f: live.txt f
 ```
+
 ```
 cook -f: https://example.com/wordlist.txt f
 ```
+
+# Access Wordlists from databases
+Cook has fetched multiple repositories and can directly use wordlist from these repos...
+
+[assetnotes](https://wordlists.assetnote.io/), [seclist](https://github.com/danielmiessler/SecLists), [fuzzdb](https://github.com/fuzzdb-project/fuzzdb), etc.
+
+<img src="assets/search.png">
+
+
+
 
 # Methods
 Using methods you can encode, decode, reverse, split, sort, extract and can do much more...
@@ -173,6 +155,10 @@ Special focus on these 2 methods, these will be great help everytime you use any
 
 ```
 ▶ cook adminNew,admin_new -m smart
+```
+```
+Output:
+
 admin
 New
 admin
@@ -183,6 +169,10 @@ new
 It breaks and join back with the supplied character.
 ```
 ▶ cook adminNew,admin-old -m smartjoin[:_]
+```
+```
+Output:
+
 admin_New
 admin_old
 ```
@@ -191,6 +181,10 @@ admin_old
 Here we applied camlecase
 ```
 ▶ cook suppose_this_is_long_text -m smartjoin[c:_]
+```
+```
+Output:
+
 suppose_This_Is_Long_Text
 ```
 
@@ -315,18 +309,27 @@ cook -z shub_zip_files z.json[path].fb.sortu.smartjoin[c:_]
 
 <img src="./assets/repeat.png">
 
-# Direct fuzzing with FUFF
+# Combine with tools
+Generate pattern and combine with other tools using PIPE.
 
-You can use generated output from cook directly with [ffuf](https://github.com/ffuf/ffuf) or any other tools using pipe.
-
-```
+#### Basic Auth Fuzzing with [FFUF](https://github.com/ffuf/ffuf)
+```bash
 cook usernames_list : passwords_list -m b64e | ffuf -u https://target.com -w - -H "Authorization: Basic FUZZ"
 ```
 
-Similarly you can fuzz directories/headers/params/numeric ids... And can apply required algorithms on your payloads.
-### `Null Payloads` fuzzing with fuff
-```bash
-cook **100 | ffuf -w - -u https://example.com/FUZZ
+#### Null Payload Fuzzing with FFUF
+```
+cook https://target.com/**100 | ffuf -u FUZZ -w - 
+```
+
+#### Hidden Parameters with [x8](https://github.com/Sh1Yo/x8)
+```
+cook [generated output] | x8 -u https://target.com
+```
+
+#### Live Top level domains with [dnsx](https://github.com/projectdiscovery/dnsx) or [httprobe](https://github.com/tomnomnom/httprobe)
+```
+cook example.com seclists-tlds.txt  | dnsx -v
 ```
 
 # Functions
@@ -353,6 +356,7 @@ cook -dob date[17,Sep,1994] elliot _,-, dob
 # Flags
 | Flag | Usage |
 |---|---|
+|-peek| Peek the output using `-peek 50` for first 50 lines |
 |-a, -append| Append to the previous lines, instead of permutations |
 |-c, -col| Print column numbers and there values |
 |-conf, -config| Config Information |
@@ -363,11 +367,14 @@ cook -dob date[17,Sep,1994] elliot _,-, dob
 
 </details>
 
+
+# Share your recipies and ingredients in [cook-ingredients](https://github.com/glitchedgitz/cook-ingredients)
+- Share your yaml file with community
+
 # Contribute
-- Concurrency
+- Use concurrency and make it faster
 - Autocomplete for shells
 - Make append work something like this `cook file1 =/= file2`, make sure chars directly work with all terminals.
-- Add wordlists, wordsets, functions, ports and other things in [cook-ingredients](https://github.com/glitchedgitz/cook-ingredients)
 - Making **raw string** works like as it works in programming languages. Means better parser.
 - I don't know, you might use your creativity and add some awesome features.
-Or you can [buy me a coffee](https://www.buymeacoffee.com/glitchedgitz)☕
+- You can [buy me a coffee](https://www.buymeacoffee.com/glitchedgitz)☕

@@ -79,6 +79,7 @@ func flagsHelp() {
 
 	printHelp(
 		"FLAGS",
+		"        -peek              Peek the output using `-peek 50` for first 50 lines",
 		"-a      -append            Append to the previous lines, instead of permutations",
 		"-c      -col               Print column numbers and there values",
 		"-conf,  -config            Config Information",
