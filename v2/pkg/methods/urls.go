@@ -114,6 +114,9 @@ func (m *Methods) UrlAllDir(u *url.URL, array *[]string) {
 func (m *Methods) AnalyzeURLs(urls []string, fn func(*url.URL, *[]string), array *[]string) {
 
 	for _, s := range urls {
+		if !strings.HasPrefix(s, "http://") && !strings.HasPrefix(s, "https://") {
+			s = "http://" + s
+		}
 		sanitizedURL := sanitizeURL(s)
 		u, err := url.Parse(sanitizedURL)
 		if err != nil {
