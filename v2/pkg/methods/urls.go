@@ -5,6 +5,7 @@ import (
 	"net"
 	"net/url"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"golang.org/x/net/publicsuffix"
@@ -113,14 +114,26 @@ func (m *Methods) UrlAllDir(u *url.URL, array *[]string) {
 func (m *Methods) AnalyzeURLs(urls []string, fn func(*url.URL, *[]string), array *[]string) {
 
 	for _, s := range urls {
-		u, err := url.Parse(s)
+		sanitizedURL := sanitizeURL(s)
+		u, err := url.Parse(sanitizedURL)
 		if err != nil {
-			log.Println("Err: AnalyseURLs in url " + s)
+			log.Println("Err: AnalyseURLs in url ", err)
 			continue
 		}
 
 		fn(u, array)
 	}
+}
+
+// Function to sanitize the URL string
+func sanitizeURL(s string) string {
+	// Regular expression to match any characters outside the valid ASCII range
+	controlCharsRegex := regexp.MustCompile(`[^ -~]`)
+
+	// Replace any characters outside the valid ASCII range with an empty string
+	sanitizedURL := controlCharsRegex.ReplaceAllString(s, "")
+
+	return sanitizedURL
 }
 
 func (m *Methods) init() {
