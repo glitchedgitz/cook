@@ -12,13 +12,13 @@ go install -v github.com/glitchedgitz/cook/v2/cmd/cook@latest
 ```
 > After installation, run `cook` for one time.    
 > It will setup and download [cook-ingredients](https://github.com/glitchedgitz/cook-ingredients) at    
-> `%USERPROFILE%/cook-ingredients` for windows &     
-> `$home/cook-ingredients` for linux.
+> `%USERPROFILE%/.config/cook-ingredients` for windows &     
+> `$home/.config/cook-ingredients` for linux.
 
 ### Use as library
 ```golang
 COOK := New(&COOK{
-    Pattern: scenario.pattern,
+    Pattern: "1-10 .example.com",
 })
 
 COOK.Generate()
@@ -189,37 +189,42 @@ suppose_This_Is_Long_Text
 ```
 
 
-All methods `cook help methods`
-<img src="assets/methdocs.png">
-
-<details><summary>All methods</summary>
+## All methods `cook help methods`
 
 ```
-METHODS
-    Apply different sets of operations to your wordlists
+sort                           - Sort them
+sortu                          - Sort them with unique values only
+reverse                        - Reverse string
+leet                           - a->4, b->8, e->3 ...
+                                    leet[0] or leet[1]
 
-STRING/LIST/JSON
-    sort                           - Sort them
-    sortu                          - Sort them with unique values only
-    reverse                        - Reverse string
-    split                          - split[char]
-    splitindex                     - splitindex[char:index]
-    replace                        - Replace All replace[this:tothis]
-    leet                           - a->4, b->8, e->3 ...
-                                     leet[0] or leet[1]
-    json                           - Extract JSON field
-                                     json[key] or json[key:subkey:sub-subkey]
-    smart                          - Separate words with naming convensions
-                                     redirectUri, redirect_uri, redirect-uri  ->  [redirect, uri]
-    smartjoin                      - This will split the words from naming convensions &
-                                     param.smartjoin[c,_] (case, join)
-                                     redirect-uri, redirectUri, redirect_uri ->  redirect_Uri
+smart                          - Separate words with naming convensions
+                                    redirectUri, redirect_uri, redirect-uri  ->  [redirect, uri]
+smartjoin                      - This will split the words from naming convensions &
+                                    param.smartjoin[c,_] (case, join)
+                                    redirect-uri, redirectUri, redirect_uri ->  redirect_Uri
 
-    u          upper               - Uppercase
-    l          lower               - Lowercase
-    t          title               - Titlecase
+u          upper               - Uppercase
+l          lower               - Lowercase
+t          title               - Titlecase
+```
 
-URLS
+### String Operations
+```
+split                          - split[char]
+splitindex                     - splitindex[char:index]
+replace                        - Replace All replace[this:tothis]
+```
+
+
+
+### JSON
+```
+json                           - Extract JSON field
+                                    json[key] or json[key:subkey:sub-subkey]
+```
+
+### Url Operations
     fb         filebase            - Extract filename from path or url
     s          scheme              - Extract http, https, gohper, ws, etc. from URL
                user                - Extract username from url
@@ -237,43 +242,51 @@ URLS
     sub        subdomain           - Extract subdomain from url
                allsubs             - Extract subdomain from url
 
-ENCODERS
-    b64e       b64encode           - Base64 encoder
-    hexe       hexencode           - Hex string encoder
-               charcode            - Give charcode encoding
-                                     charcode[0] without semicolon
-                                     charcode[1] with semicolon
-    jsone      jsonescape          - JSON escape
-    urle       urlencode           - URL encode reserved characters
-               utf16               - UTF-16 encoder (Little Endian)
-               utf16be             - UTF-16 encoder (Big Endian)
-    xmle       xmlescape           - XML escape
-    urleall    urlencodeall        - URL encode all characters
-    unicodee   unicodeencodeall    - Unicode escape string encode (all characters)
-
-DECODERS
-    b64d       b64decode           - Base64 decoder
-    hexd       hexdecode           - Hex string decoder
-    jsonu      jsonunescape        - JSON unescape
-    unicoded   unicodedecode       - Unicode escape string decode
-    urld       urldecode           - URL decode
-    xmlu       xmlunescape         - XML unescape
-
-HASHES
-    md5                            - MD5 sum
-    sha1                           - SHA1 checksum
-    sha224                         - SHA224 checksum
-    sha256                         - SHA256 checksum
-    sha384                         - SHA384 checksum
-    sha512                         - SHA512 checksum
-  
+### Encode/Decode 
 ```
-</details>
+b64e       b64encode           - Base64 encode
+b64d       b64decode           - Base64 decode
+
+           charcode            - Give charcode encoding
+                                    - charcode[0]
+                                        &#97&#98&#99 
+                                    - charcode[1] with semicolon 
+                                        &#97;&#98;&#99;
+
+hexe       hexencode           - Hex string encode
+hexd       hexdecode           - Hex string decode
+
+jsone      jsonescape          - JSON escape
+jsonu      jsonunescape        - JSON unescape
+
+urle       urlencode           - URL encode reserved characters
+            utf16                - UTF-16 encoder (Little Endian)
+            utf16be              - UTF-16 encoder (Big Endian)
+urld       urldecode           - URL decode
+urleall    urlencodeall        - URL encode all characters
+
+xmle       xmlescape           - XML escape
+xmlu       xmlunescape         - XML unescape
+
+unicodee   unicodeencodeall    - Unicode escape string encode (all characters)
+unicoded   unicodedecode       - Unicode escape string decode
+```
+
+
+### HASHES
+```
+md5                            - MD5 sum
+sha1                           - SHA1 checksum
+sha224                         - SHA224 checksum
+sha256                         - SHA256 checksum
+sha384                         - SHA384 checksum
+sha512                         - SHA512 checksum
+```
 
 # ULTIMATE USAGE
 Too overpower? But everyday you came accross weird BB stuff, like a big json file from target? May be you want to extract, join, merge or whatever. You can use cook smartly as per your usecase.
 
-### Real life usage example:
+## Real life usage example:
 Let's say you read this blog https://blog.assetnote.io/2020/09/18/finding-hidden-files-folders-iis-bigquery/.
 
 Now you will also want to save `BIG ZIP FILE` wordlist by assetnote. `https://storage.googleapis.com/zipfilesbq/zipfiles.json`
