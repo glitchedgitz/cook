@@ -58,11 +58,6 @@ Without basics, everything is complex.
 <img src="./assets/ranges.png">
 
 
-
-#### Use case: Sites using custom suffix/preffix?
-<img src="assets/prefixsuffix.png">
-
-
 ## Param Approach
 Name them anything and use them to generate the pattern.
 This will be more useful when you apply encoding column-wise using [methods](#methods).
@@ -311,9 +306,13 @@ sha512                         - SHA512 checksum
 ```
 
 # Some Usecases Examples 
-Some general usecases to grasp understanding of cook's usage.
+Some general usecases to grasp understanding of cook.
 
-## Join wordlists line-by-line
+#### ▸ Sites using custom suffix/preffix?
+<img src="assets/prefixsuffix.png">
+
+#### ▸ Join wordlists line-by-line
+
 Use `-append` flag:
 ```
 cook -l: live.txt -p: payloads.txt l / p -append 2
@@ -327,7 +326,7 @@ cook col1 col2 col3 col4 col5 -append 2,5
 
 *Note: Sometime is confusing to find index of column, then use `-col`*
 
-## Print at every step
+#### ▸ Print at every step
 
 If you want to start printing data for each permuation, then use `-min` flag
 
