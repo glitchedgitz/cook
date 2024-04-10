@@ -5,32 +5,49 @@ An overpower wordlist generator, splitter, merger, finder, saver, create words p
 
 Frustration killer! & Customizable!
 
-### Installation
+# Index
+- [Installation](#installation)
+    - [Configuration](#configuration)
+- [Basic](#basic)
+    - [Ranges](#ranges)
+    - [Param Approach](#param-approach)
+- [COOK's Ingredients](#cooks-ingredients)
+    - [Categories](#categories)
+    - [Save wordlists/lists/chars everything in `my.yaml`](#save-wordlistslistschars-everything-in-myyaml)
+    - [Functions](#functions)
+    - [Customize `my.yaml`](#customize-myyaml)   
+        [▸ Add/Update](#▸-add/update)   
+        [▸ Delete](#▸-delete)   
+    - [Local File / Fetch URL](#local-file--fetch-url)
+- [Methods](#methods)
+    - [Multiple Encoding](#multiple-encoding)
+    - [Break naming conventions 💫](#break-naming-conventions-💫)
+    - [All methods `cook help methods`](#all-methods-cook-help-methods)
+- [Some Usecases Examples](#some-usecases-examples)
+    - [Join wordlists line-by-line](#join-wordlists-line-by-line)
+    - [Print at every step](#print-at-every-step)
+    - [Combine with tools](#combine-with-tools)
+- [ULTIMATE USAGE](#ultimate-usage)
+    - [Real life usage example:](#real-life-usage-example)
+- [Repeat Operator `*` and `**`](#repeat-operator--and)
+- [Parsing Rules](#parsing-rules)
+- [Flags](#flags)
+- [Use as library](#use-as-library)
+- [Share your recipies/ingredients in cook-ingredients](#share-your-recipies-and-ingredients-in-cook-ingredients)
+- [Contribute](#contribute)
+
+
+# Installation
 Use Go or download [latest builds](https://github.com/glitchedgitz/cook/releases/)  
 ```
 go install -v github.com/glitchedgitz/cook/v2/cmd/cook@latest
 ```
-> After installation, run `cook` for one time.    
-> It will setup and download [cook-ingredients](https://github.com/glitchedgitz/cook-ingredients) at    
-> `%USERPROFILE%/cook-ingredients` for windows &     
-> `$home/cook-ingredients` for linux.
 
-### Use as library
-```golang
-COOK := New(&COOK{
-    Pattern: scenario.pattern,
-})
+### Configuration    
+From version `v2.2` cook save [cook-ingredients](https://github.com/glitchedgitz/cook-ingredients) at `$home/.config/cook/cook-ingredients`
+ 
+> To change create a path variable name `COOK=[YOUR PATH]`
 
-COOK.Generate()
-fmt.Printf("Generated list: %v", COOK.Final)
-```
-
-Search the cook-ingredients using library
-```golang
-COOK := NewWithoutConfig()
-results := COOK.Search("api")
-fmt.Printf("Searched: %v", results)
-```
 
 # Basic
 
@@ -39,9 +56,6 @@ Without basics, everything is complex.
 
 ### Ranges
 <img src="./assets/ranges.png">
-
-#### Use case: Sites using custom suffix/preffix?
-<img src="assets/prefixsuffix.png">
 
 
 ## Param Approach
@@ -58,47 +72,56 @@ cook -start intigriti,bugcrowd  -sep _,- -end users.rar,secret.zip  / start sep 
 Note: you must include parameter in the pattern, otherwise it will not print anything. 
 ```
 
-### `-append` join wordlists line by line
-
-Append line by line. So basically if you want to merge two lists line by line. Then use it. And as always you can append multiple columns using column
-<img src="./assets/append.png">
-
-### `-min` Print at every step
-<img src="./assets/min.png">
 
 
-# Save wordlists/lists/chars everything in `my.yaml`
+
+# COOK's Ingredients
+Cook depends on [cook-ingredients](https://github.com/glitchedgitz/cook-ingredients), which are `.yaml` files collections of wordsets, functions, ports, wordlists from [assetnotes](https://wordlists.assetnote.io/), [seclist](https://github.com/danielmiessler/SecLists), [fuzzdb](https://github.com/fuzzdb-project/fuzzdb), `15+` etc.
+
+### Categories
+|Category|Description|
+|---|---|
+| `lists` | Array of values to directly use when called out |
+| `files` | Array of urls|
+| `ports` | Ranges of numbers|
+| `raw-files` | Array of local files|
+| `functions` | [Functions](#functions) are used to generate patterns |
+
+## Save wordlists/lists/chars everything in `my.yaml`
 
 <img src="assets/savewordlist.png">
 
-### Add/Update/Delete wordlists/wordsets
+### Functions
+
+```
+cook -dob date[17,Sep,1994] elliot _,-, dob
+```
+
+<img src="./assets/functions.png">
+
+## Customize `my.yaml`
 Edit `my.yaml` manually or use these commands.
 
-#### Add/Update
+#### ▸ Add/Update
+If `keyword` doesn't exist it will create it. Otherwise it will update it and add the new value in the same variable.
 
 ```
-cook add [keyword]=[values, separated by comma] in [category]
-```
+# Syntax
+cook add [keyword]=[value1, value2, ..., valueN] in [category]
 
-If `keyword` doesn't exist it will create it.Otherwise it will update it and add the new value in the same variable.
-
-```bash
-cook add same variable=https://example2.com in files
-```
-
-```bash
+# Command
 cook add unique_name=word1,word2,word3 in lists
 ```
 
-> Category are `files`, `raw-files`, `functions` and `lists`
+#### ▸ Delete
 
-#### Delete
+```
+cook delete [keyword]
+```
 
-```cook delete [keyword]```
+## Local File / Fetch URL
 
-## Local File or Fetch URL
-
-To fetch local files or URLs, use `:` after param name.
+use `:` after param name.
 
 ```
 cook -f: live.txt f
@@ -147,8 +170,7 @@ Methods can be applied on final output or column-wise
 
 <img src="assets/multipleencodings.png">
 
-## Smart Break & Smart Join 💫
-
+## Break naming conventions 💫
 Special focus on these 2 methods, these will be great help everytime you use any wordlist.
 
 ### Smart Break `-m smart`
@@ -189,37 +211,42 @@ suppose_This_Is_Long_Text
 ```
 
 
-All methods `cook help methods`
-<img src="assets/methdocs.png">
-
-<details><summary>All methods</summary>
+## All methods `cook help methods`
 
 ```
-METHODS
-    Apply different sets of operations to your wordlists
+sort                           - Sort them
+sortu                          - Sort them with unique values only
+reverse                        - Reverse string
+leet                           - a->4, b->8, e->3 ...
+                                    leet[0] or leet[1]
 
-STRING/LIST/JSON
-    sort                           - Sort them
-    sortu                          - Sort them with unique values only
-    reverse                        - Reverse string
-    split                          - split[char]
-    splitindex                     - splitindex[char:index]
-    replace                        - Replace All replace[this:tothis]
-    leet                           - a->4, b->8, e->3 ...
-                                     leet[0] or leet[1]
-    json                           - Extract JSON field
-                                     json[key] or json[key:subkey:sub-subkey]
-    smart                          - Separate words with naming convensions
-                                     redirectUri, redirect_uri, redirect-uri  ->  [redirect, uri]
-    smartjoin                      - This will split the words from naming convensions &
-                                     param.smartjoin[c,_] (case, join)
-                                     redirect-uri, redirectUri, redirect_uri ->  redirect_Uri
+smart                          - Separate words with naming convensions
+                                    redirectUri, redirect_uri, redirect-uri  ->  [redirect, uri]
+smartjoin                      - This will split the words from naming convensions &
+                                    param.smartjoin[c,_] (case, join)
+                                    redirect-uri, redirectUri, redirect_uri ->  redirect_Uri
 
-    u          upper               - Uppercase
-    l          lower               - Lowercase
-    t          title               - Titlecase
+u          upper               - Uppercase
+l          lower               - Lowercase
+t          title               - Titlecase
+```
 
-URLS
+### String Operations
+```
+split                          - split[char]
+splitindex                     - splitindex[char:index]
+replace                        - Replace All replace[this:tothis]
+```
+
+
+
+### JSON
+```
+json                           - Extract JSON field
+                                    json[key] or json[key:subkey:sub-subkey]
+```
+
+### Url Operations
     fb         filebase            - Extract filename from path or url
     s          scheme              - Extract http, https, gohper, ws, etc. from URL
                user                - Extract username from url
@@ -237,50 +264,134 @@ URLS
     sub        subdomain           - Extract subdomain from url
                allsubs             - Extract subdomain from url
 
-ENCODERS
-    b64e       b64encode           - Base64 encoder
-    hexe       hexencode           - Hex string encoder
-               charcode            - Give charcode encoding
-                                     charcode[0] without semicolon
-                                     charcode[1] with semicolon
-    jsone      jsonescape          - JSON escape
-    urle       urlencode           - URL encode reserved characters
-               utf16               - UTF-16 encoder (Little Endian)
-               utf16be             - UTF-16 encoder (Big Endian)
-    xmle       xmlescape           - XML escape
-    urleall    urlencodeall        - URL encode all characters
-    unicodee   unicodeencodeall    - Unicode escape string encode (all characters)
-
-DECODERS
-    b64d       b64decode           - Base64 decoder
-    hexd       hexdecode           - Hex string decoder
-    jsonu      jsonunescape        - JSON unescape
-    unicoded   unicodedecode       - Unicode escape string decode
-    urld       urldecode           - URL decode
-    xmlu       xmlunescape         - XML unescape
-
-HASHES
-    md5                            - MD5 sum
-    sha1                           - SHA1 checksum
-    sha224                         - SHA224 checksum
-    sha256                         - SHA256 checksum
-    sha384                         - SHA384 checksum
-    sha512                         - SHA512 checksum
-  
+### Encode/Decode 
 ```
-</details>
+b64e       b64encode           - Base64 encode
+b64d       b64decode           - Base64 decode
 
+           charcode            - Give charcode encoding
+                                    - charcode[0]
+                                        &#97&#98&#99 
+                                    - charcode[1] with semicolon 
+                                        &#97;&#98;&#99;
+
+hexe       hexencode           - Hex string encode
+hexd       hexdecode           - Hex string decode
+
+jsone      jsonescape          - JSON escape
+jsonu      jsonunescape        - JSON unescape
+
+urle       urlencode           - URL encode reserved characters
+            utf16                - UTF-16 encoder (Little Endian)
+            utf16be              - UTF-16 encoder (Big Endian)
+urld       urldecode           - URL decode
+urleall    urlencodeall        - URL encode all characters
+
+xmle       xmlescape           - XML escape
+xmlu       xmlunescape         - XML unescape
+
+unicodee   unicodeencodeall    - Unicode escape string encode (all characters)
+unicoded   unicodedecode       - Unicode escape string decode
+```
+
+
+### HASHES
+```
+md5                            - MD5 sum
+sha1                           - SHA1 checksum
+sha224                         - SHA224 checksum
+sha256                         - SHA256 checksum
+sha384                         - SHA384 checksum
+sha512                         - SHA512 checksum
+```
+
+# Some Usecases Examples 
+Some general usecases to grasp understanding of cook.
+
+#### ▸ Sites using custom suffix/preffix?
+<img src="assets/prefixsuffix.png">
+
+#### ▸ Join wordlists line-by-line
+
+Use `-append` flag:
+```
+cook -l: live.txt -p: payloads.txt l / p -append 2
+```
+<img src="./assets/append.png">
+
+```
+# Multiple columns    
+cook col1 col2 col3 col4 col5 -append 2,5
+```
+
+*Note: Sometime is confusing to find index of column, then use `-col`*
+
+#### ▸ Print at every step
+
+If you want to start printing data for each permuation, then use `-min` flag
+
+<img src="./assets/min.png">
+
+*Note: Sometime is confusing to find index of column, then use `-col`*
+
+
+## Combine with tools
+Generate pattern and combine with other tools using PIPE.
+```
+cook [Generated Pattern] | [Any tool with pipe input]
+```
+
+#### ▸ Basic Auth Fuzzing with [FFUF](https://github.com/ffuf/ffuf)
+
+```bash
+cook usernames_list : passwords_list -m b64e | ffuf -u https://target.com -w - -H "Authorization: Basic FUZZ"
+```
+
+#### ▸ Null Payload Fuzzing with FFUF
+
+```bash
+cook https://target.com/**100 | ffuf -u FUZZ -w - 
+```
+
+#### ▸ Hidden Parameters with [x8](https://github.com/Sh1Yo/x8)
+
+```bash
+cook [generated output] | x8 -u https://target.com
+```
+
+#### ▸ Live Top level domains with [dnsx](https://github.com/projectdiscovery/dnsx) or [httprobe](https://github.com/tomnomnom/httprobe)
+
+```bash
+cook example.com seclists-tlds.txt  | dnsx -v
+```
+
+ 
 # ULTIMATE USAGE
 Too overpower? But everyday you came accross weird BB stuff, like a big json file from target? May be you want to extract, join, merge or whatever. You can use cook smartly as per your usecase.
 
-### Real life usage example:
-Let's say you read this blog https://blog.assetnote.io/2020/09/18/finding-hidden-files-folders-iis-bigquery/.
+## Real life usage example:
+As BBH, we came arross JSON file often. YOu may be you read find wordlist to save in your collection.
 
-Now you will also want to save `BIG ZIP FILE` wordlist by assetnote. `https://storage.googleapis.com/zipfilesbq/zipfiles.json`
+Let's say you read this blog about IIS Shortname Vulnerabilities
+https://blog.assetnote.io/2020/09/18/finding-hidden-files-folders-iis-bigquery/.
 
-COOK already saved this file at `cook shub_zip_files`, but if save a wordlist, use `cook add shub_zip_files=[URL] in files`
+Here [Assetnote](https://www.assetnote.io/) shared [BIG ZIP FILE](https://storage.googleapis.com/zipfilesbq/zipfiles.json), Now you need something that can save this file and you can recall it when you need.
 
-File contains data like this, but this isn't directly useful for you, Is it?
+
+
+Save it like this..., this will save file in `my.yaml`
+```
+cook add shub_zip_files=[URL] in files
+```
+Or manually save in `my.yaml`,
+```yaml
+shub_zip_files : [https://storage.googleapis.com/zipfilesbq/zipfiles.json]
+```
+> *Note: cook already saved it in default wordlists, you can use `cook shub_zip_files` to access it*
+
+
+
+▸ File contains data like this, but this isn't directly useful.
 ```json
 {"repo_name":"cocowool/RoseCMS","ref":"refs/heads/1","path":"user_guide/_downloads/ELDocs.tmbundle.zip","mode":"33261","id":"f7a11b364ca918379b48ad525798148e7470b6b1"}
 {"repo_name":"xuguanfeng/practise","ref":"refs/heads/1","path":"node_modules/selenium-webdriver/node_modules/adm-zip/test/assets/fast.zip","mode":"33188","id":"f4ed17b98c9d7bcd21efc4523ce75fbe2b071d0a"}
@@ -292,8 +403,13 @@ File contains data like this, but this isn't directly useful for you, Is it?
 ...
 ```
 
-### Single line solution
-Not just we can extract it, we extracted filebase from path and sort unique, then use smartjoin to create diff permuataions.
+**Let say you need to:**   
+ ▸ Extract json field `path`  
+ ▸ extract `filebase` from `path`    
+ ▸ then spliting it based on `naming conventions`
+
+#### Single line solution
+ ▸ With cook not just we can extract it, we can extract filebase from path and sort unique, then use smartjoin to create diff permuataions.
 
 ```
 cook -z shub_zip_files z.json[path].fb.sortu.smartjoin[c:_]
@@ -301,45 +417,16 @@ cook -z shub_zip_files z.json[path].fb.sortu.smartjoin[c:_]
 
 <img src="./assets/multiplemethods.png">
 
-# Repeat Operator `*` and `**`
+And this is also how cook was born, while fuzzing IIS Shortnames and later on I added other features.
 
+# Repeat Operator `*` and `**`
 - Use `*` for horizontal repeating.
 - Use `**` for vertical repeating.
 - And try this `*10-1` or this `*1-10`.
 
 <img src="./assets/repeat.png">
 
-# Combine with tools
-Generate pattern and combine with other tools using PIPE.
 
-#### Basic Auth Fuzzing with [FFUF](https://github.com/ffuf/ffuf)
-```bash
-cook usernames_list : passwords_list -m b64e | ffuf -u https://target.com -w - -H "Authorization: Basic FUZZ"
-```
-
-#### Null Payload Fuzzing with FFUF
-```
-cook https://target.com/**100 | ffuf -u FUZZ -w - 
-```
-
-#### Hidden Parameters with [x8](https://github.com/Sh1Yo/x8)
-```
-cook [generated output] | x8 -u https://target.com
-```
-
-#### Live Top level domains with [dnsx](https://github.com/projectdiscovery/dnsx) or [httprobe](https://github.com/tomnomnom/httprobe)
-```
-cook example.com seclists-tlds.txt  | dnsx -v
-```
-
-# Functions
-```
-cook -dob date[17,Sep,1994] elliot _,-, dob
-```
-<img src="./assets/functions.png">
-
-> Customize:    
- Create your own functions in `cook-ingredients/my.yaml` under functions:
 
 # Parsing Rules
 |  |  |
@@ -367,6 +454,24 @@ cook -dob date[17,Sep,1994] elliot _,-, dob
 
 </details>
 
+# Use as library
+
+```golang
+COOK := New(&COOK{
+    Pattern: "1-10 .example.com",
+})
+
+COOK.Generate()
+fmt.Printf("Generated list: %v", COOK.Final)
+```
+
+Search the [cook-ingredients](https://github.com/glitchedgitz/cook-ingredients) using library
+
+```golang
+COOK := NewWithoutConfig()
+results := COOK.Search("api")
+fmt.Printf("Searched: %v", results)
+```
 
 # Share your recipies and ingredients in [cook-ingredients](https://github.com/glitchedgitz/cook-ingredients)
 - Share your yaml file with community

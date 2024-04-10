@@ -96,11 +96,6 @@ func (cook *COOK) Delete(keyword string) {
 				return
 			}
 
-			if err != nil {
-				fmt.Printf("Prompt failed %v\n", err)
-				return
-			}
-
 			input = strings.ToLower(input)
 
 			if input == "yes" || input == "y" {
