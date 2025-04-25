@@ -102,3 +102,4 @@ func (cook *COOK) CheckMethods(p string, array *[]string) bool {
 	}
 	return false
 }
+
