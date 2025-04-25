@@ -86,6 +86,7 @@ func main() {
 		COOK.ShowCols()
 	}
 
+	// Checking predefined commands
 	if COOK.TotalCols > 0 {
 		if fn, exists := cmdFunctions[COOK.Pattern[0]]; exists {
 			fn(COOK.Pattern[1:])

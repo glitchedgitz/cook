@@ -1,34 +1,36 @@
 <img src="assets/head.png">
 
 # COOK
-An overpower wordlist generator, splitter, merger, finder, saver, create words permutation and combinations, apply different encoding/decoding and everything you need.  
+
+An overpower wordlist generator, splitter, merger, finder, saver, create words permutation and combinations, apply different encoding/decoding and everything you need.
 
 Frustration killer! & Customizable!
 
 # Index
+
 - [Installation](#installation)
-    - [Configuration](#configuration)
+  - [Configuration](#configuration)
 - [Basic](#basic)
-    - [Ranges](#ranges)
-    - [Param Approach](#param-approach)
+  - [Ranges](#ranges)
+  - [Param Approach](#param-approach)
 - [COOK's Ingredients](#cooks-ingredients)
-    - [Categories](#categories)
-    - [Save wordlists/lists/chars everything in `my.yaml`](#save-wordlistslistschars-everything-in-myyaml)
-    - [Functions](#functions)
-    - [Customize `my.yaml`](#customize-myyaml)   
-        [▸ Add/Update](#▸-add/update)   
-        [▸ Delete](#▸-delete)   
-    - [Local File / Fetch URL](#local-file--fetch-url)
+  - [Categories](#categories)
+  - [Save wordlists/lists/chars everything in `my.yaml`](#save-wordlistslistschars-everything-in-myyaml)
+  - [Functions](#functions)
+  - [Customize `my.yaml`](#customize-myyaml)  
+     [▸ Add/Update](#▸-add/update)  
+     [▸ Delete](#▸-delete)
+  - [Local File / Fetch URL](#local-file--fetch-url)
 - [Methods](#methods)
-    - [Multiple Encoding](#multiple-encoding)
-    - [Break naming conventions 💫](#break-naming-conventions-💫)
-    - [All methods `cook help methods`](#all-methods-cook-help-methods)
+  - [Multiple Encoding](#multiple-encoding)
+  - [Break naming conventions 💫](#break-naming-conventions-💫)
+  - [All methods `cook help methods`](#all-methods-cook-help-methods)
 - [Some Usecases Examples](#some-usecases-examples)
-    - [Join wordlists line-by-line](#join-wordlists-line-by-line)
-    - [Print at every step](#print-at-every-step)
-    - [Combine with tools](#combine-with-tools)
+  - [Join wordlists line-by-line](#join-wordlists-line-by-line)
+  - [Print at every step](#print-at-every-step)
+  - [Combine with tools](#combine-with-tools)
 - [ULTIMATE USAGE](#ultimate-usage)
-    - [Real life usage example:](#real-life-usage-example)
+  - [Real life usage example:](#real-life-usage-example)
 - [Repeat Operator `*` and `**`](#repeat-operator--and)
 - [Parsing Rules](#parsing-rules)
 - [Flags](#flags)
@@ -36,18 +38,19 @@ Frustration killer! & Customizable!
 - [Share your recipies/ingredients in cook-ingredients](#share-your-recipies-and-ingredients-in-cook-ingredients)
 - [Contribute](#contribute)
 
-
 # Installation
-Use Go or download [latest builds](https://github.com/glitchedgitz/cook/releases/)  
+
+Use Go or download [latest builds](https://github.com/glitchedgitz/cook/releases/)
+
 ```
 go install -v github.com/glitchedgitz/cook/v2/cmd/cook@latest
 ```
 
-### Configuration    
-From version `v2.2` cook save [cook-ingredients](https://github.com/glitchedgitz/cook-ingredients) at `$home/.config/cook/cook-ingredients`
- 
-> To change create a path variable name `COOK=[YOUR PATH]`
+### Configuration
 
+From version `v2.2` cook save [cook-ingredients](https://github.com/glitchedgitz/cook-ingredients) at `$home/.config/cook/cook-ingredients`
+
+> To change create a path variable name `COOK=[YOUR PATH]`
 
 # Basic
 
@@ -55,10 +58,11 @@ Without basics, everything is complex.
 <img src="assets/basic.png">
 
 ### Ranges
+
 <img src="./assets/ranges.png">
 
-
 ## Param Approach
+
 Name them anything and use them to generate the pattern.
 This will be more useful when you apply encoding column-wise using [methods](#methods).
 
@@ -69,22 +73,21 @@ cook -start intigriti,bugcrowd  -sep _,- -end users.rar,secret.zip  / start sep 
 <img src="assets/parameterapproach.png">
 
 ```
-Note: you must include parameter in the pattern, otherwise it will not print anything. 
+Note: you must include parameter in the pattern, otherwise it will not print anything.
 ```
 
-
-
-
 # COOK's Ingredients
+
 Cook depends on [cook-ingredients](https://github.com/glitchedgitz/cook-ingredients), which are `.yaml` files collections of wordsets, functions, ports, wordlists from [assetnotes](https://wordlists.assetnote.io/), [seclist](https://github.com/danielmiessler/SecLists), [fuzzdb](https://github.com/fuzzdb-project/fuzzdb), `15+` etc.
 
 ### Categories
-|Category|Description|
-|---|---|
-| `lists` | Array of values to directly use when called out |
-| `files` | Array of urls|
-| `ports` | Ranges of numbers|
-| `raw-files` | Array of local files|
+
+| Category    | Description                                           |
+| ----------- | ----------------------------------------------------- |
+| `lists`     | Array of values to directly use when called out       |
+| `files`     | Array of urls                                         |
+| `ports`     | Ranges of numbers                                     |
+| `raw-files` | Array of local files                                  |
 | `functions` | [Functions](#functions) are used to generate patterns |
 
 ## Save wordlists/lists/chars everything in `my.yaml`
@@ -100,9 +103,11 @@ cook -dob date[17,Sep,1994] elliot _,-, dob
 <img src="./assets/functions.png">
 
 ## Customize `my.yaml`
+
 Edit `my.yaml` manually or use these commands.
 
 #### ▸ Add/Update
+
 If `keyword` doesn't exist it will create it. Otherwise it will update it and add the new value in the same variable.
 
 ```
@@ -132,16 +137,15 @@ cook -f: https://example.com/wordlist.txt f
 ```
 
 # Access Wordlists from databases
+
 Cook has fetched multiple repositories and can directly use wordlist from these repos...
 
 [assetnotes](https://wordlists.assetnote.io/), [seclist](https://github.com/danielmiessler/SecLists), [fuzzdb](https://github.com/fuzzdb-project/fuzzdb), etc.
 
 <img src="assets/search.png">
 
-
-
-
 # Methods
+
 Using methods you can encode, decode, reverse, split, sort, extract and can do much more...
 
 Methods can be applied on final output or column-wise
@@ -150,27 +154,27 @@ Methods can be applied on final output or column-wise
 - `-mc/-methodcol` to apply column-wise.
 - `param.methodname` apply to any parameter-wise, will example this param thing later.
 
-
 <img src="assets/methods.png">
 
 ## Multiple Encoding
 
 - **Overlapping Encodings**:
-    - Use dot `.`    
-    - `md5.b64e.urle` apply multiple methods one by one.   
-    - Output Logic:
-        - `Generated Pattern` > `md5 hashing` > `base 64 encoding` > `URL Encoding`.
-- **Different Encodings**:     
-    - Use comma `,`    
-    - `md5,sha1,sha256` apply different encoding to the same generated pattern.    
-    - Output Logic:
-        - `Generated Pattern` > `md5 hashing`
-        - `Generated Pattern` > `sha1 hashing`
-        - `Generated Pattern` > `sha256 hashing`
+  - Use dot `.`
+  - `md5.b64e.urle` apply multiple methods one by one.
+  - Output Logic:
+    - `Generated Pattern` > `md5 hashing` > `base 64 encoding` > `URL Encoding`.
+- **Different Encodings**:
+  - Use comma `,`
+  - `md5,sha1,sha256` apply different encoding to the same generated pattern.
+  - Output Logic:
+    - `Generated Pattern` > `md5 hashing`
+    - `Generated Pattern` > `sha1 hashing`
+    - `Generated Pattern` > `sha256 hashing`
 
 <img src="assets/multipleencodings.png">
 
 ## Break naming conventions 💫
+
 Special focus on these 2 methods, these will be great help everytime you use any wordlist.
 
 ### Smart Break `-m smart`
@@ -178,6 +182,7 @@ Special focus on these 2 methods, these will be great help everytime you use any
 ```
 ▶ cook adminNew,admin_new -m smart
 ```
+
 ```
 Output:
 
@@ -188,28 +193,33 @@ new
 ```
 
 ### Smart Join `-m smartjoin[<case>:<char>]`
+
 It breaks and join back with the supplied character.
+
 ```
 ▶ cook adminNew,admin-old -m smartjoin[:_]
 ```
+
 ```
 Output:
 
 admin_New
 admin_old
 ```
+
 **Apply Cases over separated**
 
 Here we applied camlecase
+
 ```
 ▶ cook suppose_this_is_long_text -m smartjoin[c:_]
 ```
+
 ```
 Output:
 
 suppose_This_Is_Long_Text
 ```
-
 
 ## All methods `cook help methods`
 
@@ -232,21 +242,22 @@ t          title               - Titlecase
 ```
 
 ### String Operations
+
 ```
 split                          - split[char]
 splitindex                     - splitindex[char:index]
 replace                        - Replace All replace[this:tothis]
 ```
 
-
-
 ### JSON
+
 ```
 json                           - Extract JSON field
                                     json[key] or json[key:subkey:sub-subkey]
 ```
 
 ### Url Operations
+
     fb         filebase            - Extract filename from path or url
     s          scheme              - Extract http, https, gohper, ws, etc. from URL
                user                - Extract username from url
@@ -264,15 +275,16 @@ json                           - Extract JSON field
     sub        subdomain           - Extract subdomain from url
                allsubs             - Extract subdomain from url
 
-### Encode/Decode 
+### Encode/Decode
+
 ```
 b64e       b64encode           - Base64 encode
 b64d       b64decode           - Base64 decode
 
            charcode            - Give charcode encoding
                                     - charcode[0]
-                                        &#97&#98&#99 
-                                    - charcode[1] with semicolon 
+                                        &#97&#98&#99
+                                    - charcode[1] with semicolon
                                         &#97;&#98;&#99;
 
 hexe       hexencode           - Hex string encode
@@ -294,8 +306,8 @@ unicodee   unicodeencodeall    - Unicode escape string encode (all characters)
 unicoded   unicodedecode       - Unicode escape string decode
 ```
 
-
 ### HASHES
+
 ```
 md5                            - MD5 sum
 sha1                           - SHA1 checksum
@@ -305,26 +317,30 @@ sha384                         - SHA384 checksum
 sha512                         - SHA512 checksum
 ```
 
-# Some Usecases Examples 
+# Some Usecases Examples
+
 Some general usecases to grasp understanding of cook.
 
 #### ▸ Sites using custom suffix/preffix?
+
 <img src="assets/prefixsuffix.png">
 
 #### ▸ Join wordlists line-by-line
 
 Use `-append` flag:
+
 ```
 cook -l: live.txt -p: payloads.txt l / p -append 2
 ```
+
 <img src="./assets/append.png">
 
 ```
-# Multiple columns    
+# Multiple columns
 cook col1 col2 col3 col4 col5 -append 2,5
 ```
 
-*Note: Sometime is confusing to find index of column, then use `-col`*
+_Note: Sometime is confusing to find index of column, then use `-col`_
 
 #### ▸ Print at every step
 
@@ -332,11 +348,12 @@ If you want to start printing data for each permuation, then use `-min` flag
 
 <img src="./assets/min.png">
 
-*Note: Sometime is confusing to find index of column, then use `-col`*
-
+_Note: Sometime is confusing to find index of column, then use `-col`_
 
 ## Combine with tools
+
 Generate pattern and combine with other tools using PIPE.
+
 ```
 cook [Generated Pattern] | [Any tool with pipe input]
 ```
@@ -350,7 +367,7 @@ cook usernames_list : passwords_list -m b64e | ffuf -u https://target.com -w - -
 #### ▸ Null Payload Fuzzing with FFUF
 
 ```bash
-cook https://target.com/**100 | ffuf -u FUZZ -w - 
+cook https://target.com/**100 | ffuf -u FUZZ -w -
 ```
 
 #### ▸ Hidden Parameters with [x8](https://github.com/Sh1Yo/x8)
@@ -365,11 +382,12 @@ cook [generated output] | x8 -u https://target.com
 cook example.com seclists-tlds.txt  | dnsx -v
 ```
 
- 
 # ULTIMATE USAGE
+
 Too overpower? But everyday you came accross weird BB stuff, like a big json file from target? May be you want to extract, join, merge or whatever. You can use cook smartly as per your usecase.
 
 ## Real life usage example:
+
 As BBH, we came arross JSON file often. YOu may be you read find wordlist to save in your collection.
 
 Let's say you read this blog about IIS Shortname Vulnerabilities
@@ -377,21 +395,22 @@ https://blog.assetnote.io/2020/09/18/finding-hidden-files-folders-iis-bigquery/.
 
 Here [Assetnote](https://www.assetnote.io/) shared [BIG ZIP FILE](https://storage.googleapis.com/zipfilesbq/zipfiles.json), Now you need something that can save this file and you can recall it when you need.
 
-
-
 Save it like this..., this will save file in `my.yaml`
+
 ```
 cook add shub_zip_files=[URL] in files
 ```
+
 Or manually save in `my.yaml`,
+
 ```yaml
-shub_zip_files : [https://storage.googleapis.com/zipfilesbq/zipfiles.json]
+shub_zip_files: [https://storage.googleapis.com/zipfilesbq/zipfiles.json]
 ```
-> *Note: cook already saved it in default wordlists, you can use `cook shub_zip_files` to access it*
 
-
+> _Note: cook already saved it in default wordlists, you can use `cook shub_zip_files` to access it_
 
 ▸ File contains data like this, but this isn't directly useful.
+
 ```json
 {"repo_name":"cocowool/RoseCMS","ref":"refs/heads/1","path":"user_guide/_downloads/ELDocs.tmbundle.zip","mode":"33261","id":"f7a11b364ca918379b48ad525798148e7470b6b1"}
 {"repo_name":"xuguanfeng/practise","ref":"refs/heads/1","path":"node_modules/selenium-webdriver/node_modules/adm-zip/test/assets/fast.zip","mode":"33188","id":"f4ed17b98c9d7bcd21efc4523ce75fbe2b071d0a"}
@@ -403,13 +422,14 @@ shub_zip_files : [https://storage.googleapis.com/zipfilesbq/zipfiles.json]
 ...
 ```
 
-**Let say you need to:**   
+**Let say you need to:**  
  ▸ Extract json field `path`  
- ▸ extract `filebase` from `path`    
+ ▸ extract `filebase` from `path`  
  ▸ then spliting it based on `naming conventions`
 
 #### Single line solution
- ▸ With cook not just we can extract it, we can extract filebase from path and sort unique, then use smartjoin to create diff permuataions.
+
+▸ With cook not just we can extract it, we can extract filebase from path and sort unique, then use smartjoin to create diff permuataions.
 
 ```
 cook -z shub_zip_files z.json[path].fb.sortu.smartjoin[c:_]
@@ -420,63 +440,160 @@ cook -z shub_zip_files z.json[path].fb.sortu.smartjoin[c:_]
 And this is also how cook was born, while fuzzing IIS Shortnames and later on I added other features.
 
 # Repeat Operator `*` and `**`
+
 - Use `*` for horizontal repeating.
 - Use `**` for vertical repeating.
 - And try this `*10-1` or this `*1-10`.
 
 <img src="./assets/repeat.png">
 
-
-
 # Parsing Rules
-|  |  |
-|---|---|
-|Columns| Separated by space |
-|Values| Separated by comma |
-|Params| You can give param any name, use `-` before anything to make it param `-param value` |
-|Raw Strings| Use ` before and after the string to stop cook's parsing. Useful when you need to use any keyword as a word. |
-|Pipe Input| Take pipe input using `-` as value of any param. |
-|File Input| Use `:` after param name to take file input. `cook -f: live.txt f`|
-|Functions | Can be called using params only. |
-|Methods | Can be used on params or on final output |
+
+|             |                                                                                                              |
+| ----------- | ------------------------------------------------------------------------------------------------------------ |
+| Columns     | Separated by space                                                                                           |
+| Values      | Separated by comma                                                                                           |
+| Params      | You can give param any name, use `-` before anything to make it param `-param value`                         |
+| Raw Strings | Use ` before and after the string to stop cook's parsing. Useful when you need to use any keyword as a word. |
+| Pipe Input  | Take pipe input using `-` as value of any param.                                                             |
+| File Input  | Use `:` after param name to take file input. `cook -f: live.txt f`                                           |
+| Functions   | Can be called using params only.                                                                             |
+| Methods     | Can be used on params or on final output                                                                     |
 
 # Flags
-| Flag | Usage |
-|---|---|
-|-peek| Peek the output using `-peek 50` for first 50 lines |
-|-a, -append| Append to the previous lines, instead of permutations |
-|-c, -col| Print column numbers and there values |
-|-conf, -config| Config Information |
-|-mc, -methodcol| Apply methods column wise  `-mc 0:md5,b64e; 1:reverse` <br> To all cols separate  `-mc md5,b64e` |
-|-m, -method| Apply methods to final output |
-|-h, -help| Help |
-|-min | Minimum no of columns to print |
+
+| Flag            | Usage                                                                                          |
+| --------------- | ---------------------------------------------------------------------------------------------- |
+| -peek           | Peek the output using `-peek 50` for first 50 lines                                            |
+| -a, -append     | Append to the previous lines, instead of permutations                                          |
+| -c, -col        | Print column numbers and there values                                                          |
+| -conf, -config  | Config Information                                                                             |
+| -mc, -methodcol | Apply methods column wise `-mc 0:md5,b64e; 1:reverse` <br> To all cols separate `-mc md5,b64e` |
+| -m, -method     | Apply methods to final output                                                                  |
+| -h, -help       | Help                                                                                           |
+| -min            | Minimum no of columns to print                                                                 |
 
 </details>
 
 # Use as library
 
-```golang
-COOK := New(&COOK{
-    Pattern: "1-10 .example.com",
-})
+You can use the Cook as a library in your Go projects.
 
-COOK.Generate()
-fmt.Printf("Generated list: %v", COOK.Final)
+## Basic Usage
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/glitchedgitz/cook/v2/pkg/cook"
+)
+
+func main() {
+	// Create a new cook instance
+	cookInst := cook.New(&cook.COOK{
+		Pattern:     []string{"a,b,c", "1,2,3"},
+		PrintResult: false, // Don't print to stdout
+	})
+
+	// Generate the pattern
+	cookInst.Generate()
+
+	fmt.Println("Generated patterns:", cookInst.Final)
+}
 ```
 
-Search the [cook-ingredients](https://github.com/glitchedgitz/cook-ingredients) using library
+## Efficient Multi-Pattern Generation (v2.X.X and above)
 
-```golang
-COOK := NewWithoutConfig()
-results := COOK.Search("api")
-fmt.Printf("Searched: %v", results)
+For generating multiple patterns without reinitializing resources each time:
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/glitchedgitz/cook/v2/pkg/cook"
+)
+
+func main() {
+	// Create a generator which initializes shared resources once
+	generator := cook.NewGenerator()
+
+	// Generate multiple patterns efficiently
+	list1 := generator.Generate([]string{"a,b,c", "1,2,3"})
+	list2 := generator.Generate([]string{"admin", "password-2023"})
+
+	fmt.Println("Pattern 1:", list1)
+	fmt.Println("Pattern 2:", list2)
+}
+```
+
+## Concurrent Pattern Generation
+
+The generator also supports concurrent pattern generation:
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+	"github.com/glitchedgitz/cook/v2/pkg/cook"
+)
+
+func main() {
+	generator := cook.NewGenerator()
+	patterns := [][]string{
+		{"user-1-5", "pass-1-3"},
+		{"admin", "Admin-2023-2025"},
+	}
+
+	var wg sync.WaitGroup
+	results := make([][]string, len(patterns))
+
+	// Generate patterns concurrently
+	for i, pattern := range patterns {
+		wg.Add(1)
+		go func(idx int, p []string) {
+			defer wg.Done()
+			results[idx] = generator.Generate(p)
+		}(i, pattern)
+	}
+
+	wg.Wait()
+
+	// Use the results
+	for i, r := range results {
+		fmt.Printf("Pattern %d generated %d results\n", i, len(r))
+	}
+}
+```
+
+## Search Example
+
+Search the [cook-ingredients](https://github.com/glitchedgitz/cook-ingredients) using the library:
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/glitchedgitz/cook/v2/pkg/cook"
+)
+
+func main() {
+	cookInst := cook.NewWithoutConfig()
+	results := cookInst.Search("api")
+	fmt.Printf("Searched API patterns: %v\n", results)
+}
 ```
 
 # Share your recipies and ingredients in [cook-ingredients](https://github.com/glitchedgitz/cook-ingredients)
+
 - Share your yaml file with community
 
 # Contribute
+
 - Use concurrency and make it faster
 - Autocomplete for shells
 - Make append work something like this `cook file1 =/= file2`, make sure chars directly work with all terminals.

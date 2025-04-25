@@ -57,7 +57,9 @@ func (cook *COOK) Generate() {
 		// config.VPrint(fmt.Sprintf("%-40s: %s", "Time ApplyColumnCases", time.Since(start)))
 
 		if columnNum >= cook.Min {
-			cook.Print()
+			if cook.PrintResult {
+				cook.Print()
+			}
 		}
 	}
 }

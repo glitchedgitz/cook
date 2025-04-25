@@ -116,31 +116,3 @@ func NewWithoutConfig() *COOK {
 	return New(NewCook)
 }
 
-func New(newCook *COOK) *COOK {
-
-	newCook.SetupConfig()
-	newCook.Config.CookConfig()
-	newCook.ParseCustomFlags()
-	newCook.SetupMethods()
-
-	newCook.TotalCols = len(newCook.Pattern)
-	if newCook.Min < 0 {
-		newCook.Min = newCook.TotalCols
-	}
-
-	newCook.SetMin()
-	newCook.AnalyseParams()
-	newCook.Final = []string{""}
-
-	newCook.AppendMap = make(map[int]bool)
-	newCook.MethodMap = make(map[int][]string)
-
-	if len(newCook.AppendParam) > 0 {
-		newCook.ParseAppend()
-	}
-
-	if len(newCook.MethodParam) > 0 {
-		newCook.ParseMethod()
-	}
-	return newCook
-}
