@@ -2,6 +2,7 @@ package cook
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/glitchedgitz/cook/v2/pkg/config"
@@ -43,7 +44,6 @@ func (cook *COOK) CheckParam(p string, array *[]string) bool {
 }
 
 func (cook *COOK) Print() {
-
 	if !cook.PrintResult {
 		return
 	}
@@ -52,9 +52,14 @@ func (cook *COOK) Print() {
 		tmp := []string{}
 
 		for _, meth := range strings.Split(cook.MethodsForAll, ",") {
-			cook.ApplyMethods(cook.Final, parse.SplitMethods(meth), &tmp)
+			if err := cook.ApplyMethods(cook.Final, parse.SplitMethods(meth), &tmp); err != nil {
+				fmt.Printf("Warning: %v\n", err)
+				os.Exit(0)
+			}
+			cook.Final = tmp
+			tmp = []string{}
 		}
-		for _, v := range tmp {
+		for _, v := range cook.Final {
 			fmt.Println(v)
 		}
 	} else {

@@ -180,9 +180,9 @@ func (g *CookGenerator) Search(query string) ([]CookIngredient, bool) {
 
 // ApplyMethods applies specified methods to the input strings and returns the transformed result
 // This function allows direct method application without pattern generation
-func (g *CookGenerator) ApplyMethods(input []string, methodNames []string) []string {
+func (g *CookGenerator) ApplyMethods(input []string, methodNames []string) ([]string, error) {
 	if len(methodNames) == 0 || len(input) == 0 {
-		return input
+		return input, nil
 	}
 
 	// Create a temporary COOK instance with the shared resources
@@ -195,7 +195,10 @@ func (g *CookGenerator) ApplyMethods(input []string, methodNames []string) []str
 	output := []string{}
 
 	// Apply the methods
-	tempCook.ApplyMethods(input, methodNames, &output)
+	err := tempCook.ApplyMethods(input, methodNames, &output)
+	if err != nil {
+		return nil, err
+	}
 
-	return output
+	return output, nil
 }
