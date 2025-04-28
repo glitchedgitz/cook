@@ -2,8 +2,7 @@ package cook
 
 import (
 	"fmt"
-	"log"
-	"os"
+	"net/url"
 	"strings"
 
 	"github.com/adrg/strutil"
@@ -11,56 +10,90 @@ import (
 	"github.com/glitchedgitz/cook/v2/pkg/parse"
 )
 
-func (cook *COOK) ApplyMethods(vallll []string, meths []string, array *[]string) {
-	tmp := []string{}
-	analyseMethods := [][]string{}
-
-	for _, g := range meths {
-		if strings.Contains(g, "[") {
-			name, value := parse.ReadSqBr(g)
-			analyseMethods = append(analyseMethods, []string{strings.ToLower(name), value})
-		} else {
-			analyseMethods = append(analyseMethods, []string{strings.ToLower(g), ""})
-		}
+// ValidateMethod checks if a method exists and returns an error if it doesn't
+func (cook *COOK) ValidateMethod(method string) error {
+	// Extract method name and parameters
+	methodName := method
+	if strings.Contains(method, "[") {
+		methodName, _ = parse.ReadSqBr(method)
 	}
 
-	for _, v := range analyseMethods {
-		f := v[0]
-		value := v[1]
-		if fn, exists := cook.Method.MethodFuncs[f]; exists {
-			fn(vallll, value, &tmp)
-		} else if fn, exists := cook.Method.UrlFuncs[f]; exists {
-			cook.Method.AnalyzeURLs(vallll, fn, &tmp)
-		} else if e, exists := cook.Method.EncodersFuncs[f]; exists {
-			for _, v := range vallll {
-				output, err := e.Encode([]byte(v))
-				if err != nil {
-					log.Fatalln("Err")
-				}
-				tmp = append(tmp, string(output))
-			}
-		} else {
-			fmt.Fprintf(os.Stderr, "\nMethod \"%s\" Doesn't exists\n", f)
-			cook.MistypedCheck(f)
-			os.Exit(0)
-		}
-		vallll = tmp
-		tmp = nil
+	// Check if method exists in any of the method maps
+	_, methodExists := cook.Method.MethodFuncs[methodName]
+	_, urlExists := cook.Method.UrlFuncs[methodName]
+	_, encoderExists := cook.Method.EncodersFuncs[methodName]
+
+	if !methodExists && !urlExists && !encoderExists {
+		suggestions := cook.MistypedCheck(methodName)
+		return fmt.Errorf("method '%s' not found. \n%s", methodName, suggestions)
 	}
 
-	*array = append(*array, vallll...)
+	return nil
 }
 
-func (cook *COOK) MistypedCheck(mistyped string) {
-	fmt.Fprintln(os.Stderr)
+// ApplyMethods applies the given methods to the input strings and handles errors gracefully
+func (cook *COOK) ApplyMethods(input []string, methods []string, output *[]string) error {
+	// Validate all methods first
+	for _, method := range methods {
+		if err := cook.ValidateMethod(method); err != nil {
+			return err
+		}
+	}
 
-	fmt.Fprintln(os.Stderr, "Similar Methods")
-	found := false
+	// If all methods are valid, apply them
+	tmp := input
+	for _, method := range methods {
+		methodName := method
+		methodParam := ""
+		if strings.Contains(method, "[") {
+			methodName, methodParam = parse.ReadSqBr(method)
+		}
+
+		// Try each type of method
+		if fn, exists := cook.Method.MethodFuncs[methodName]; exists {
+			fn(tmp, methodParam, output)
+			tmp = *output
+			*output = []string{}
+			continue
+		}
+
+		if fn, exists := cook.Method.UrlFuncs[methodName]; exists {
+			for _, t := range tmp {
+				u, err := url.Parse(t)
+				if err != nil {
+					continue
+				}
+				fn(u, output)
+			}
+			tmp = *output
+			*output = []string{}
+			continue
+		}
+
+		if encoder, exists := cook.Method.EncodersFuncs[methodName]; exists {
+			for _, t := range tmp {
+				encoded, err := encoder.Encode([]byte(t))
+				if err != nil {
+					*output = append(*output, fmt.Sprintf("error in %s: %v", methodName, err))
+					continue
+				}
+				*output = append(*output, string(encoded))
+			}
+			tmp = *output
+			*output = []string{}
+		}
+	}
+
+	*output = tmp
+	return nil
+}
+
+func (cook *COOK) MistypedCheck(mistyped string) string {
+	var suggestions []string
 	check := func(k string) {
 		similarity := strutil.Similarity(mistyped, k, metrics.NewHamming())
 		if similarity >= 0.3 {
-			fmt.Println("-", k)
-			found = true
+			suggestions = append(suggestions, k)
 		}
 	}
 
@@ -76,30 +109,24 @@ func (cook *COOK) MistypedCheck(mistyped string) {
 		check(k)
 	}
 
-	if !found {
-		fmt.Fprintln(os.Stderr, "None")
+	if len(suggestions) == 0 {
+		return "No similar methods found"
 	}
 
+	return "Similar methods: " + strings.Join(suggestions, "\n - ")
 }
 
-func (cook *COOK) CheckMethods(p string, array *[]string) bool {
-	if strings.Count(p, ".") > 0 {
-		splitS := parse.SplitMethods(p)
-		u := splitS[0]
-		if _, exists := cook.Params[u]; exists {
-
-			vallll := []string{}
-
-			if !cook.CheckParam(u, &vallll) && !cook.Config.CheckYaml(u, &vallll) {
-				return false
-			}
-
-			cook.ApplyMethods(vallll, splitS[1:], array)
-
-			return true
+// CheckMethods checks if a string contains methods and applies them
+func (cook *COOK) CheckMethods(value string, array *[]string) bool {
+	if strings.Contains(value, ".") {
+		methods := parse.SplitMethods(value)
+		tmp := []string{}
+		if err := cook.ApplyMethods([]string{methods[0]}, methods[1:], &tmp); err != nil {
+			fmt.Printf("Error: %v\n", err)
+			return false
 		}
-
+		*array = append(*array, tmp...)
+		return true
 	}
 	return false
 }
-
