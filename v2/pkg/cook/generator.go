@@ -177,3 +177,25 @@ func (g *CookGenerator) Search(query string) ([]CookIngredient, bool) {
 	// Use the existing Search method from the COOK struct
 	return tempCook.Search(query)
 }
+
+// ApplyMethods applies specified methods to the input strings and returns the transformed result
+// This function allows direct method application without pattern generation
+func (g *CookGenerator) ApplyMethods(input []string, methodNames []string) []string {
+	if len(methodNames) == 0 || len(input) == 0 {
+		return input
+	}
+
+	// Create a temporary COOK instance with the shared resources
+	tempCook := &COOK{
+		Config: g.Config,
+		Method: g.Method,
+	}
+
+	// Create output slice
+	output := []string{}
+
+	// Apply the methods
+	tempCook.ApplyMethods(input, methodNames, &output)
+
+	return output
+}
