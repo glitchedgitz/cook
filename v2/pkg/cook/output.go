@@ -56,11 +56,10 @@ func (cook *COOK) Print() {
 				fmt.Printf("Warning: %v\n", err)
 				os.Exit(0)
 			}
-			cook.Final = tmp
+			for _, v := range tmp {
+				fmt.Println(v)
+			}
 			tmp = []string{}
-		}
-		for _, v := range cook.Final {
-			fmt.Println(v)
 		}
 	} else {
 		for _, v := range cook.Final {
