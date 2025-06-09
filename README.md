@@ -1,7 +1,7 @@
 <img src="assets/head.png">
 
 # COOK
-An overpower wordlist generator, splitter, merger, finder, saver, create words permutation and combinations, apply different encoding/decoding and everything you need.  
+An overpowered wordlist generator, splitter, merger, finder, saver, create words permutation and combinations, apply different encoding/decoding and everything you need.  
 
 Frustration killer! & Customizable!
 
@@ -367,7 +367,7 @@ cook example.com seclists-tlds.txt  | dnsx -v
 
  
 # ULTIMATE USAGE
-Too overpower? But everyday you came accross weird BB stuff, like a big json file from target? May be you want to extract, join, merge or whatever. You can use cook smartly as per your usecase.
+Too overpowered? But everyday you came accross weird BB stuff, like a big json file from target? May be you want to extract, join, merge or whatever. You can use cook smartly as per your usecase.
 
 ## Real life usage example:
 As BBH, we came arross JSON file often. YOu may be you read find wordlist to save in your collection.
