@@ -9,6 +9,7 @@ import (
 	"github.com/glitchedgitz/cook/v2/pkg/config"
 	"github.com/glitchedgitz/cook/v2/pkg/cook"
 	"github.com/glitchedgitz/cook/v2/pkg/parse"
+	"github.com/glitchedgitz/cook/v2/pkg/util"
 )
 
 var COOK *cook.COOK
@@ -30,6 +31,7 @@ var (
 	appendParam   string
 	showConfig    bool
 	reConfigure   bool
+	noColor       bool
 )
 
 func main() {
@@ -47,7 +49,10 @@ func main() {
 	showConfig = parseFlags.Boolean("-conf", "-config")
 	reConfigure = parseFlags.Boolean("-reconfigure", "-reconf")
 	configPath = parseFlags.String("-config-path", "-config-path")
+	noColor = parseFlags.Boolean("-no-color", "-nocolor")
 	parseFlags.Parse()
+
+	util.InitColors(noColor)
 
 	if !verbose {
 		log.SetFlags(0)
