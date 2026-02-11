@@ -72,6 +72,12 @@ func (cook *COOK) ApplyMethods(input []string, methods []string, output *[]strin
 
 		if encoder, exists := cook.Method.EncodersFuncs[methodName]; exists {
 			for _, t := range tmp {
+				if methodName == "b64d" || methodName == "b64decode" {
+					// add padding if needed
+					for len(t)%4 != 0 {
+						t += "="
+					}
+				}
 				encoded, err := encoder.Encode([]byte(t))
 				if err != nil {
 					*output = append(*output, fmt.Sprintf("error in %s: %v", methodName, err))
