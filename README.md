@@ -44,6 +44,10 @@ Use Go or download [latest builds](https://github.com/glitchedgitz/cook/releases
 ```
 go install -v github.com/glitchedgitz/cook/v2/cmd/cook@latest
 ```
+Archlinux users
+```
+yay -S cook-framework
+```
 
 ### Configuration
 
