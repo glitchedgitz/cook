@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"runtime"
 	"strconv"
 	"strings"
 
@@ -67,7 +68,12 @@ func (conf *Config) ParseFile(param string, value string, array *[]string) bool 
 		} else {
 			// When you paste URL from chrome
 			// file:///C://Users//gites//AppData//Local/grroxy/downloaded_lL5A
-			value = strings.TrimLeft(value, "file:///")
+			if strings.HasPrefix(value, "file://") {
+				value = strings.TrimPrefix(value, "file://")
+				if runtime.GOOS == "windows" && len(value) > 2 && value[0] == '/' && value[2] == ':' {
+					value = value[1:]
+				}
+			}
 			FileValues(value, array, conf.Peek)
 		}
 		return true
